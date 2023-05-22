@@ -44,7 +44,13 @@ void MonsterLevel::Start()
 	MonsterPtr->Init({ 10, 10 }, "Monster\\Octopus1");
 
 	Item* ItemPtr = CreateActor<Item>(UpdateOrder::Item);
-	ItemPtr->Init({ 5, 7 }, "Item\\item_61");
+	ItemPtr->Init({ 5, 7 }, { 3, 2 });
+	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
+	ItemPtr->Init({ 6, 7 }, { 4, 2 });
+	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
+	ItemPtr->Init({ 7, 7 }, { 5, 2 });
+	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
+	ItemPtr->Init({ 8, 7 }, { 0, 3 });
 }
 
 void MonsterLevel::Update(float _Delta)

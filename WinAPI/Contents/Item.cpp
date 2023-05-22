@@ -10,27 +10,29 @@ Item::~Item()
 {
 }
 
-void Item::Init(const int2& _Index, const std::string& _Path)
+void Item::Init(const int2& _Index, const float4& _Type)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
 
-	CreateRenderer(_Path, "Main", RenderOrder::Item, true);
+	CreateRenderer("Item\\Item", "Main", RenderOrder::Item, true, _Type, { 6, 4 });
+	FindRenderer("Main")->SetRenderPos({ 0, -10.f });
+	FindRenderer("Main")->SetRenderScale(TileSize);
+
+	CreateRenderer("Item\\ItemShadow", "Shadow", RenderOrder::Shadow, true);
+	FindRenderer("Shadow")->SetRenderPos({ 0, 10.f });
 }
 
 void Item::Update(float _Delta)
 {
-	float MoveDist = 0.f;
-	float MoveDir = -1.f;
+	FindRenderer("Main")->SetRenderPos({ 0, FindRenderer("Main")->GetRenderPos().Y + MoveDir * MoveSpeed * _Delta });
+	MoveDist += MoveSpeed * _Delta;
 
-	Pos.Y += MoveDir * 5.f * _Delta;
-	MoveDist += 5.f * _Delta;
-
-	if (MoveDist >= 10.f)
+	if (MoveDist >= MaxDist)
 	{
 		MoveDir *= -1.f;
-		MoveDist -= 10.f;
-		Pos.Y += MoveDir * MoveDist;
+		MoveDist -= MaxDist;
+		FindRenderer("Main")->SetRenderPos({ 0, FindRenderer("Main")->GetRenderPos().Y + MoveDir * MoveDist * _Delta });
 	}
 }
 
