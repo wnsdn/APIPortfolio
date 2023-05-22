@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="EndingLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreProcess.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Water.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster_State.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_State.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EndingLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreProcess.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Water.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Level">
+      <UniqueIdentifier>{4a91162f-e129-4638-b9aa-38ad95a5c399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process">
+      <UniqueIdentifier>{578c0263-81bb-4a96-bdc3-d2d41609b1e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{956755b3-dae5-484e-a94b-af13395f385a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{b6f06e62-162d-403a-b6ee-4803ccd3135e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
