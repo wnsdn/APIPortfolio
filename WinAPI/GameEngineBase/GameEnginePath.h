@@ -4,10 +4,8 @@
 class GameEnginePath
 {
 public:
-	static std::filesystem::path GetPath(const std::string& _Path);
+	static std::filesystem::path GetPath(const std::string& _ResourceType, const std::string& _Path);
 private:
-	static const std::string TexturePath;
-
 	GameEnginePath();
 	~GameEnginePath();
 	GameEnginePath(const GameEnginePath& _Other) = delete;

@@ -23,8 +23,8 @@ ResourceManager::~ResourceManager()
 
 GameEngineTexture* ResourceManager::LoadTexture(const std::string& _Path)
 {
-	std::string Path = GameEnginePath::GetPath(_Path + ".bmp").string();
-	std::string Filename = GameEnginePath::GetPath(_Path + ".bmp").filename().string();
+	std::string Path = GameEnginePath::GetPath("Texture", _Path + ".bmp").string();
+	std::string Filename = GameEnginePath::GetPath("Texture", _Path + ".bmp").filename().string();
 
 	std::string Upper = GameEngineString::ToUpperReturn(Filename);
 	auto FindIter = AllTexture.find(Upper);

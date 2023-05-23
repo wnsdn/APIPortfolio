@@ -19,6 +19,18 @@ MonsterLevel::~MonsterLevel()
 {
 }
 
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngineBase/GameEnginePath.h>
+
+void MonsterLevel::ReadMapData()
+{
+	
+}
+
 void MonsterLevel::Start()
 {
 	BackGround* BackGroundPtr = CreateActor<BackGround>(UpdateOrder::None);
@@ -34,8 +46,49 @@ void MonsterLevel::Start()
 		}
 	}
 
-	Block* BlockPtr = CreateActor<Block>(UpdateOrder::Block);
-	BlockPtr->Init({ 2, 2 }, "1x1_1", { 0, 8 });
+	std::filesystem::path Path = GameEnginePath::GetPath("MapData", "Octopus1.txt");
+	std::ifstream Read(Path);
+	//std::string Str[15][13] = {};
+
+	if (Read)
+	{
+		Block* BlockPtr = nullptr;
+		for (int Y = 0; Y < 13; ++Y)
+		{
+			for (int X = 0; X < 15; ++X)
+			{
+				//Block* BlockPtr = CreateActor<Block>(UpdateOrder::Block);
+				//BlockPtr->Init({ X, Y }, "1x1_1", { 0, 8 });
+
+				/*Read >> Str[Y][X];
+
+				std::istringstream Stream(Str[Y][X]);
+				std::string Buffer = "";
+				std::vector<float> Result;
+				while (std::getline(Stream, Buffer, ','))
+				{
+					if (Buffer == "0")
+					{
+						continue;
+					}
+
+					Result.push_back(std::stof(Buffer, nullptr));
+				}
+
+				BlockPtr = CreateActor<Block>(UpdateOrder::Block);
+				if (Result.size())
+				{
+					BlockPtr->Init({ X, Y }, "1x1_1", { Result[0], Result[1] });
+				}*/
+			}
+		}
+	}
+	else
+	{
+		MsgBoxAssert(Path.string() + " ReadMapData()");
+	}
+	/*Block* BlockPtr = CreateActor<Block>(UpdateOrder::Block);
+	BlockPtr->Init({ 2, 2 }, "1x1_1", { 0, 8 });*/
 
 	Player* PlayerPtr = CreateActor<Player>(UpdateOrder::Player);
 	PlayerPtr->Init({ 5, 3 }, "Player\\Bazzi");

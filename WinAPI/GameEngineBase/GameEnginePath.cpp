@@ -1,8 +1,6 @@
 #include "GameEnginePath.h"
 #include "GameEngineDebug.h"
 
-const std::string GameEnginePath::TexturePath = "Texture";
-
 GameEnginePath::GameEnginePath()
 {
 }
@@ -11,14 +9,14 @@ GameEnginePath::~GameEnginePath()
 {
 }
 
-std::filesystem::path GameEnginePath::GetPath(const std::string& _Path)
+std::filesystem::path GameEnginePath::GetPath(const std::string& _ResourceType, const std::string& _Path)
 {
 	std::filesystem::path Path = std::filesystem::current_path();
 
 	while (true)
 	{
 		std::filesystem::path FindPath = Path;
-		FindPath.append(TexturePath);
+		FindPath.append(_ResourceType);
 
 		if (std::filesystem::exists(FindPath))
 		{

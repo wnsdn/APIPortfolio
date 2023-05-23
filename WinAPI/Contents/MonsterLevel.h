@@ -11,6 +11,8 @@ public:
 	MonsterLevel& operator=(const MonsterLevel& _Other) = delete;
 	MonsterLevel& operator=(MonsterLevel&& _Other) noexcept = delete;
 private:
+	void ReadMapData();
+
 	void Start() override;
 	void Update(float _Delta) override;
 };

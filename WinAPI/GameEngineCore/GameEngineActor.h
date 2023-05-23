@@ -27,6 +27,14 @@ public:
 	void DrawRect(const float4& _Pos, const float4& _Scale);
 	void DrawStr(const float4& _Pos, const char* _Str);
 
+	class GameEngineLevel* GetLevel() const
+	{
+		return Level;
+	}
+	void SetLevel(class GameEngineLevel* const _Level)
+	{
+		Level = _Level;
+	}
 	float4 GetPos() const
 	{
 		return Pos;

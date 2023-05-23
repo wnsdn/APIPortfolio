@@ -33,12 +33,17 @@ public:
 	{
 		return MainCamera;
 	}
+	std::map<int, std::list<class GameEngineCollision*>> GetAllCollision() const
+	{
+		return AllCollision;
+	}
 
 	bool IsActorRender = true;
 protected:
 	class GameEngineCamera* MainCamera = nullptr;
 	class GameEngineCamera* UICamera = nullptr;
 	std::map<int, std::list<class GameEngineActor*>> AllActor;
+	std::map<int, std::list<class GameEngineCollision*>> AllCollision;
 private:
 	void ActorInit(class GameEngineActor* _Actor);
 	void ActorUpdate(float _Delta);
