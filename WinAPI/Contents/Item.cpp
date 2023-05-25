@@ -16,11 +16,15 @@ void Item::Init(const int2& _Index, const float4& _Type)
 	Pos = IndexToPos(Index);
 
 	CreateRenderer("Item\\Item", "Main", RenderOrder::Item, true, _Type, { 6, 4 });
-	FindRenderer("Main")->SetRenderPos({ 0, -10.f });
+	FindRenderer("Main")->SetRenderPos({ 0, -18.f });
 	FindRenderer("Main")->SetRenderScale(TileSize);
 
-	CreateRenderer("Item\\ItemShadow", "Shadow", RenderOrder::Shadow, true);
-	FindRenderer("Shadow")->SetRenderPos({ 0, 10.f });
+	CreateRenderer("Item\\ItemShadow", "Shadow", RenderOrder::Shadow, true, {}, { 2, 1 });
+	FindRenderer("Shadow")->SetRenderPos({0, 5});
+	FindRenderer("Shadow")->SetRenderScale({25, 25});
+	FindRenderer("Shadow")->CreateAnimation("Big", 0, 0, 1, 0, false);
+	FindRenderer("Shadow")->CreateAnimation("Small", 1, 0, 1, 0, false);
+	FindRenderer("Shadow")->ChangeAnimation("Big");
 }
 
 void Item::Update(float _Delta)
@@ -33,6 +37,15 @@ void Item::Update(float _Delta)
 		MoveDir *= -1.f;
 		MoveDist -= MaxDist;
 		FindRenderer("Main")->SetRenderPos({ 0, FindRenderer("Main")->GetRenderPos().Y + MoveDir * MoveDist * _Delta });
+		
+		if (MoveDir == -1)
+		{
+			FindRenderer("Shadow")->ChangeAnimation("Big");
+		}
+		else
+		{
+			FindRenderer("Shadow")->ChangeAnimation("Small");
+		}
 	}
 }
 

@@ -15,9 +15,8 @@ GameEngineRenderer::~GameEngineRenderer()
 {
 }
 
-void GameEngineRenderer::SetTexture(const std::string& _Path, GameEngineActor* _Master, const float4& _Pos, const float4& _Size)
+void GameEngineRenderer::Init(const std::string& _Path, const float4& _Pos, const float4& _Size)
 {
-	Master = _Master;
 	Texture = ResourceManager::GetInst().LoadTexture(_Path);
 
 	RenderScale = Texture->GetScale() / _Size;
@@ -35,20 +34,23 @@ void GameEngineRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 			CopyPos.X = static_cast<float>(CurAnimation->CurFrame);
 			CopyPos.Y = static_cast<float>(CurAnimation->YFrame);
 
-			++CurAnimation->CurFrame;
-			if (CurAnimation->CurFrame > CurAnimation->EndFrame)
+			if (CurAnimation->Inter)
 			{
-				if (CurAnimation->Loop)
+				++CurAnimation->CurFrame;
+				if (CurAnimation->CurFrame > CurAnimation->EndFrame)
 				{
-					CurAnimation->CurFrame = CurAnimation->StartFrame;
+					if (CurAnimation->Loop)
+					{
+						CurAnimation->CurFrame = CurAnimation->StartFrame;
+					}
+					else
+					{
+						--CurAnimation->CurFrame;
+					}
 				}
-				else
-				{
-					--CurAnimation->CurFrame;
-				}
-			}
 
-			CurAnimation->CurInter -= CurAnimation->Inter;
+				CurAnimation->CurInter -= CurAnimation->Inter;
+			}
 		}
 	}
 

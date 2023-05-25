@@ -33,9 +33,11 @@ public:
 	{
 		return MainCamera;
 	}
-	std::map<int, std::list<class GameEngineCollision*>> GetAllCollision() const
+
+	template <typename EnumType>
+	std::list<class GameEngineActor*> GetActorGroup(EnumType _Order)
 	{
-		return AllCollision;
+		return AllActor[static_cast<int>(_Order)];
 	}
 
 	bool IsActorRender = true;
@@ -43,7 +45,6 @@ protected:
 	class GameEngineCamera* MainCamera = nullptr;
 	class GameEngineCamera* UICamera = nullptr;
 	std::map<int, std::list<class GameEngineActor*>> AllActor;
-	std::map<int, std::list<class GameEngineCollision*>> AllCollision;
 private:
 	void ActorInit(class GameEngineActor* _Actor);
 	void ActorUpdate(float _Delta);

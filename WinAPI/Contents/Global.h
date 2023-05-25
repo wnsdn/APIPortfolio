@@ -17,6 +17,9 @@ const float MapRight = MapLeft + TileSize.X * IndexRight;
 const float MapBottom = MapTop + TileSize.Y * IndexBottom;
 const float4 MapRightBottom = { MapRight, MapBottom };
 
+const float TrimRatio = 0.6f;
+const float SpeedRatio = 0.7f;
+
 enum class UpdateOrder
 {
 	Player,
@@ -45,11 +48,6 @@ enum class RenderOrder
 	Monster,
 
 	None,
-};
-
-enum class CollisionOrder
-{
-
 };
 
 int2 PosToIndex(const float4& _Pos);

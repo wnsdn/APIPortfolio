@@ -1,6 +1,9 @@
 #include "Monster.h"
 #include <GameEngineBase/GameEngineRandom.h>
+#include <GameEngineCore/GameEngineLevel.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include "Global.h"
+#include "Tile.h"
 
 void Monster::StateUpdate(float _Delta)
 {
@@ -61,34 +64,72 @@ void Monster::DirCheck()
 
 void Monster::RunUpdate(float _Delta)
 {
-	float4 MovePos = {};
-	if (Dir == "Up")
+	Tile* NextTile = nullptr;
+
+	if (Dir == "Left")
 	{
-		MovePos = { 0.0f, -Speed * _Delta };
-	}
-	else if (Dir == "Down")
-	{
-		MovePos = { 0.0f, Speed * _Delta };
-	}
-	else if (Dir == "Left")
-	{
-		MovePos = { -Speed * _Delta, 0.0f };
+		Pos.X -= Speed * _Delta;
+		if (Left() < MapLeft)
+		{
+			Pos.X = MapLeft + Scale.hX();
+			DirCheck();
+		}
+
+		NextTile = Tile::GetTile(Index + int2::Left);
+		if (NextTile && !NextTile->GetIsEmpty() && Left() < NextTile->Right())
+		{
+			Pos.X = NextTile->Right() + Scale.hX();
+			DirCheck();
+		}
 	}
 	else if (Dir == "Right")
 	{
-		MovePos = { Speed * _Delta, 0.0f };
-	}
+		Pos.X += Speed * _Delta;
+		if (Right() > MapRight)
+		{
+			Pos.X = MapRight - Scale.hX();
+			DirCheck();
+		}
 
-	if (Pos.X - TileSize.Half().X + MovePos.X > MapLeft
-		&& Pos.Y - TileSize.Half().Y + MovePos.Y > MapTop
-		&& Pos.X + TileSize.Half().X + MovePos.X < MapRight
-		&& Pos.Y + TileSize.Half().Y + MovePos.Y < MapBottom)
-	{
-		Pos += MovePos;
-		Index = PosToIndex(Pos);
+		NextTile = Tile::GetTile(Index + int2::Right);
+		if (NextTile && !NextTile->GetIsEmpty() && Right() > NextTile->Left())
+		{
+			Pos.X = NextTile->Left() - Scale.hX();
+			DirCheck();
+		}
 	}
-	else
+	else if (Dir == "Up")
 	{
-		DirCheck();
+		Pos.Y -= Speed * _Delta;
+		if (Top() < MapTop)
+		{
+			Pos.Y = MapTop + Scale.hY();
+			DirCheck();
+		}
+
+		NextTile = Tile::GetTile(Index + int2::Up);
+		if (NextTile && !NextTile->GetIsEmpty() && Top() < NextTile->Bot())
+		{
+			Pos.Y = NextTile->Bot() + Scale.hY();
+			DirCheck();
+		}
 	}
+	else if (Dir == "Down")
+	{
+		Pos.Y += Speed * _Delta;
+		if (Bot() > MapBottom)
+		{
+			Pos.Y = MapBottom - Scale.hY();
+			DirCheck();
+		}
+
+		NextTile = Tile::GetTile(Index + int2::Down);
+		if (NextTile && !NextTile->GetIsEmpty() && Bot() > NextTile->Top())
+		{
+			Pos.Y = NextTile->Top() - Scale.hY();
+			DirCheck();
+		}
+	}
+	
+	Index = PosToIndex(Pos);
 }

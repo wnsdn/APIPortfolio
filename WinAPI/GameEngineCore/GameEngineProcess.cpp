@@ -18,19 +18,6 @@ GameEngineProcess::~GameEngineProcess()
 	}
 }
 
-void GameEngineProcess::ChangeLevel(const std::string& _LevelName)
-{
-	std::string Upper = GameEngineString::ToUpperReturn(_LevelName);
-	auto FindIter = AllLevel.find(Upper);
-
-	if (FindIter == AllLevel.end())
-	{
-		MsgBoxAssert(Upper + " 레벨이 존재하지 않습니다.\n(GameEngineProcess::ChangeLevel)");
-	}
-
-	NextLevel = FindIter->second;
-}
-
 GameEngineLevel* GameEngineProcess::FindLevel(const std::string& _LevelName)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_LevelName);

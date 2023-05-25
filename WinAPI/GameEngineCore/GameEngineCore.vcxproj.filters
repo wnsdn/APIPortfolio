@@ -14,9 +14,6 @@
     <ClCompile Include="GameEngineCamera.cpp">
       <Filter>Object\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngineRenderer.cpp">
-      <Filter>Object\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngineProcess.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -24,7 +21,10 @@
       <Filter>Object\Parent</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCollision.cpp">
-      <Filter>Object\Collision</Filter>
+      <Filter>Object\Rendering\SubObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineRenderer.cpp">
+      <Filter>Object\Rendering\SubObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,9 +41,6 @@
     <ClInclude Include="GameEngineCamera.h">
       <Filter>Object\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineRenderer.h">
-      <Filter>Object\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngineProcess.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -51,7 +48,10 @@
       <Filter>Object\Parent</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineCollision.h">
-      <Filter>Object\Collision</Filter>
+      <Filter>Object\Rendering\SubObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineRenderer.h">
+      <Filter>Object\Rendering\SubObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +67,7 @@
     <Filter Include="Object\Parent">
       <UniqueIdentifier>{05c2c675-5a81-4fd6-9b7e-b3dccf1428c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Collision">
+    <Filter Include="Object\Rendering\SubObject">
       <UniqueIdentifier>{14e43864-2de0-4f3e-9d87-1cbaa5d1e58b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

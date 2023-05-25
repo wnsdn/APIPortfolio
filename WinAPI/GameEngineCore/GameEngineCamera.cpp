@@ -32,15 +32,15 @@ GameEngineCamera::~GameEngineCamera()
 	}
 }
 
-void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer, int _Order, bool _Ordered)
+void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer, bool _Ordered)
 {
 	if (_Ordered)
 	{
-		Ordered_Renderer[_Order].push_back(_Renderer);
+		Ordered_Renderer[_Renderer->GetOrder()].emplace_back(_Renderer);
 	}
 	else
 	{
-		Unordered_Renderer[_Order].push_back(_Renderer);
+		Unordered_Renderer[_Renderer->GetOrder()].emplace_back(_Renderer);
 	}
 }
 
@@ -50,6 +50,11 @@ void GameEngineCamera::Render(float _Delta)
 	{
 		for (auto& Renderer : Pair.second)
 		{
+			if (!Renderer->IsUpdate())
+			{
+				continue;
+			}
+
 			Renderer->Render(this, _Delta);
 		}
 	}
@@ -59,6 +64,11 @@ void GameEngineCamera::Render(float _Delta)
 		{
 			for (auto& Renderer : Pair.second)
 			{
+				if (!Renderer->IsUpdate())
+				{
+					continue;
+				}
+
 				if (Renderer->GetMaster()->GetIndex().Y == Y)
 				{
 					Renderer->Render(this, _Delta);

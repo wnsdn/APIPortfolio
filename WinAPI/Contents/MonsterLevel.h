@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <GameEngineCore/GameEngineLevel.h>
 
 class MonsterLevel : public GameEngineLevel
@@ -10,9 +11,9 @@ public:
 	MonsterLevel(MonsterLevel&& _Other) noexcept = delete;
 	MonsterLevel& operator=(const MonsterLevel& _Other) = delete;
 	MonsterLevel& operator=(MonsterLevel&& _Other) noexcept = delete;
-private:
-	void ReadMapData();
 
+	void Init(const std::string& _MapData);
+private:
 	void Start() override;
 	void Update(float _Delta) override;
 };

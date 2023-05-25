@@ -37,20 +37,25 @@ public:
 		return static_cast<int>(Y * 0.5f);
 	}
 
-	float Pythagoras()
+	float Length()
 	{
 		return sqrtf(X * X + Y * Y);
 	}
 	float4 Normalize()
 	{
-		float Length = Pythagoras();
+		float Len = Length();
 
-		if (Pythagoras() == 0.0f)
+		if (Length() == 0.0f)
 		{
 			return {};
 		}
 
-		return *this /= Length;
+		return *this /= Len;
+	}
+
+	float Max()
+	{
+		return X > Y ? X : Y;
 	}
 
 	float4 Half() const
@@ -230,7 +235,7 @@ public:
 	{
 	}
 	int2(const int2& _Other)
-		: X(_Other.X), Y(_Other.Y)
+  		: X(_Other.X), Y(_Other.Y)
 	{
 	}
 	~int2()

@@ -21,6 +21,7 @@ void Bomb::Init(const int2& _Index, const std::string& _Path)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
+	Scale = TileSize;
 
 	CreateRenderer("Bomb\\BombShadow", "Shadow", RenderOrder::Shadow, true);
 	FindRenderer("Shadow")->SetRenderPos({ -3.f, 16.5f });
@@ -30,6 +31,7 @@ void Bomb::Init(const int2& _Index, const std::string& _Path)
 	FindRenderer("Main")->ChangeAnimation("bubble");
 
 	Tile::GetTile(Index)->Full();
+	Tile::GetTile(Index)->SetIsBomb(true);
 }
 
 void Bomb::Update(float _Delta)
@@ -38,9 +40,17 @@ void Bomb::Update(float _Delta)
 	{
 		Death();
 	}
+
+	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Water))
+	{
+		if (Index == Ptr->GetIndex() && Ptr->GetLiveTime() <= 0.1f && GetLiveTime() >= 0.3f)
+		{
+			Death();
+		}
+	}
 }
 
 void Bomb::Render()
 {
-	DrawRect(Pos, TileSize);
+	DrawRect(Pos, Scale);
 }

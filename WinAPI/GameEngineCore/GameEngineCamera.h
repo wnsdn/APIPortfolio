@@ -13,7 +13,7 @@ public:
 	GameEngineCamera& operator=(const GameEngineCamera& _Other) = delete;
 	GameEngineCamera& operator=(GameEngineCamera&& _Other) noexcept = delete;
 
-	void InsertRenderer(class GameEngineRenderer* _Renderer, int _Order, bool _Ordered);
+	void InsertRenderer(class GameEngineRenderer* _Renderer, bool _Ordered);
 	void Render(float _Delta);
 	void Release();
 

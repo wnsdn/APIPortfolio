@@ -57,7 +57,6 @@ void GameEngineCore::CoreUpdate()
 	if (GameEngineWindow::GetInst().IsFocus())
 	{
 		GameEngineInput::Update(Delta);
-
 	}
 	else
 	{
@@ -67,7 +66,7 @@ void GameEngineCore::CoreUpdate()
 	Process->LevelUpdate(Delta);
 	Process->Update(Delta);
 
-	GameEngineWindow::GetInst().ClearBackBuffer();
+	//GameEngineWindow::GetInst().ClearBackBuffer();
 	Process->CurLevel->GetMainCamera()->Render(Delta);
 	Process->LevelRender();
 	Process->Render();

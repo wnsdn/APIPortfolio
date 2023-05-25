@@ -15,21 +15,23 @@ public:
 	GameEngineProcess& operator=(GameEngineProcess&& _Other) noexcept = delete;
 
 	template <typename LevelType>
-	void CreateLevel(const std::string& _LevelName)
+	LevelType* CreateLevel(const std::string& _LevelName)
 	{
 		std::string Upper = GameEngineString::ToUpperReturn(_LevelName);
 		auto FindIter = AllLevel.find(Upper);
 		
 		if (FindIter != AllLevel.end())
 		{
-			return;
+			return dynamic_cast<LevelType*>(FindIter->second);
 		}
 
 		class GameEngineLevel* NewLevel = new LevelType();
 		LevelInit(NewLevel);
 		AllLevel.emplace(std::make_pair(Upper, NewLevel));
+		NextLevel = NewLevel;
+
+		return dynamic_cast<LevelType*>(NewLevel);
 	}
-	void ChangeLevel(const std::string& _LevelName);
 	class GameEngineLevel* FindLevel(const std::string& _LevelName);
 protected:
 	class GameEngineLevel* CurLevel = nullptr;

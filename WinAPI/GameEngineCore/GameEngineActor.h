@@ -43,6 +43,14 @@ public:
 	{
 		Pos = _Pos;
 	}
+	float4 GetScale() const
+	{
+		return Scale;
+	}
+	void SetScale(const float4& _Scale)
+	{
+		Scale = _Scale;
+	}
 	int2 GetIndex() const
 	{
 		return Index;
@@ -51,9 +59,44 @@ public:
 	{
 		Index = _Index;
 	}
+
+	float Left()
+	{
+		return Pos.X - Scale.hX();
+	}
+	float Right()
+	{
+		return Pos.X + Scale.hX();
+	}
+	float Top()
+	{
+		return Pos.Y - Scale.hY();
+	}
+	float Bot()
+	{
+		return Pos.Y + Scale.hY();
+	}
+
+	int iLeft()
+	{
+		return static_cast<int>(Left());
+	}
+	int iRight()
+	{
+		return static_cast<int>(Right());
+	}
+	int iTop()
+	{
+		return static_cast<int>(Top());
+	}
+	int iBot()
+	{
+		return static_cast<int>(Bot());
+	}
 protected:
 	class GameEngineLevel* Level = nullptr;
 	float4 Pos = {};
+	float4 Scale = {};
 	int2 Index = {};
 
 	std::map<std::string, GameEngineRenderer*> AllRenderer;

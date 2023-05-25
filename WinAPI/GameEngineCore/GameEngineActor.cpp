@@ -34,8 +34,12 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Path, co
 	}
 
 	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
-	NewRenderer->SetTexture(_Path, this, _Pos, _Size);
-	Level->GetMainCamera()->InsertRenderer(NewRenderer, _Order, _Ordered);
+
+	NewRenderer->SetMaster(this);
+	NewRenderer->SetOrder(_Order);
+	NewRenderer->Init(_Path, _Pos, _Size);
+
+	Level->GetMainCamera()->InsertRenderer(NewRenderer, _Ordered);
 	AllRenderer.emplace(Upper, NewRenderer);
 
 	return NewRenderer;
@@ -59,7 +63,7 @@ void GameEngineActor::DrawRect(const float4& _Pos, const float4& _Scale)
 	HDC BackBuffer = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
 	HBRUSH MyBrush = static_cast<HBRUSH>(GetStockObject(HOLLOW_BRUSH));
 	HBRUSH OldBrush = static_cast<HBRUSH>(SelectObject(BackBuffer, MyBrush));
-	HPEN MyPen = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
+	HPEN MyPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
 	HPEN OldPen = static_cast<HPEN>(SelectObject(BackBuffer, MyPen));
 
 	Rectangle(BackBuffer,

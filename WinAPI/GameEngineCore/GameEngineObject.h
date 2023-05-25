@@ -10,6 +10,15 @@ public:
 	GameEngineObject& operator=(const GameEngineObject& _Other) = delete;
 	GameEngineObject& operator=(GameEngineObject&& _Other) noexcept = delete;
 
+	int GetOrder() const
+	{
+		return Order;
+	}
+	void SetOrder(const int _Order)
+	{
+		Order = _Order;
+	}
+
 	void On()
 	{
 		IsUpdateValue = true;
@@ -46,6 +55,7 @@ public:
 		LiveTime += _Delta;
 	}
 protected:
+	int Order = 0;
 	bool IsUpdateValue = true;
 	bool IsDeathValue = false;
 	float LiveTime = 0.0f;

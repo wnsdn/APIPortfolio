@@ -27,10 +27,20 @@ public:
 	{
 		IsEmpty = false;
 	}
+
+	bool GetIsBomb() const
+	{
+		return IsBomb;
+	}
+	void SetIsBomb(const bool _IsBomb)
+	{
+		IsBomb = _IsBomb;
+	}
 private:
 	static std::list<Tile*> AllTile;
 
 	bool IsEmpty = true;
+	bool IsBomb = false;
 
 	void Render() override;
 };

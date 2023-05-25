@@ -1,5 +1,6 @@
 #include "Block.h"
 #include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include "Global.h"
 #include "Tile.h"
 
@@ -15,6 +16,7 @@ void Block::Init(const int2& _Index, const std::string& _BlockSize, const float4
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
+	Scale = TileSize;
 
 	CreateRenderer("Block\\" + _BlockSize, "Main", RenderOrder::Block, true, _Type, { 10, 9 });
 	FindRenderer("Main")->SetRenderScale({TileSize.X, TileSize.Y * 2});
@@ -30,5 +32,5 @@ void Block::Update(float _Delta)
 
 void Block::Render()
 {
-	DrawRect(Pos, TileSize);
+	//DrawRect(Pos, TileSize);
 }

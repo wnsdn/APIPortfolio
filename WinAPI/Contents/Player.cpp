@@ -3,6 +3,7 @@
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include "Global.h"
 #include "Bomb.h"
 #include "Tile.h"
@@ -23,6 +24,7 @@ void Player::Init(const int2& _Index, const std::string& _Path)
 
 	Index = _Index;
 	Pos = IndexToPos(Index);
+	Scale = TileSize - 2;
 
 	CreateRenderer("Player\\PlayerShadow", "Shadow", RenderOrder::Shadow, true);
 	FindRenderer("Shadow")->SetRenderPos({ -1.f, -1.4f });
@@ -56,6 +58,6 @@ void Player::Update(float _Delta)
 
 void Player::Render()
 {
-	//DrawRect(Pos, TileSize);
+	DrawRect(Pos, Scale);
 	DrawRect(IndexToPos(Index), TileSize);
 }

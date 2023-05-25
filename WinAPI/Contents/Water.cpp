@@ -2,6 +2,7 @@
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
+#include "Tile.h"
 
 Water::Water()
 {
@@ -15,19 +16,34 @@ void Water::Init(const int2& _Index)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
+	Scale = TileSize;
 
 	int2 DirPos[4] = { int2::Left, int2::Up, int2::Right, int2::Down };
 	std::string DirStr[4] = { "Left", "Up", "Right", "Down" };
+	bool DirOn[4] = {true, true, true, true};
 
 	for (int i = 1; i <= Length; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
-			if (Index + DirPos[j] * i >= IndexLeftTop &&
-				Index + DirPos[j] * i < IndexRightBottom)
+			if (!DirOn[j])
 			{
+				continue;
+			}
+
+			int2 CurIndex = Index + DirPos[j] * i;
+
+			if (CurIndex >= IndexLeftTop &&
+				CurIndex < IndexRightBottom)
+			{
+				if (!Tile::GetTile(CurIndex)->GetIsEmpty() && !Tile::GetTile(CurIndex)->GetIsBomb())
+				{
+					DirOn[j] = false;
+					continue;
+				}
+
 				Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
-				WaterPtr->Index = Index + DirPos[j] * i;
+				WaterPtr->Index = CurIndex;
 				WaterPtr->Pos = IndexToPos(WaterPtr->Index);
 				WaterPtr->FindRenderer("Main")->ChangeAnimation(DirStr[j]);
 			}
@@ -57,5 +73,5 @@ void Water::Update(float _Delta)
 
 void Water::Render()
 {
-	DrawRect(Pos, TileSize);
+	DrawRect(Pos, Scale);
 }

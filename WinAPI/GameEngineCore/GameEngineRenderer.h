@@ -14,18 +14,21 @@ public:
 	GameEngineRenderer& operator=(const GameEngineRenderer& _Other) = delete;
 	GameEngineRenderer& operator=(GameEngineRenderer&& _Other) noexcept = delete;
 
-	void SetTexture(const std::string& _Path, class GameEngineActor* _Master, const float4& _Pos, const float4& _Size);
+	void Init(const std::string& _Path, const float4& _Pos, const float4& _Size);
 	void Render(class GameEngineCamera* _Camera, float _Delta);
 
 	void CreateAnimation(const std::string& _AnimationName,
 		int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop);
 	void ChangeAnimation(const std::string& _AnimationName);
 
-	GameEngineActor* GetMaster() const
+	class GameEngineActor* GetMaster() const
 	{
 		return Master;
 	}
-
+	void SetMaster(class GameEngineActor* const _Master)
+	{
+		Master = _Master;
+	}
 	float4 GetRenderPos() const
 	{
 		return RenderPos;

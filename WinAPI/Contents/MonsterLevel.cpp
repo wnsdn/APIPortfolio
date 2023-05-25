@@ -1,7 +1,11 @@
 #include "MonsterLevel.h"
+#include <fstream>
+#include <sstream>
+#include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngineBase/GameEnginePath.h>
 #include <GameEnginePlatform/GameEngineInput.h>
-#include "Global.h"
 
+#include "Global.h"
 #include "BackGround.h"
 #include "Tile.h"
 #include "Player.h"
@@ -19,22 +23,20 @@ MonsterLevel::~MonsterLevel()
 {
 }
 
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <GameEngineBase/GameEngineDebug.h>
-#include <GameEngineBase/GameEnginePath.h>
-
-void MonsterLevel::ReadMapData()
-{
-	
-}
-
-void MonsterLevel::Start()
+void MonsterLevel::Init(const std::string& _MapData)
 {
 	BackGround* BackGroundPtr = CreateActor<BackGround>(UpdateOrder::None);
 	BackGroundPtr->Init("UI\\Frame");
+
+	std::filesystem::path Path = GameEnginePath::GetPath("MapData", "Octopus1.txt");
+	std::ifstream Read(Path);
+	std::istringstream Stream;
+	std::string Str = "";
+
+	if (!Read)
+	{
+		MsgBoxAssert(Path.string() + " ReadMapData()");
+	}
 
 	Tile* TilePtr = nullptr;
 	for (int Y = 0; Y < 13; ++Y)
@@ -46,64 +48,56 @@ void MonsterLevel::Start()
 		}
 	}
 
-	std::filesystem::path Path = GameEnginePath::GetPath("MapData", "Octopus1.txt");
-	std::ifstream Read(Path);
-	//std::string Str[15][13] = {};
-
-	if (Read)
+	Block* BlockPtr = nullptr;
+	for (int Y = 0; Y < 13; ++Y)
 	{
-		Block* BlockPtr = nullptr;
-		for (int Y = 0; Y < 13; ++Y)
+		std::getline(Read, Str);
+		Stream.clear();
+		Stream.str(Str);
+		for (int X = 0; X < 15; ++X)
 		{
-			for (int X = 0; X < 15; ++X)
+			std::getline(Stream, Str, ' ');
+
+			if (Str != "0")
 			{
-				//Block* BlockPtr = CreateActor<Block>(UpdateOrder::Block);
-				//BlockPtr->Init({ X, Y }, "1x1_1", { 0, 8 });
-
-				/*Read >> Str[Y][X];
-
-				std::istringstream Stream(Str[Y][X]);
-				std::string Buffer = "";
-				std::vector<float> Result;
-				while (std::getline(Stream, Buffer, ','))
-				{
-					if (Buffer == "0")
-					{
-						continue;
-					}
-
-					Result.push_back(std::stof(Buffer, nullptr));
-				}
-
 				BlockPtr = CreateActor<Block>(UpdateOrder::Block);
-				if (Result.size())
-				{
-					BlockPtr->Init({ X, Y }, "1x1_1", { Result[0], Result[1] });
-				}*/
+				BlockPtr->Init({ X, Y }, "1x1_1", { static_cast<float>(Str[0] - '0'), static_cast<float>(Str[2] - '0') });
 			}
 		}
 	}
-	else
-	{
-		MsgBoxAssert(Path.string() + " ReadMapData()");
-	}
-	/*Block* BlockPtr = CreateActor<Block>(UpdateOrder::Block);
-	BlockPtr->Init({ 2, 2 }, "1x1_1", { 0, 8 });*/
 
 	Player* PlayerPtr = CreateActor<Player>(UpdateOrder::Player);
-	PlayerPtr->Init({ 5, 3 }, "Player\\Bazzi");
+	PlayerPtr->Init({ 12, 11 }, "Player\\Bazzi");
 
 	Monster* MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
-	MonsterPtr->Init({ 10, 10 }, "Monster\\Octopus1");
+	MonsterPtr->Init({ 9, 6 }, "Monster\\Octopus1");
+	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
+	MonsterPtr->Init({ 10, 6 }, "Monster\\Octopus1");
+	 MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
+	MonsterPtr->Init({ 11, 6 }, "Monster\\Octopus1");
+	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
+	MonsterPtr->Init({ 12, 6 }, "Monster\\Octopus1");
+	 MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
+	MonsterPtr->Init({ 7, 1 }, "Monster\\Octopus2");
+	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
+	MonsterPtr->Init({ 7, 11 }, "Monster\\Octopus2");
 
 	Item* ItemPtr = CreateActor<Item>(UpdateOrder::Item);
-	ItemPtr->Init({ 5, 7 }, { 3, 2 });
+	ItemPtr->Init({ 6, 0 }, { 0, 3 });
 	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
-	ItemPtr->Init({ 6, 7 }, { 4, 2 });
+	ItemPtr->Init({ 7, 0 }, { 5, 2 });
 	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
-	ItemPtr->Init({ 7, 7 }, { 5, 2 });
+	ItemPtr->Init({ 8, 0 }, { 3, 2 });
 	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
-	ItemPtr->Init({ 8, 7 }, { 0, 3 });
+	ItemPtr->Init({ 6, 12 }, { 0, 3 });
+	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
+	ItemPtr->Init({ 7, 12 }, { 5, 2 });
+	ItemPtr = CreateActor<Item>(UpdateOrder::Item);
+	ItemPtr->Init({ 8, 12 }, { 3, 2 });
+}
+
+void MonsterLevel::Start()
+{
 }
 
 void MonsterLevel::Update(float _Delta)

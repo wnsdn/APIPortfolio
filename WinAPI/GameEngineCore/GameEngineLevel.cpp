@@ -1,6 +1,7 @@
 #include "GameEngineLevel.h"
 #include "GameEngineActor.h"
 #include "GameEngineCamera.h"
+#include "GameEngineCollision.h"
 
 GameEngineLevel::GameEngineLevel()
 	: MainCamera(new GameEngineCamera)
