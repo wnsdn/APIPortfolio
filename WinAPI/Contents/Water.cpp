@@ -12,11 +12,13 @@ Water::~Water()
 {
 }
 
-void Water::Init(const int2& _Index)
+void Water::Init(const int2& _Index, int _Length)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
+
+	Length = _Length;
 
 	int2 DirPos[4] = { int2::Left, int2::Up, int2::Right, int2::Down };
 	std::string DirStr[4] = { "Left", "Up", "Right", "Down" };

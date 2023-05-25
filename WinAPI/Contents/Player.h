@@ -13,7 +13,12 @@ public:
 
 	void Init(const int2& _Index, const std::string& _Path);
 private:
+	int Count = 0;
+	int MaxCount = 0;
+	int Length = 0;
+	int MaxLength = 0;
 	float Speed = 0.f;
+	float MaxSpeed = 0.f;
 	std::string Dir = "";
 	std::string State = "";
 

@@ -18,7 +18,12 @@ Player::~Player()
 
 void Player::Init(const int2& _Index, const std::string& _Path)
 {
-	Speed = 300.f;
+	Count = 1;
+	MaxCount = 6;
+	Length = 1;
+	MaxLength = 7;
+	Speed = 5.f * 33;
+	MaxSpeed = 9.f;
 	Dir = "Down";
 	State = "Idle";
 
@@ -51,7 +56,7 @@ void Player::Update(float _Delta)
 		if (Tile::GetTile(Index)->GetIsEmpty())
 		{
 			Bomb* NewBomb = Level->CreateActor<Bomb>(UpdateOrder::Bomb);
-			NewBomb->Init(Index, "Bomb\\bubble");
+			NewBomb->Init(Index, "Bomb\\bubble", Length);
 		}
 	}
 }

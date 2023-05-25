@@ -11,9 +11,9 @@ public:
 	Water& operator=(const Water& _Other) = delete;
 	Water& operator=(Water&& _Other) noexcept = delete;
 
-	void Init(const int2& _Index);
+	void Init(const int2& _Index, int _Length);
 private:
-	int Length = 4;
+	int Length;
 	float Duration = 0.5f;
 
 	void Start() override;
