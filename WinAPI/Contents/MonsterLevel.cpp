@@ -14,6 +14,7 @@
 #include "Water.h"
 #include "Block.h"
 #include "Item.h"
+#include "UI.h"
 
 MonsterLevel::MonsterLevel()
 {
@@ -25,8 +26,8 @@ MonsterLevel::~MonsterLevel()
 
 void MonsterLevel::Init(const std::string& _MapData)
 {
-	BackGround* BackGroundPtr = CreateActor<BackGround>(UpdateOrder::None);
-	BackGroundPtr->Init("UI\\Frame");
+	UI* UIPtr = nullptr;
+	UIPtr = CreateActor<UI>(UpdateOrder::UI);
 
 	std::filesystem::path Path = GameEnginePath::GetPath("MapData", "Octopus1.txt");
 	std::ifstream Read(Path);

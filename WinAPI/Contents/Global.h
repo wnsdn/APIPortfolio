@@ -29,6 +29,7 @@ enum class UpdateOrder
 	Tile,
 	Block,
 	Item,
+	UI,
 
 	None,
 };
@@ -46,6 +47,8 @@ enum class RenderOrder
 
 	Player,
 	Monster,
+
+	UI,
 
 	None,
 };

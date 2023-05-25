@@ -15,7 +15,7 @@ void Item::Init(const int2& _Index, const float4& _Type)
 	Index = _Index;
 	Pos = IndexToPos(Index);
 
-	CreateRenderer("Item\\Item", "Main", RenderOrder::Item, true, _Type, { 6, 4 });
+	CreateRenderer("Item\\Item", "Main", RenderOrder::Item, true, _Type, {6, 4});
 	FindRenderer("Main")->SetRenderPos({ 0, -18.f });
 	FindRenderer("Main")->SetRenderScale(TileSize);
 

@@ -29,9 +29,17 @@ public:
 		return dynamic_cast<ActorType*>(NewActor);
 	}
 
+	class GameEngineCamera* GetBackUICamera() const
+	{
+		return BackUICamera;
+	}
 	class GameEngineCamera* GetMainCamera() const
 	{
 		return MainCamera;
+	}
+	class GameEngineCamera* GetFrontUICamera() const
+	{
+		return FrontUICamera;
 	}
 
 	template <typename EnumType>
@@ -42,8 +50,9 @@ public:
 
 	bool IsActorRender = true;
 protected:
+	class GameEngineCamera* BackUICamera = nullptr;
 	class GameEngineCamera* MainCamera = nullptr;
-	class GameEngineCamera* UICamera = nullptr;
+	class GameEngineCamera* FrontUICamera = nullptr;
 	std::map<int, std::list<class GameEngineActor*>> AllActor;
 private:
 	void ActorInit(class GameEngineActor* _Actor);

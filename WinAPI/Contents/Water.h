@@ -13,7 +13,6 @@ public:
 
 	void Init(const int2& _Index, int _Length);
 private:
-	int Length;
 	float Duration = 0.5f;
 
 	void Start() override;

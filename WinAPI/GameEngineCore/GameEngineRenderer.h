@@ -15,12 +15,20 @@ public:
 	GameEngineRenderer& operator=(GameEngineRenderer&& _Other) noexcept = delete;
 
 	void Init(const std::string& _Path, const float4& _Pos, const float4& _Size);
-	void Render(class GameEngineCamera* _Camera, float _Delta);
+	void Render(float _Delta);
 
 	void CreateAnimation(const std::string& _AnimationName,
 		int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop);
 	void ChangeAnimation(const std::string& _AnimationName);
 
+	class GameEngineCamera* GetCamera() const
+	{
+		return Camera;
+	}
+	void SetCamera(class GameEngineCamera* const _Camera)
+	{
+		Camera = _Camera;
+	}
 	class GameEngineActor* GetMaster() const
 	{
 		return Master;
@@ -74,6 +82,7 @@ private:
 		bool Loop = true;
 	};
 
+	class GameEngineCamera* Camera = nullptr;
 	class GameEngineActor* Master = nullptr;
 	class GameEngineTexture* Texture = nullptr;
 

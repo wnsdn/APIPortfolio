@@ -55,7 +55,7 @@ void GameEngineCamera::Render(float _Delta)
 				continue;
 			}
 
-			Renderer->Render(this, _Delta);
+			Renderer->Render(_Delta);
 		}
 	}
 	for (int Y = 0; Y < 13; ++Y)
@@ -71,7 +71,7 @@ void GameEngineCamera::Render(float _Delta)
 
 				if (Renderer->GetMaster()->GetIndex().Y == Y)
 				{
-					Renderer->Render(this, _Delta);
+					Renderer->Render(_Delta);
 				}
 			}
 		}

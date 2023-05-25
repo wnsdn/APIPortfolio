@@ -23,6 +23,29 @@ GameEngineActor::~GameEngineActor()
 	}
 }
 
+GameEngineRenderer* GameEngineActor::CreateBackUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_Name);
+	auto FindIter = AllRenderer.find(Upper);
+
+	if (FindIter != AllRenderer.end())
+	{
+		return FindIter->second;
+	}
+
+	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
+
+	NewRenderer->SetCamera(Level->GetBackUICamera());
+	NewRenderer->SetMaster(this);
+	NewRenderer->SetOrder(_Order);
+	NewRenderer->Init(_Path, _Pos, _Size);
+
+	Level->GetBackUICamera()->InsertRenderer(NewRenderer, _Ordered);
+	AllRenderer.emplace(Upper, NewRenderer);
+
+	return NewRenderer;
+}
+
 GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Name);
@@ -35,11 +58,35 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Path, co
 
 	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
 
+	NewRenderer->SetCamera(Level->GetMainCamera());
 	NewRenderer->SetMaster(this);
 	NewRenderer->SetOrder(_Order);
 	NewRenderer->Init(_Path, _Pos, _Size);
 
 	Level->GetMainCamera()->InsertRenderer(NewRenderer, _Ordered);
+	AllRenderer.emplace(Upper, NewRenderer);
+
+	return NewRenderer;
+}
+
+GameEngineRenderer* GameEngineActor::CreateFrontUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_Name);
+	auto FindIter = AllRenderer.find(Upper);
+
+	if (FindIter != AllRenderer.end())
+	{
+		return FindIter->second;
+	}
+
+	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
+
+	NewRenderer->SetCamera(Level->GetFrontUICamera());
+	NewRenderer->SetMaster(this);
+	NewRenderer->SetOrder(_Order);
+	NewRenderer->Init(_Path, _Pos, _Size);
+
+	Level->GetFrontUICamera()->InsertRenderer(NewRenderer, _Ordered);
 	AllRenderer.emplace(Upper, NewRenderer);
 
 	return NewRenderer;

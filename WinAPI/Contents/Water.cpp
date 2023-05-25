@@ -18,13 +18,11 @@ void Water::Init(const int2& _Index, int _Length)
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
 
-	Length = _Length;
-
 	int2 DirPos[4] = { int2::Left, int2::Up, int2::Right, int2::Down };
 	std::string DirStr[4] = { "Left", "Up", "Right", "Down" };
 	bool DirOn[4] = {true, true, true, true};
 
-	for (int i = 1; i <= Length; ++i)
+	for (int i = 1; i <= _Length; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		{

@@ -24,7 +24,7 @@ void GameEngineRenderer::Init(const std::string& _Path, const float4& _Pos, cons
 	CopyPos = _Pos;
 }
 
-void GameEngineRenderer::Render(GameEngineCamera* _Camera, float _Delta)
+void GameEngineRenderer::Render(float _Delta)
 {
 	if (CurAnimation)
 	{
@@ -55,7 +55,7 @@ void GameEngineRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 	}
 
 	GameEngineWindow::GetInst().GetBackBuffer()->TransCopy(Texture,
-		Master->GetPos() + RenderPos - _Camera->GetPos(),
+		Master->GetPos() + RenderPos - Camera->GetPos(),
 		RenderScale,
 		CopyPos * CopyScale,
 		CopyScale);

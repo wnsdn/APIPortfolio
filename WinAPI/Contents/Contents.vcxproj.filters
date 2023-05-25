@@ -46,6 +46,9 @@
     <ClCompile Include="Item.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EndingLevel.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="Item.h">
       <Filter>Actor</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Level">
@@ -100,6 +106,9 @@
     </Filter>
     <Filter Include="Actor">
       <UniqueIdentifier>{b6f06e62-162d-403a-b6ee-4803ccd3135e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{3fafc6ff-5db7-483c-86b9-c51dad7ec302}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

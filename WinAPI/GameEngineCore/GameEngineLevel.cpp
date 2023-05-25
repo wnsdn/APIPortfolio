@@ -4,7 +4,9 @@
 #include "GameEngineCollision.h"
 
 GameEngineLevel::GameEngineLevel()
-	: MainCamera(new GameEngineCamera)
+	: BackUICamera(new GameEngineCamera)
+	, MainCamera(new GameEngineCamera)
+	, FrontUICamera(new GameEngineCamera)
 {
 }
 
@@ -22,10 +24,20 @@ GameEngineLevel::~GameEngineLevel()
 		}
 	}
 
+	if (BackUICamera)
+	{
+		delete BackUICamera;
+		BackUICamera = nullptr;
+	}
 	if (MainCamera)
 	{
 		delete MainCamera;
 		MainCamera = nullptr;
+	}
+	if (FrontUICamera)
+	{
+		delete FrontUICamera;
+		FrontUICamera = nullptr;
 	}
 }
 
