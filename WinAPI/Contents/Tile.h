@@ -36,6 +36,14 @@ public:
 	{
 		IsBomb = _IsBomb;
 	}
+	bool GetIsWater() const
+	{
+		return IsWater;
+	}
+	void SetIsWater(const bool _IsWater)
+	{
+		IsWater = _IsWater;
+	}
 
 	bool GetIsObject() const
 	{
@@ -50,6 +58,7 @@ private:
 
 	bool IsEmpty = true;
 	bool IsBomb = false;
+	bool IsWater = false;
 	bool IsObject = false;
 
 	void Render() override;

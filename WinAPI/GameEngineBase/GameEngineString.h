@@ -5,6 +5,10 @@ class GameEngineString
 {
 public:
 	static std::string ToUpperReturn(const std::string& _Str);
+	static std::wstring AnsiToUnicode(const std::string& _Text);
+	static std::string UnicodeToUTF8(const std::wstring& _Text);
+	static std::string AnsiToUTF8(const std::string& _Text);
+	static std::string UnicodeToAnsi(const std::wstring& _Text);
 private:
 	GameEngineString();
 	~GameEngineString();

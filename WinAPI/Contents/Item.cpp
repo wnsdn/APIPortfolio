@@ -2,6 +2,7 @@
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
+#include "Player.h"
 
 Item::Item()
 {
@@ -16,7 +17,9 @@ void Item::Init(const int2& _Index, const float4& _Type)
 	Index = _Index;
 	Pos = IndexToPos(Index);
 
-	CreateRenderer("Item\\Item", "Main", RenderOrder::Item, true, _Type, {6, 4});
+	Type = _Type;
+
+	CreateRenderer("Item\\Item", "Main", RenderOrder::Item, true, Type, {6, 4});
 	FindRenderer("Main")->SetRenderPos({ 0, -18.f });
 	FindRenderer("Main")->SetRenderScale(TileSize);
 
@@ -50,6 +53,27 @@ void Item::Update(float _Delta)
 	}
 
 	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Player))
+	{
+		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
+		{
+			Player* PlayerPtr = dynamic_cast<Player*>(Ptr);
+			if (Type.X == 3 && Type.Y == 2)
+			{
+				PlayerPtr->AddCurSpeed(1);
+			}
+			else if (Type.X == 5 && Type.Y == 2)
+			{
+				PlayerPtr->AddLength(1);
+			}
+			else if (Type.X == 0 && Type.Y == 3)
+			{
+				PlayerPtr->AddCount(1);
+			}
+			Death();
+		}
+	}
+
+	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Water))
 	{
 		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
 		{

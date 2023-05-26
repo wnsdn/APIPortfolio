@@ -26,7 +26,7 @@ void Tile::Init(const int2& _Index, const float4& _Type)
 
 void Tile::Render()
 {
-	if(!IsEmpty)
+	if(IsWater)
 	{
 		DrawRect(Pos, TileSize);
 	}

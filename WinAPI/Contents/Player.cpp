@@ -19,11 +19,12 @@ Player::~Player()
 void Player::Init(const int2& _Index, const std::string& _Path)
 {
 	Count = 1;
-	CurCount = 2;
 	MaxCount = 6;
 	Length = 1;
 	MaxLength = 7;
-	Speed = 5.f * 33;
+	StdSpeed = 33.f;
+	CurSpeed = 5.f;
+	Speed = CurSpeed * StdSpeed;
 	MaxSpeed = 9.f;
 	Dir = "Down";
 	State = "Idle";
@@ -52,19 +53,39 @@ void Player::Update(float _Delta)
 	StateUpdate(_Delta);
 	FindRenderer("Main")->ChangeAnimation(Dir + State);
 
-	if (GameEngineInput::IsDown(VK_SPACE) && CurCount > 0)
+	if (GameEngineInput::IsDown(VK_SPACE) && Count > 0)
 	{
 		if (Tile::GetTile(Index)->GetIsEmpty())
 		{
 			Bomb* NewBomb = Level->CreateActor<Bomb>(UpdateOrder::Bomb);
 			NewBomb->Init(Index, "Bomb\\bubble", Length, this);
-			--CurCount;
+			--Count;
 		}
 	}
+
+	if (Count > MaxCount)
+	{
+		Count = MaxCount;
+	}
+
+	if (Length > MaxLength)
+	{
+		Length = MaxLength;
+	}
+
+	if (CurSpeed > MaxSpeed)
+	{
+		CurSpeed = MaxSpeed;
+	}
+
+	Speed = CurSpeed * StdSpeed;
 }
 
 void Player::Render()
 {
 	DrawRect(Pos, Scale);
 	DrawRect(IndexToPos(Index), TileSize);
+	char Buffer[30] = {};
+	sprintf_s(Buffer, "%d, %d, %f", Count, Length, Speed);
+	DrawStr(Pos, Buffer);
 }

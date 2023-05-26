@@ -10,6 +10,7 @@ Water::Water()
 
 Water::~Water()
 {
+	Tile::GetTile(Index)->SetIsWater(false);
 }
 
 void Water::Init(const int2& _Index, int _Length)
@@ -36,18 +37,22 @@ void Water::Init(const int2& _Index, int _Length)
 			if (CurIndex >= IndexLeftTop &&
 				CurIndex < IndexRightBottom)
 			{
-				if (!Tile::GetTile(CurIndex)->GetIsEmpty() && 
-					!Tile::GetTile(CurIndex)->GetIsBomb() &&
-					!Tile::GetTile(CurIndex)->GetIsObject())
+				if (!Tile::GetTile(CurIndex)->GetIsEmpty())
 				{
 					DirOn[j] = false;
-					continue;
+					if (!Tile::GetTile(CurIndex)->GetIsBomb() &&
+						!Tile::GetTile(CurIndex)->GetIsObject() &&
+						!Tile::GetTile(CurIndex)->GetIsWater())
+					{
+						continue;
+					}
 				}
 
 				Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
 				WaterPtr->Index = CurIndex;
 				WaterPtr->Pos = IndexToPos(WaterPtr->Index);
 				WaterPtr->FindRenderer("Main")->ChangeAnimation(DirStr[j]);
+				Tile::GetTile(CurIndex)->SetIsWater(true);
 			}
 		}
 	}

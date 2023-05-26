@@ -13,6 +13,7 @@ public:
 
 	void Init(const int2& _Index, const float4& _Type);
 private:
+	float4 Type = {};
 	float MoveDist = 0.f;
 	float MaxDist = 8.f;
 	float MoveSpeed = 10.f;

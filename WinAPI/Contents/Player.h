@@ -13,24 +13,51 @@ public:
 
 	void Init(const int2& _Index, const std::string& _Path);
 
-	int GetCurCount() const
+	int GetCount() const
 	{
-		return CurCount;
+		return Count;
 	}
-	void SetCurCount(const int _CurCount)
+	void SetCount(const int _Count)
 	{
-		CurCount = _CurCount;
+		Count = _Count;
 	}
-	void AddCurCount(const int _CurCount)
+	void AddCount(const int _Count)
 	{
-		CurCount += _CurCount;
+		Count += _Count;
+	}
+
+	int GetLength() const
+	{
+		return Length;
+	}
+	void SetLength(const int _Length)
+	{
+		Length = _Length;
+	}
+	void AddLength(const int _Length)
+	{
+		Length += _Length;
+	}
+
+	float GetCurSpeed() const
+	{
+		return CurSpeed;
+	}
+	void SetCurSpeed(const float _CurSpeed)
+	{
+		CurSpeed = _CurSpeed;
+	}
+	void AddCurSpeed(const float _CurSpeed)
+	{
+		CurSpeed += _CurSpeed;
 	}
 private:
 	int Count = 0;
-	int CurCount = 0;
 	int MaxCount = 0;
 	int Length = 0;
 	int MaxLength = 0;
+	float StdSpeed = 0.f;
+	float CurSpeed = 0.f;
 	float Speed = 0.f;
 	float MaxSpeed = 0.f;
 	std::string Dir = "";

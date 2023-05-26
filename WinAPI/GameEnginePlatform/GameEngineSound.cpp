@@ -44,6 +44,10 @@ void GameEngineSound::SoundLoad(const std::string& _Name, const std::string& _Pa
 {
 }
 
+void GameEngineSound::SoundLoad(const std::string& _Name)
+{
+}
+
 void GameEngineSound::SoundPlay(const std::string& _Name)
 {
 }
@@ -53,5 +57,9 @@ void GameEngineSound::PlayBgm(const std::string& _Name)
 }
 
 void GameEngineSound::StopBgm()
+{
+}
+
+void GameEngineSound::Load(const std::string& _Path)
 {
 }

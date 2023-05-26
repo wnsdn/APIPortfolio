@@ -12,11 +12,12 @@ Bomb::Bomb()
 
 Bomb::~Bomb()
 {
-	Owner->AddCurCount(1);
+	Owner->AddCount(1);
 	Tile::GetTile(Index)->Empty();
 
 	Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
 	WaterPtr->Init(Index, Length);
+	Tile::GetTile(Index)->SetIsWater(true);
 }
 
 void Bomb::Init(const int2& _Index, const std::string& _Path, int _Length, class Player* _Owner)
