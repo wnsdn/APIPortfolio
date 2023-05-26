@@ -4,6 +4,7 @@
 #include "Global.h"
 #include "Tile.h"
 #include "Water.h"
+#include "Player.h"
 
 Bomb::Bomb()
 {
@@ -11,19 +12,21 @@ Bomb::Bomb()
 
 Bomb::~Bomb()
 {
+	Owner->AddCurCount(1);
 	Tile::GetTile(Index)->Empty();
 
 	Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
 	WaterPtr->Init(Index, Length);
 }
 
-void Bomb::Init(const int2& _Index, const std::string& _Path, int _Length)
+void Bomb::Init(const int2& _Index, const std::string& _Path, int _Length, class Player* _Owner)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
 	
 	Length = _Length;
+	Owner = _Owner;
 
 	CreateRenderer("Bomb\\BombShadow", "Shadow", RenderOrder::Shadow, true);
 	FindRenderer("Shadow")->SetRenderPos({ -3.f, 16.5f });
@@ -45,7 +48,8 @@ void Bomb::Update(float _Delta)
 
 	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Water))
 	{
-		if (Index == Ptr->GetIndex() && Ptr->GetLiveTime() <= 0.1f && GetLiveTime() >= 0.3f)
+		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y 
+			&& Ptr->GetLiveTime() <= 0.1f && GetLiveTime() >= 0.3f)
 		{
 			Death();
 		}

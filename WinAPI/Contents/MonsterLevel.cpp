@@ -13,6 +13,7 @@
 #include "Bomb.h"
 #include "Water.h"
 #include "Block.h"
+#include "Object.h"
 #include "Item.h"
 #include "UI.h"
 
@@ -50,6 +51,7 @@ void MonsterLevel::Init(const std::string& _MapData)
 	}
 
 	Block* BlockPtr = nullptr;
+	std::getline(Read, Str);
 	for (int Y = 0; Y < 13; ++Y)
 	{
 		std::getline(Read, Str);
@@ -63,6 +65,25 @@ void MonsterLevel::Init(const std::string& _MapData)
 			{
 				BlockPtr = CreateActor<Block>(UpdateOrder::Block);
 				BlockPtr->Init({ X, Y }, "1x1_1", { static_cast<float>(Str[0] - '0'), static_cast<float>(Str[2] - '0') });
+			}
+		}
+	}
+
+	Object* ObjectPtr = nullptr;
+	std::getline(Read, Str);
+	for (int Y = 0; Y < 13; ++Y)
+	{
+		std::getline(Read, Str);
+		Stream.clear();
+		Stream.str(Str);
+		for (int X = 0; X < 15; ++X)
+		{
+			std::getline(Stream, Str, ' ');
+
+			if (Str != "0")
+			{
+				ObjectPtr = CreateActor<Object>(UpdateOrder::Object);
+				ObjectPtr->Init({ X, Y }, { static_cast<float>(Str[0] - '0'), static_cast<float>(Str[2] - '0') });
 			}
 		}
 	}

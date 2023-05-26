@@ -36,7 +36,9 @@ void Water::Init(const int2& _Index, int _Length)
 			if (CurIndex >= IndexLeftTop &&
 				CurIndex < IndexRightBottom)
 			{
-				if (!Tile::GetTile(CurIndex)->GetIsEmpty() && !Tile::GetTile(CurIndex)->GetIsBomb())
+				if (!Tile::GetTile(CurIndex)->GetIsEmpty() && 
+					!Tile::GetTile(CurIndex)->GetIsBomb() &&
+					!Tile::GetTile(CurIndex)->GetIsObject())
 				{
 					DirOn[j] = false;
 					continue;

@@ -53,7 +53,7 @@ void GameEngineLevel::ActorUpdate(float _Delta)
 	{
 		for (auto& Actor : Pair.second)
 		{
-			if (!Actor->IsUpdate())
+			if (Actor->IsDeath())
 			{
 				continue;
 			}
@@ -75,7 +75,7 @@ void GameEngineLevel::ActorRender()
 	{
 		for (auto& Actor : Pair.second)
 		{
-			if (!Actor->IsUpdate())
+			if (Actor->IsDeath())
 			{
 				continue;
 			}

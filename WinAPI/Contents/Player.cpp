@@ -19,6 +19,7 @@ Player::~Player()
 void Player::Init(const int2& _Index, const std::string& _Path)
 {
 	Count = 1;
+	CurCount = 2;
 	MaxCount = 6;
 	Length = 1;
 	MaxLength = 7;
@@ -51,12 +52,13 @@ void Player::Update(float _Delta)
 	StateUpdate(_Delta);
 	FindRenderer("Main")->ChangeAnimation(Dir + State);
 
-	if (GameEngineInput::IsDown(VK_SPACE))
+	if (GameEngineInput::IsDown(VK_SPACE) && CurCount > 0)
 	{
 		if (Tile::GetTile(Index)->GetIsEmpty())
 		{
 			Bomb* NewBomb = Level->CreateActor<Bomb>(UpdateOrder::Bomb);
-			NewBomb->Init(Index, "Bomb\\bubble", Length);
+			NewBomb->Init(Index, "Bomb\\bubble", Length, this);
+			--CurCount;
 		}
 	}
 }

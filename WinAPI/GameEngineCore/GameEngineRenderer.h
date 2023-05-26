@@ -53,6 +53,10 @@ public:
 	{
 		RenderScale = _RenderScale;
 	}
+	void AddRenderScale(const float4& _RenderScale)
+	{
+		RenderScale += _RenderScale;
+	}
 	float4 GetCopyPos() const
 	{
 		return CopyPos;

@@ -36,11 +36,21 @@ public:
 	{
 		IsBomb = _IsBomb;
 	}
+
+	bool GetIsObject() const
+	{
+		return IsObject;
+	}
+	void SetIsObject(const bool _IsObject)
+	{
+		IsObject = _IsObject;
+	}
 private:
 	static std::list<Tile*> AllTile;
 
 	bool IsEmpty = true;
 	bool IsBomb = false;
+	bool IsObject = false;
 
 	void Render() override;
 };

@@ -1,5 +1,6 @@
 #include "Item.h"
 #include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
 
 Item::Item()
@@ -45,6 +46,14 @@ void Item::Update(float _Delta)
 		else
 		{
 			FindRenderer("Shadow")->ChangeAnimation("Small");
+		}
+	}
+
+	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Player))
+	{
+		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
+		{
+			Death();
 		}
 	}
 }

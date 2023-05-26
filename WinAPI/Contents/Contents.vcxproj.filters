@@ -49,6 +49,9 @@
     <ClCompile Include="UI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EndingLevel.h">
@@ -92,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

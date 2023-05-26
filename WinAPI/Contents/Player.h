@@ -12,8 +12,22 @@ public:
 	Player& operator=(Player&& _Other) noexcept = delete;
 
 	void Init(const int2& _Index, const std::string& _Path);
+
+	int GetCurCount() const
+	{
+		return CurCount;
+	}
+	void SetCurCount(const int _CurCount)
+	{
+		CurCount = _CurCount;
+	}
+	void AddCurCount(const int _CurCount)
+	{
+		CurCount += _CurCount;
+	}
 private:
 	int Count = 0;
+	int CurCount = 0;
 	int MaxCount = 0;
 	int Length = 0;
 	int MaxLength = 0;

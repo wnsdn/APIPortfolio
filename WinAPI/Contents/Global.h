@@ -22,13 +22,17 @@ const float SpeedRatio = 0.7f;
 
 enum class UpdateOrder
 {
+	Tile,
+
+	Water,
+	Block,
+	Object,
+	Bomb,
+	Item,
+
 	Player,
 	Monster,
-	Bomb,
-	Water,
-	Tile,
-	Block,
-	Item,
+
 	UI,
 
 	None,
@@ -42,6 +46,7 @@ enum class RenderOrder
 
 	Water,
 	Block,
+	Object,
 	Bomb,
 	Item,
 

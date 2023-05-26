@@ -1,6 +1,7 @@
 #include "Monster.h"
 #include <iostream>
 #include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
 #include "Player.h"
 
@@ -50,8 +51,28 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 
 void Monster::Update(float _Delta)
 {
+	if (!IsUpdate())
+	{
+		if (GetLiveTime() >= 0.5f)
+		{
+			Death();
+		}
+
+		return;
+	}	
+
 	StateUpdate(_Delta);
 	FindRenderer("Main")->ChangeAnimation(Dir);
+
+	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Water))
+	{
+		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
+		{
+			Off();
+			ResetLiveTime();
+			FindRenderer("Main")->ChangeAnimation("Death");
+		}
+	}
 }
 
 void Monster::Render()
