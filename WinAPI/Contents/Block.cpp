@@ -24,13 +24,3 @@ void Block::Init(const int2& _Index, const std::string& _BlockSize, const float4
 
 	Tile::GetTile(Index)->Full();
 }
-
-void Block::Update(float _Delta)
-{
-
-}
-
-void Block::Render()
-{
-	//DrawRect(Pos, TileSize);
-}

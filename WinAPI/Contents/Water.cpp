@@ -33,43 +33,56 @@ void Water::Init(const int2& _Index, int _Length)
 
 			int2 CurIndex = Index + DirPos[j] * i;
 
-			if (CurIndex >= IndexLeftTop &&
-				CurIndex < IndexRightBottom)
+			if (CurIndex.X < IndexLeft ||
+				CurIndex.X >= IndexRight ||
+				CurIndex.Y < IndexTop ||
+				CurIndex.Y >= IndexBottom)
 			{
-				if (!Tile::GetTile(CurIndex)->GetIsEmpty())
+				continue;
+			}
+			if (!Tile::GetTile(CurIndex)->GetIsEmpty())
+			{
+				DirOn[j] = false;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Object))
+				{
+					if (CurIndex.X == Ptr->GetIndex().X &&
+						CurIndex.Y == Ptr->GetIndex().Y)
+					{
+						Tile::GetTile(CurIndex)->Empty();
+						Ptr->Off();
+						Ptr->ResetLiveTime();
+						Ptr->FindRenderer("Main")->Off();
+						Ptr->FindRenderer("Death")->On();
+						Ptr->FindRenderer("Death")->ChangeAnimation("Death");
+					}
+				}
+				for (auto Ptr : Level->FindActor(UpdateOrder::Bomb))
+				{
+					if (CurIndex.X == Ptr->GetIndex().X &&
+						CurIndex.Y == Ptr->GetIndex().Y &&
+						GetLiveTime() <= 0.1f &&
+						Ptr->GetLiveTime() >= 0.3f)
+					{
+						Ptr->Death();
+					}
+				}
+				continue;
+			}
+
+			for (auto Ptr : Level->FindActor(UpdateOrder::Water))
+			{
+				if (CurIndex.X == Ptr->GetIndex().X &&
+					CurIndex.Y == Ptr->GetIndex().Y)
 				{
 					DirOn[j] = false;
-					for (auto Ptr : Level->FindActor(UpdateOrder::Object))
-					{
-						if (CurIndex.X == Ptr->GetIndex().X &&
-							CurIndex.Y == Ptr->GetIndex().Y)
-						{
-							Tile::GetTile(CurIndex)->Empty();
-							Ptr->Off();
-							Ptr->ResetLiveTime();
-							Ptr->FindRenderer("Main")->Off();
-							Ptr->FindRenderer("Death")->On();
-							Ptr->FindRenderer("Death")->ChangeAnimation("Death");
-						}
-					}
-					for (auto Ptr : Level->FindActor(UpdateOrder::Bomb))
-					{
-						if (CurIndex.X == Ptr->GetIndex().X &&
-							CurIndex.Y == Ptr->GetIndex().Y &&
-							GetLiveTime() <= 0.1f &&
-							Ptr->GetLiveTime() >= 0.3f)
-						{
-							Ptr->Death();
-						}
-					}
 					continue;
 				}
-
-				Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
-				WaterPtr->Index = CurIndex;
-				WaterPtr->Pos = IndexToPos(WaterPtr->Index);
-				WaterPtr->FindRenderer("Main")->ChangeAnimation(DirStr[j]);
 			}
+
+			Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
+			WaterPtr->Index = CurIndex;
+			WaterPtr->Pos = IndexToPos(WaterPtr->Index);
+			WaterPtr->FindRenderer("Main")->ChangeAnimation(DirStr[j]);
 		}
 	}
 }

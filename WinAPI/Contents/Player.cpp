@@ -19,12 +19,12 @@ Player::~Player()
 
 void Player::Init(const int2& _Index, const std::string& _Path)
 {
-	Count = 1;
+	Count = 3;
 	MaxCount = 6;
-	Length = 1;
+	Length = 3;
 	MaxLength = 7;
 	StdSpeed = 33.f;
-	CurSpeed = 5.f;
+	CurSpeed = 7.f;
 	Speed = CurSpeed * StdSpeed;
 	MaxSpeed = 9.f;
 	Dir = "Down";
@@ -87,6 +87,6 @@ void Player::Render()
 	DrawRect(Pos, Scale);
 	DrawRect(IndexToPos(Index), TileSize);
 	char Buffer[30] = {};
-	sprintf_s(Buffer, "%d, %d, %f", Count, Length, Speed);
+	sprintf_s(Buffer, "%d, %d, %.1f", Count, Length, Speed);
 	DrawStr(Pos, Buffer);
 }

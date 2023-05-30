@@ -31,7 +31,7 @@ void Object::Init(const int2& _Index, const float4& _Type)
 
 	if (_Type.X == 9 && _Type.Y == 4)
 	{
-		IsMove = true;
+		CanMove = true;
 	}
 
 	Tile::GetTile(Index)->Full();
@@ -48,65 +48,12 @@ void Object::Update(float _Delta)
 
 		return;
 	}
-
-	if (IsMove && Tile::GetTile(Index + int2::Up)->GetIsEmpty())
-	{
-		for (auto Ptr : Level->FindActor(UpdateOrder::Player))
-		{
-			Player* Temp = dynamic_cast<Player*>(Ptr);
-
-			if (GameEngineInput::IsPress(VK_UP) && Temp->GetDir() == "Up")
-			{
-				if (Index.X == Temp->GetIndex().X &&
-					Index.Y == Temp->GetIndex().Y - 1)
-				{
-					Timer += _Delta;
-				}
-
-			}
-			else
-			{
-				Timer = 0.f;
-			}
-		}
-
-		if (Timer >= 1.f)
-		{
-			Moving = true;
-			Tile::GetTile(Index)->Empty();
-		}
-	}
-
-	if (Moving)
-	{
-		Pos.Y -= 80.f * _Delta;
-		MoveDist += 80.f * _Delta;
-		for (auto Ptr : Level->FindActor(UpdateOrder::Player))
-		{
-			if (Ptr->Top() >= Bot())
-			{
-				Ptr->SetPos({ Ptr->GetPos().X, Pos.Y + TileSize.Y});
-			}
-		}
-		if (MoveDist >= TileSize.Y)
-		{
-			Moving = false;
-			Index = PosToIndex(Pos);
-			Tile::GetTile(Index)->Full();
-			MoveDist -= TileSize.Y;
-			Pos.Y += MoveDist * _Delta;
-			Timer = 0.f;
-			MoveDist = 0.f;
-		}
-	}
-
-	//Index = PosToIndex(Pos);
 }
 
 void Object::Render()
 {
-	//DrawRect(Pos, Scale);
-	char Buffer[30] = {};
-	sprintf_s(Buffer, "%f, %f", Timer, MoveDist);
-	DrawStr(Pos, Buffer);
+	DrawRect(Pos, Scale);
+	//char Buffer[30] = {};
+	//sprintf_s(Buffer, "%.2f", MoveUp);
+	//DrawStr(Pos, Buffer);
 }

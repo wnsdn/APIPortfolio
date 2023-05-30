@@ -158,14 +158,6 @@ public:
 	{
 		return !X && !Y;
 	}
-	bool operator<(const float4& _Other)
-	{
-		return X < _Other.X && Y < _Other.Y;
-	}
-	bool operator>(const float4& _Other)
-	{
-		return X > _Other.X && Y > _Other.Y;
-	}
 
 	float4()
 		: X(0.f), Y(0.f)
@@ -216,14 +208,6 @@ public:
 	bool operator==(const int2& _Other)
 	{
 		return X == _Other.X && Y == _Other.Y;
-	}
-	bool operator<(const int2& _Other)
-	{
-		return X < _Other.X && Y < _Other.Y;
-	}
-	bool operator>=(const int2& _Other)
-	{
-		return X >= _Other.X && Y >= _Other.Y;
 	}
 
 	int2()
