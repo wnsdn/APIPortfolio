@@ -26,10 +26,6 @@ void Tile::Init(const int2& _Index, const float4& _Type)
 
 void Tile::Render()
 {
-	if(IsWater)
-	{
-		DrawRect(Pos, TileSize);
-	}
 	//char Buffer[30] = {};
 	//sprintf_s(Buffer, "%d, %d", Index.X, Index.Y);
 	//DrawStr(Pos, Buffer);
@@ -39,7 +35,7 @@ Tile* Tile::GetTile(const int2& _Index)
 {
 	for (auto& TilePtr : AllTile)
 	{
-		if (TilePtr->Index == _Index)
+		if (TilePtr && TilePtr->Index == _Index)
 		{
 			return TilePtr;
 		}

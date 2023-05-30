@@ -20,6 +20,7 @@ void GameEngineTexture::ResLoad(const std::string& _Path)
 	if (!Hbmp)
 	{
 		MsgBoxAssert("HBITMAP == nullptr, " + _Path);
+		return;
 	}
 
 	ImageDC = CreateCompatibleDC(nullptr);
@@ -34,6 +35,7 @@ void GameEngineTexture::ResCreate(const float4& _Scale)
 	if (!Hbmp)
 	{
 		MsgBoxAssert("Fail to CreateCompatibleBitmap, WindowDC");
+		return;
 	}
 
 	ImageDC = CreateCompatibleDC(nullptr);

@@ -1,4 +1,6 @@
 #include "GameEngineString.h"
+#include "GameEngineDebug.h"
+#include <Windows.h>
 
 GameEngineString::GameEngineString()
 {
@@ -22,21 +24,77 @@ std::string GameEngineString::ToUpperReturn(const std::string& _Str)
 
 std::wstring GameEngineString::AnsiToUnicode(const std::string& _Text)
 {
-	return std::wstring();
+	int Size = MultiByteToWideChar(CP_ACP, 0, _Text.c_str(), 
+		static_cast<int>(_Text.size()), nullptr, 0);
+	if (!Size)
+	{
+		MsgBoxAssert("문자열 반환 실패");
+		return std::wstring();
+	}
+
+	std::wstring Result;
+	Result.resize(Size);
+	Size = MultiByteToWideChar(CP_ACP, 0, _Text.c_str(), 
+		static_cast<int>(_Text.size()), &Result[0], Size);
+	if (!Size)
+	{
+		MsgBoxAssert("문자열 반환 실패");
+		return std::wstring();
+	}
+
+	return Result;
+}
+
+std::string GameEngineString::UnicodeToAnsi(const std::wstring& _Text)
+{
+	int Size = WideCharToMultiByte(CP_ACP, 0, _Text.c_str(),
+		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
+	if (!Size)
+	{
+		MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	std::string Result;
+	Result.resize(Size);
+
+	Size = WideCharToMultiByte(CP_ACP, 0, _Text.c_str(),
+		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
+	if (!Size)
+	{
+		MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	return Result;
 }
 
 std::string GameEngineString::UnicodeToUTF8(const std::wstring& _Text)
 {
-	return std::string();
+	int Size = WideCharToMultiByte(CP_UTF8, 0, _Text.c_str(),
+		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
+	if (!Size)
+	{
+		MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	std::string Result;
+	Result.resize(Size);
+
+	Size = WideCharToMultiByte(CP_UTF8, 0, _Text.c_str(),
+		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
+	if (!Size)
+	{
+		MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	return Result;
 }
 
 std::string GameEngineString::AnsiToUTF8(const std::string& _Text)
 {
 	std::wstring Unicode = AnsiToUnicode(_Text);
 	return UnicodeToUTF8(Unicode);
-}
-
-std::string GameEngineString::UnicodeToAnsi(const std::wstring& _Text)
-{
-	return std::string();
 }

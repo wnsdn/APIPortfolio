@@ -31,6 +31,7 @@ std::filesystem::path GameEnginePath::GetPath(const std::string& _ResourceType, 
 		if (Path == Path.root_path())
 		{
 			MsgBoxAssert("Fail to find PATH: " + _Path);
+			return std::filesystem::path();
 		}
 	}
 

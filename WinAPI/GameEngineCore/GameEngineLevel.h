@@ -3,6 +3,8 @@
 #include <list>
 #include "GameEngineObject.h"
 
+class GameEngineActor;
+class GameEngineCamera;
 class GameEngineLevel : public GameEngineObject
 {
 	friend class GameEngineProcess;
@@ -14,49 +16,41 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
-	template <typename ActorType, typename EnumType>
+	template<typename ActorType, typename EnumType>
 	ActorType* CreateActor(EnumType _Order)
 	{
 		return CreateActor<ActorType>(static_cast<int>(_Order));
 	}
-	template <typename ActorType>
+	template<typename ActorType>
 	ActorType* CreateActor(int _Order)
 	{
-		class GameEngineActor* NewActor = new ActorType();
+		GameEngineActor* NewActor = new ActorType();
 		ActorInit(NewActor);
 		AllActor[_Order].push_back(NewActor);
 
 		return dynamic_cast<ActorType*>(NewActor);
 	}
 
-	class GameEngineCamera* GetBackUICamera() const
-	{
-		return BackUICamera;
-	}
-	class GameEngineCamera* GetMainCamera() const
-	{
-		return MainCamera;
-	}
-	class GameEngineCamera* GetFrontUICamera() const
-	{
-		return FrontUICamera;
-	}
-
-	template <typename EnumType>
-	std::list<class GameEngineActor*> GetActorGroup(EnumType _Order)
+	template<typename EnumType>
+	std::list<GameEngineActor*> FindActor(EnumType _Order)
 	{
 		return AllActor[static_cast<int>(_Order)];
 	}
 
-	bool IsActorRender = true;
+	GameEngineCamera* GetMainCamera() const
+	{
+		return MainCamera;
+	}
 protected:
-	class GameEngineCamera* BackUICamera = nullptr;
-	class GameEngineCamera* MainCamera = nullptr;
-	class GameEngineCamera* FrontUICamera = nullptr;
-	std::map<int, std::list<class GameEngineActor*>> AllActor;
-private:
-	void ActorInit(class GameEngineActor* _Actor);
-	void ActorUpdate(float _Delta);
-	void ActorRender();
-	void ActorRelease();
+	std::map<int, std::list<GameEngineActor*>> AllActor;
+	GameEngineCamera* MainCamera = nullptr;
+
+	bool IsDebugRender = false;
+
+	void Start() override;
+	void Update(float _Delta) override;
+	void Render() override;
+	void Release() override;
+
+	void ActorInit(GameEngineActor* _Actor);
 };

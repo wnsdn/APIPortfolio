@@ -4,9 +4,7 @@
 #include "GameEngineCollision.h"
 
 GameEngineLevel::GameEngineLevel()
-	: BackUICamera(new GameEngineCamera)
-	, MainCamera(new GameEngineCamera)
-	, FrontUICamera(new GameEngineCamera)
+	: MainCamera(new GameEngineCamera)
 {
 }
 
@@ -24,30 +22,18 @@ GameEngineLevel::~GameEngineLevel()
 		}
 	}
 
-	if (BackUICamera)
-	{
-		delete BackUICamera;
-		BackUICamera = nullptr;
-	}
 	if (MainCamera)
 	{
 		delete MainCamera;
 		MainCamera = nullptr;
 	}
-	if (FrontUICamera)
-	{
-		delete FrontUICamera;
-		FrontUICamera = nullptr;
-	}
 }
 
-void GameEngineLevel::ActorInit(GameEngineActor* _Actor)
+void GameEngineLevel::Start()
 {
-	_Actor->Level = this;
-	_Actor->Start();
 }
 
-void GameEngineLevel::ActorUpdate(float _Delta)
+void GameEngineLevel::Update(float _Delta)
 {
 	for (auto& Pair : AllActor)
 	{
@@ -64,9 +50,9 @@ void GameEngineLevel::ActorUpdate(float _Delta)
 	}
 }
 
-void GameEngineLevel::ActorRender()
+void GameEngineLevel::Render()
 {
-	if (!IsActorRender)
+	if (!IsDebugRender)
 	{
 		return;
 	}
@@ -85,7 +71,7 @@ void GameEngineLevel::ActorRender()
 	}
 }
 
-void GameEngineLevel::ActorRelease()
+void GameEngineLevel::Release()
 {
 	for (auto& Pair : AllActor)
 	{
@@ -96,6 +82,7 @@ void GameEngineLevel::ActorRelease()
 			GameEngineActor* Actor = *Iter;
 			if (Actor->IsDeath())
 			{
+				Actor->Release();
 				delete Actor;
 				Actor = nullptr;
 
@@ -107,4 +94,10 @@ void GameEngineLevel::ActorRelease()
 			}
 		}
 	}
+}
+
+void GameEngineLevel::ActorInit(GameEngineActor* _Actor)
+{
+	_Actor->Level = this;
+	_Actor->Start();
 }

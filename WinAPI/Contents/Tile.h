@@ -27,39 +27,10 @@ public:
 	{
 		IsEmpty = false;
 	}
-
-	bool GetIsBomb() const
-	{
-		return IsBomb;
-	}
-	void SetIsBomb(const bool _IsBomb)
-	{
-		IsBomb = _IsBomb;
-	}
-	bool GetIsWater() const
-	{
-		return IsWater;
-	}
-	void SetIsWater(const bool _IsWater)
-	{
-		IsWater = _IsWater;
-	}
-
-	bool GetIsObject() const
-	{
-		return IsObject;
-	}
-	void SetIsObject(const bool _IsObject)
-	{
-		IsObject = _IsObject;
-	}
 private:
 	static std::list<Tile*> AllTile;
 
 	bool IsEmpty = true;
-	bool IsBomb = false;
-	bool IsWater = false;
-	bool IsObject = false;
 
 	void Render() override;
 };

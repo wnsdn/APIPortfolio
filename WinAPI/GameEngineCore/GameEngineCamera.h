@@ -3,6 +3,7 @@
 #include <list>
 #include <GameEngineBase/GameEngineMath.h>
 
+class GameEngineRenderer;
 class GameEngineCamera
 {
 public:
@@ -13,7 +14,8 @@ public:
 	GameEngineCamera& operator=(const GameEngineCamera& _Other) = delete;
 	GameEngineCamera& operator=(GameEngineCamera&& _Other) noexcept = delete;
 
-	void InsertRenderer(class GameEngineRenderer* _Renderer, bool _Ordered);
+	void InsertRenderer(GameEngineRenderer* _Renderer, bool _Ordered);
+	void InsertUIRenderer(GameEngineRenderer* _Renderer, bool _Front);
 	void Render(float _Delta);
 	void Release();
 
@@ -31,6 +33,7 @@ public:
 	}
 private:
 	float4 Pos = {};
-	std::map<int, std::list<class GameEngineRenderer*>> Ordered_Renderer;
-	std::map<int, std::list<class GameEngineRenderer*>> Unordered_Renderer;
+	std::map<int, std::list<GameEngineRenderer*>> Ordered_Renderer;
+	std::map<int, std::list<GameEngineRenderer*>> Unordered_Renderer;
+	std::map<int, std::list<GameEngineRenderer*>> UI_Renderer;
 };

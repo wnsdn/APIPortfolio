@@ -10,17 +10,43 @@ GameEngineProcess::~GameEngineProcess()
 {
 	for (auto& Pair : AllLevel)
 	{
-		if (Pair.second)
+		GameEngineLevel* Level = Pair.second;
+
+		if (Level)
 		{
-			delete Pair.second;
-			Pair.second = nullptr;
+			delete Level;
+			Level = nullptr;
 		}
 	}
 }
 
-GameEngineLevel* GameEngineProcess::FindLevel(const std::string& _LevelName)
+void GameEngineProcess::Start()
 {
-	std::string Upper = GameEngineString::ToUpperReturn(_LevelName);
+}
+
+void GameEngineProcess::Update(float _Delta)
+{
+	CurLevel->Update(_Delta);
+}
+
+void GameEngineProcess::Render()
+{
+	CurLevel->Render();
+}
+
+void GameEngineProcess::Release()
+{
+	CurLevel->Release();
+}
+
+void GameEngineProcess::LevelInit(GameEngineLevel* _Level)
+{
+	_Level->Start();
+}
+
+GameEngineLevel* GameEngineProcess::FindLevel(const std::string& _Level)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_Level);
 	auto FindIter = AllLevel.find(Upper);
 
 	if (FindIter == AllLevel.end())
@@ -29,27 +55,4 @@ GameEngineLevel* GameEngineProcess::FindLevel(const std::string& _LevelName)
 	}
 
 	return FindIter->second;
-}
-
-void GameEngineProcess::LevelInit(GameEngineLevel* _Level)
-{
-	_Level->Start();
-}
-
-void GameEngineProcess::LevelUpdate(float _Delta)
-{
-	CurLevel->ActorUpdate(_Delta);
-	CurLevel->Update(_Delta);
-}
-
-void GameEngineProcess::LevelRender()
-{
-	CurLevel->ActorRender();
-	CurLevel->Render();
-}
-
-void GameEngineProcess::LevelRelease()
-{
-	CurLevel->ActorRelease();
-	CurLevel->Release();
 }

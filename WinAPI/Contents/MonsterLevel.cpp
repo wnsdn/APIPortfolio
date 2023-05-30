@@ -4,6 +4,7 @@
 #include <GameEngineBase/GameEngineDebug.h>
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEnginePlatform/GameEngineSound.h>
 
 #include "Global.h"
 #include "BackGround.h"
@@ -27,6 +28,10 @@ MonsterLevel::~MonsterLevel()
 
 void MonsterLevel::Init(const std::string& _MapData)
 {
+	GameEngineSound::CreateSound("Bomb\\Set.mp3");
+	GameEngineSound::CreateSound("Bomb\\Explode.wav");
+	GameEngineSound::CreateSound("Item\\Get.mp3");
+
 	UI* UIPtr = nullptr;
 	UIPtr = CreateActor<UI>(UpdateOrder::UI);
 
@@ -38,6 +43,7 @@ void MonsterLevel::Init(const std::string& _MapData)
 	if (!Read)
 	{
 		MsgBoxAssert(Path.string() + " ReadMapData()");
+		return;
 	}
 
 	Tile* TilePtr = nullptr;
@@ -118,21 +124,19 @@ void MonsterLevel::Init(const std::string& _MapData)
 	ItemPtr->Init({ 8, 12 }, { 3, 2 });
 }
 
-void MonsterLevel::Start()
-{
-}
-
 void MonsterLevel::Update(float _Delta)
 {
+	GameEngineLevel::Update(_Delta);
+
 	if (GameEngineInput::IsDown('R'))
 	{
-		if (IsActorRender)
+		if (IsDebugRender)
 		{
-			IsActorRender = false;
+			IsDebugRender = false;
 		}
 		else
 		{
-			IsActorRender = true;
+			IsDebugRender = true;
 		}
 	}
 }

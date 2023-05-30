@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 #include <GameEnginePlatform/ThirdParty/FMOD/inc/fmod.hpp>
 
 class GameEngineSound
@@ -12,12 +13,22 @@ public:
 	GameEngineSound& operator=(const GameEngineSound& _Other) = delete;
 	GameEngineSound& operator=(GameEngineSound&& _Other) noexcept = delete;
 
-	static void FindSound(const std::string& _Name, const std::string& _Path);
-	static void SoundLoad(const std::string& _Name, const std::string& _Path);
-	static void SoundLoad(const std::string& _Name);
-	static void SoundPlay(const std::string& _Name);
-	static void PlayBgm(const std::string& _Name);
-	static void StopBgm();
+	static void Init();
+	static void Release();
+	static void Update();
+	static void CreateSound(const std::string& _Filename, bool _Loop = false);
+	static GameEngineSound* FindSound(const std::string& _Filename);
+
+	void Play();
+	void Stop();
+	void SetVolume(float _Volume);
 private:
-	void Load(const std::string& _Path);
+	static FMOD::System* SoundSystem;
+	static std::map<std::string, GameEngineSound*> AllSound;
+
+	FMOD::Sound* SoundHandle = nullptr;
+	FMOD::Channel* SoundControl = nullptr;
+
+	void Load(const std::string& _Path, bool _Loop = false);
 };
+

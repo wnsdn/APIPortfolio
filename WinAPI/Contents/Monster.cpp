@@ -59,12 +59,12 @@ void Monster::Update(float _Delta)
 		}
 
 		return;
-	}	
+	}
 
 	StateUpdate(_Delta);
 	FindRenderer("Main")->ChangeAnimation(Dir);
 
-	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Water))
+	for (auto Ptr : Level->FindActor(UpdateOrder::Water))
 	{
 		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
 		{

@@ -17,33 +17,29 @@ public:
 	GameEngineActor& operator=(GameEngineActor&& _Other) noexcept = delete;
 
 	template <typename EnumType>
-	GameEngineRenderer* CreateBackUIRenderer(const std::string& _Path, const std::string& _Name, EnumType _Order, bool _Ordered = false, const float4 _Pos = { 0, 0 }, const float4 _Size = { 1, 1 })
-	{
-		return CreateBackUIRenderer(_Path, _Name, static_cast<int>(_Order), _Ordered, _Pos, _Size);
-	}
-	GameEngineRenderer* CreateBackUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size);
-	template <typename EnumType>
 	GameEngineRenderer* CreateRenderer(const std::string& _Path, const std::string& _Name, EnumType _Order, bool _Ordered, const float4 _Pos = { 0, 0 }, const float4 _Size = { 1, 1 })
 	{
 		return CreateRenderer(_Path, _Name, static_cast<int>(_Order), _Ordered, _Pos, _Size);
 	}
 	GameEngineRenderer* CreateRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size);
+
 	template <typename EnumType>
-	GameEngineRenderer* CreateFrontUIRenderer(const std::string& _Path, const std::string& _Name, EnumType _Order, bool _Ordered = false, const float4 _Pos = { 0, 0 }, const float4 _Size = { 1, 1 })
+	GameEngineRenderer* CreateUIRenderer(const std::string& _Path, const std::string& _Name, EnumType _Order, bool _Front = false, const float4 _Pos = { 0, 0 }, const float4 _Size = { 1, 1 })
 	{
-		return CreateFrontUIRenderer(_Path, _Name, static_cast<int>(_Order), _Ordered, _Pos, _Size);
+		return CreateUIRenderer(_Path, _Name, static_cast<int>(_Order), _Front, _Pos, _Size);
 	}
-	GameEngineRenderer* CreateFrontUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size);
+	GameEngineRenderer* CreateUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Front, const float4 _Pos, const float4 _Size);
+
 	GameEngineRenderer* FindRenderer(const std::string& _Name);
 
 	void DrawRect(const float4& _Pos, const float4& _Scale);
 	void DrawStr(const float4& _Pos, const char* _Str);
 
-	class GameEngineLevel* GetLevel() const
+	GameEngineLevel* GetLevel() const
 	{
 		return Level;
 	}
-	void SetLevel(class GameEngineLevel* const _Level)
+	void SetLevel(GameEngineLevel* const _Level)
 	{
 		Level = _Level;
 	}
@@ -106,7 +102,7 @@ public:
 		return static_cast<int>(Bot());
 	}
 protected:
-	class GameEngineLevel* Level = nullptr;
+	GameEngineLevel* Level = nullptr;
 	float4 Pos = {};
 	float4 Scale = {};
 	int2 Index = {};

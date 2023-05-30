@@ -15,35 +15,14 @@ GameEngineActor::~GameEngineActor()
 {
 	for (auto& Pair : AllRenderer)
 	{
-		if (Pair.second)
+		GameEngineRenderer* Renderer = Pair.second;
+
+		if (Renderer)
 		{
-			Pair.second->Death();
-			Pair.second = nullptr;
+			Renderer->Death();
+			Renderer = nullptr;
 		}
 	}
-}
-
-GameEngineRenderer* GameEngineActor::CreateBackUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size)
-{
-	std::string Upper = GameEngineString::ToUpperReturn(_Name);
-	auto FindIter = AllRenderer.find(Upper);
-
-	if (FindIter != AllRenderer.end())
-	{
-		return FindIter->second;
-	}
-
-	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
-
-	NewRenderer->SetCamera(Level->GetBackUICamera());
-	NewRenderer->SetMaster(this);
-	NewRenderer->SetOrder(_Order);
-	NewRenderer->Init(_Path, _Pos, _Size);
-
-	Level->GetBackUICamera()->InsertRenderer(NewRenderer, _Ordered);
-	AllRenderer.emplace(Upper, NewRenderer);
-
-	return NewRenderer;
 }
 
 GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size)
@@ -69,7 +48,7 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Path, co
 	return NewRenderer;
 }
 
-GameEngineRenderer* GameEngineActor::CreateFrontUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Ordered, const float4 _Pos, const float4 _Size)
+GameEngineRenderer* GameEngineActor::CreateUIRenderer(const std::string& _Path, const std::string& _Name, int _Order, bool _Front, const float4 _Pos, const float4 _Size)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Name);
 	auto FindIter = AllRenderer.find(Upper);
@@ -81,12 +60,12 @@ GameEngineRenderer* GameEngineActor::CreateFrontUIRenderer(const std::string& _P
 
 	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
 
-	NewRenderer->SetCamera(Level->GetFrontUICamera());
+	NewRenderer->SetCamera(Level->GetMainCamera());
 	NewRenderer->SetMaster(this);
 	NewRenderer->SetOrder(_Order);
 	NewRenderer->Init(_Path, _Pos, _Size);
 
-	Level->GetFrontUICamera()->InsertRenderer(NewRenderer, _Ordered);
+	Level->GetMainCamera()->InsertUIRenderer(NewRenderer, _Front);
 	AllRenderer.emplace(Upper, NewRenderer);
 
 	return NewRenderer;
@@ -100,6 +79,7 @@ GameEngineRenderer* GameEngineActor::FindRenderer(const std::string& _Name)
 	if (FindIter == AllRenderer.end())
 	{
 		MsgBoxAssert(Upper + " FindRenderer() ½ÇÆÐ");
+		return nullptr;
 	}
 
 	return FindIter->second;

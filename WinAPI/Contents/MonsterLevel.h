@@ -14,6 +14,5 @@ public:
 
 	void Init(const std::string& _MapData);
 private:
-	void Start() override;
 	void Update(float _Delta) override;
 };

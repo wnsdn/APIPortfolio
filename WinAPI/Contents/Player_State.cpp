@@ -6,6 +6,7 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
 #include "Tile.h"
+#include "Object.h"
 
 void Player::StateUpdate(float _Delta)
 {
@@ -74,7 +75,7 @@ void Player::RunUpdate(float _Delta)
 			Pos.X += Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->GetActorGroup(UpdateOrder::Tile))
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 		{
 			Tile* Temp = dynamic_cast<Tile*>(Ptr);
 			if (Temp->GetIsEmpty())
@@ -115,7 +116,7 @@ void Player::RunUpdate(float _Delta)
 			Pos.X -= Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->GetActorGroup(UpdateOrder::Tile))
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 		{
 			Tile* Temp = dynamic_cast<Tile*>(Ptr);
 			if (Temp->GetIsEmpty())
@@ -156,7 +157,7 @@ void Player::RunUpdate(float _Delta)
 			Pos.Y += Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->GetActorGroup(UpdateOrder::Tile))
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 		{
 			Tile* Temp = dynamic_cast<Tile*>(Ptr);
 			if (Temp->GetIsEmpty())
@@ -170,7 +171,8 @@ void Player::RunUpdate(float _Delta)
 				{
 					if (Index.X == Ptr->GetIndex().X)
 					{
-						Pos.Y += Speed * _Delta;
+						//Pos.Y += Speed * _Delta;
+						Pos.Y = Ptr->GetPos().Y + TileSize.Y;
 					}
 
 					if (Pos.X > Ptr->GetPos().X + Ptr->GetScale().hX() * TrimRatio &&
@@ -197,7 +199,7 @@ void Player::RunUpdate(float _Delta)
 			Pos.Y -= Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->GetActorGroup(UpdateOrder::Tile))
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 		{
 			Tile* Temp = dynamic_cast<Tile*>(Ptr);
 			if (Temp->GetIsEmpty())

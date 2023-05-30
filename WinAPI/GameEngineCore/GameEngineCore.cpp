@@ -4,6 +4,7 @@
 #include <GameEngineBase/GameEngineRandom.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEnginePlatform/GameEngineSound.h>
 #include "GameEngineProcess.h"
 #include "GameEngineLevel.h"
 #include "GameEngineCamera.h"
@@ -28,6 +29,7 @@ void GameEngineCore::EngineStart(HINSTANCE _Hinst, const std::string& _Title, Ga
 	if (!Process)
 	{
 		MsgBoxAssert("Process == nullptr (EngineStart)");
+		return;
 	}
 
 	GameEngineWindow::GetInst().Open(_Hinst, _Title);
@@ -39,6 +41,7 @@ void GameEngineCore::CoreStart()
 	GameEngineTime::Init();
 	GameEngineInput::Init();
 	GameEngineRandom::Init();
+	GameEngineSound::Init();
 
 	Process->Start();
 }
@@ -52,6 +55,7 @@ void GameEngineCore::CoreUpdate()
 		GameEngineTime::Reset();
 	}
 
+	GameEngineSound::Update();
 	GameEngineTime::Update();
 	float Delta = GameEngineTime::GetFloatDelta();
 	if (GameEngineWindow::GetInst().IsFocus())
@@ -63,24 +67,19 @@ void GameEngineCore::CoreUpdate()
 		GameEngineInput::Reset();
 	}
 
-	Process->LevelUpdate(Delta);
 	Process->Update(Delta);
 
-	//GameEngineWindow::GetInst().ClearBackBuffer();
-	Process->CurLevel->GetBackUICamera()->Render(Delta);
 	Process->CurLevel->GetMainCamera()->Render(Delta);
-	Process->CurLevel->GetFrontUICamera()->Render(Delta);
-	Process->LevelRender();
 	Process->Render();
 	GameEngineWindow::GetInst().DoubleBuffering();
 
 	Process->CurLevel->GetMainCamera()->Release();
-	Process->LevelRelease();
 	Process->Release();
 }
 
 void GameEngineCore::CoreEnd()
 {
+	GameEngineSound::Release();
 	if (Process)
 	{
 		delete Process;

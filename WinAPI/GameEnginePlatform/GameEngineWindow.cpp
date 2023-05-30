@@ -25,6 +25,7 @@ void GameEngineWindow::Open(HINSTANCE _Hinst, const std::string& _Title)
 	if (!Hinst)
 	{
 		MsgBoxAssert("HINSTANCE == nullptr");
+		return;
 	}
 
 	WNDCLASSEXA Wc = {};
@@ -42,6 +43,7 @@ void GameEngineWindow::Open(HINSTANCE _Hinst, const std::string& _Title)
 	if (!Hwnd)
 	{
 		MsgBoxAssert("HWND == nullptr");
+		return;
 	}
 
 	Hdc = GetDC(Hwnd);

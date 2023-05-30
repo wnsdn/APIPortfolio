@@ -1,4 +1,5 @@
 #include "Item.h"
+#include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
@@ -52,11 +53,12 @@ void Item::Update(float _Delta)
 		}
 	}
 
-	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Player))
+	for (auto Ptr : Level->FindActor(UpdateOrder::Player))
 	{
 		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
 		{
 			Player* PlayerPtr = dynamic_cast<Player*>(Ptr);
+			GameEngineSound::FindSound("Item\\Get.mp3")->Play();
 			if (Type.X == 3 && Type.Y == 2)
 			{
 				PlayerPtr->AddCurSpeed(1);
@@ -73,7 +75,7 @@ void Item::Update(float _Delta)
 		}
 	}
 
-	for (auto Ptr : Level->GetActorGroup(UpdateOrder::Water))
+	for (auto Ptr : Level->FindActor(UpdateOrder::Water))
 	{
 		if (Index.X == Ptr->GetIndex().X && Index.Y == Ptr->GetIndex().Y)
 		{

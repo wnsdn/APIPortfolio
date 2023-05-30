@@ -51,6 +51,11 @@ public:
 	{
 		CurSpeed += _CurSpeed;
 	}
+
+	std::string GetDir() const
+	{
+		return Dir;
+	}
 private:
 	int Count = 0;
 	int MaxCount = 0;

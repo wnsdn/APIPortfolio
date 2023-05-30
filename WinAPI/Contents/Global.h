@@ -40,6 +40,8 @@ enum class UpdateOrder
 
 enum class RenderOrder
 {
+	BackUI,
+
 	BackGround,
 	Tile,
 	Shadow,
@@ -53,7 +55,7 @@ enum class RenderOrder
 	Player,
 	Monster,
 
-	UI,
+	FrontUI,
 
 	None,
 };

@@ -3,6 +3,7 @@
 #include <GameEngineBase/GameEngineString.h>
 #include "GameEngineObject.h"
 
+class GameEngineLevel;
 class GameEngineProcess : public GameEngineObject
 {
 	friend class GameEngineCore;
@@ -14,10 +15,10 @@ public:
 	GameEngineProcess& operator=(const GameEngineProcess& _Other) = delete;
 	GameEngineProcess& operator=(GameEngineProcess&& _Other) noexcept = delete;
 
-	template <typename LevelType>
-	LevelType* CreateLevel(const std::string& _LevelName)
+	template<typename LevelType>
+	LevelType* CreateLevel(const std::string& _Level)
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_LevelName);
+		std::string Upper = GameEngineString::ToUpperReturn(_Level);
 		auto FindIter = AllLevel.find(Upper);
 		
 		if (FindIter != AllLevel.end())
@@ -25,21 +26,23 @@ public:
 			return dynamic_cast<LevelType*>(FindIter->second);
 		}
 
-		class GameEngineLevel* NewLevel = new LevelType();
+		GameEngineLevel* NewLevel = new LevelType();
 		LevelInit(NewLevel);
-		AllLevel.emplace(std::make_pair(Upper, NewLevel));
+		AllLevel.emplace(Upper, NewLevel);
 		NextLevel = NewLevel;
 
 		return dynamic_cast<LevelType*>(NewLevel);
 	}
-	class GameEngineLevel* FindLevel(const std::string& _LevelName);
+	GameEngineLevel* FindLevel(const std::string& _Level);
 protected:
-	class GameEngineLevel* CurLevel = nullptr;
-	class GameEngineLevel* NextLevel = nullptr;
-	std::map<std::string, class GameEngineLevel*> AllLevel;
-private:
-	void LevelInit(class GameEngineLevel* _Level);
-	void LevelUpdate(float _Delta);
-	void LevelRender();
-	void LevelRelease();
+	std::map<std::string, GameEngineLevel*> AllLevel;
+	GameEngineLevel* NextLevel = nullptr;
+	GameEngineLevel* CurLevel = nullptr;
+
+	void Start() override;
+	void Update(float _Delta) override;
+	void Render() override;
+	void Release() override;
+
+	void LevelInit(GameEngineLevel* _Level);
 };
