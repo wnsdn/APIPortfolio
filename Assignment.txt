@@ -7,3 +7,5 @@ GameResult UI 구현
 아이템 효과 구현
 
 맵에디터 만들기
+
+<random>
