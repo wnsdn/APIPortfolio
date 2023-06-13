@@ -92,13 +92,13 @@ public:
 		}
 
 		int Count = CurAnimation->EndFrame - CurAnimation->StartFrame + 1;
-		if (!AnimationEnd && LiveTime >= static_cast<float>(Count) * CurAnimation->Inter)
+		if (!CurAnimation->AnimationEnd && LiveTime >= static_cast<float>(Count) * CurAnimation->Inter)
 		{
-			AnimationEnd = true;
+			CurAnimation->AnimationEnd = true;
 			LiveTime = 0.0f;
 		}
 
-		return AnimationEnd;
+		return CurAnimation->AnimationEnd;
 	}
 private:
 	GameEngineCamera* Camera = nullptr;
@@ -120,10 +120,10 @@ private:
 		float CurInter = 0.f;
 		float Inter = 0.1f;
 		bool Loop = true;
+		bool AnimationEnd = false;
 	};
 	std::map<std::string, Animation> AllAnimation;
 	Animation* CurAnimation = nullptr;
-	bool AnimationEnd = false;
 private:
 	std::string Text = "";
 	int TextScale = 0;

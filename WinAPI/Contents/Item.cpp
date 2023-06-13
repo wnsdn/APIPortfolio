@@ -34,14 +34,14 @@ void Item::Init(const int2& _Index, const float4& _Type)
 
 void Item::Update(float _Delta)
 {
-	FindRenderer("Item.bmp")->SetPos({ 0, FindRenderer("Item.bmp")->GetPos().Y + MoveDir * MoveSpeed * _Delta });
+	FindRenderer("Item.bmp")->AddPos({ 0, MoveDir * MoveSpeed * _Delta });
 	MoveDist += MoveSpeed * _Delta;
 
 	if (MoveDist >= MaxDist)
 	{
 		MoveDir *= -1.f;
 		MoveDist -= MaxDist;
-		FindRenderer("Item.bmp")->SetPos({ 0, FindRenderer("Item.bmp")->GetPos().Y + MoveDir * MoveDist * _Delta });
+		FindRenderer("Item.bmp")->AddPos({ 0, MoveDir * MoveDist });
 		
 		if (MoveDir == -1)
 		{

@@ -77,12 +77,15 @@ void Player::Update(float _Delta)
 
 	if (Count > 0 && GameEngineInput::IsDown(VK_SPACE))
 	{
-		if (Tile::GetTile(Index)->GetIsEmpty())
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 		{
-			Level->CreateActor<Bomb>(UpdateOrder::Bomb)->Init(Index, Length, this);
-			FindRenderer("PlayerShadow.bmp")->SetOrderChange(true);
-			FindRenderer(Main)->SetOrderChange(true);
-			--Count;
+			if (Ptr && Index == Ptr->GetIndex() && dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			{
+				Level->CreateActor<Bomb>(UpdateOrder::Bomb)->Init(Index, Length, this);
+				FindRenderer("PlayerShadow.bmp")->SetOrderChange(true);
+				FindRenderer(Main)->SetOrderChange(true);
+				--Count;
+			}
 		}
 	}
 }

@@ -110,22 +110,46 @@ void Object::CollisionCheck(float _Delta)
 	if (MoveLeft >= 0.5f)
 	{
 		MoveDir = "Left";
-		Tile::GetTile(Index)->Empty();
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Index == Ptr->GetIndex())
+			{
+				dynamic_cast<Tile*>(Ptr)->Empty();
+			}
+		}
 	}
 	else if (MoveRight >= 0.5f)
 	{
 		MoveDir = "Right";
-		Tile::GetTile(Index)->Empty();
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Index == Ptr->GetIndex())
+			{
+				dynamic_cast<Tile*>(Ptr)->Empty();
+			}
+		}
 	}
 	else if (MoveUp >= 0.5f)
 	{
 		MoveDir = "Up";
-		Tile::GetTile(Index)->Empty();
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Index == Ptr->GetIndex())
+			{
+				dynamic_cast<Tile*>(Ptr)->Empty();
+			}
+		}
 	}
 	else if (MoveDown >= 0.5f)
 	{
 		MoveDir = "Down";
-		Tile::GetTile(Index)->Empty();
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Index == Ptr->GetIndex())
+			{
+				dynamic_cast<Tile*>(Ptr)->Empty();
+			}
+		}
 	}
 
 	if (MoveDir == "Left")
@@ -178,7 +202,13 @@ void Object::CollisionCheck(float _Delta)
 		MoveDir = "";
 
 		Index = PosToIndex(Pos);
-		Tile::GetTile(Index)->Full();
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Index == Ptr->GetIndex())
+			{
+				dynamic_cast<Tile*>(Ptr)->Full();
+			}
+		}
 	}
 
 	if (MoveDir == "Left")

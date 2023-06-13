@@ -185,6 +185,7 @@ void MonsterLevel::Start()
 void MonsterLevel::Update(float _Delta)
 {
 	GameEngineLevel::Update(_Delta);
-
+	
+	CuratinUpdate(_Delta);
 	OutButtonUpdate(_Delta);
 }

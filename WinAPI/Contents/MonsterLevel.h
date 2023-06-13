@@ -24,5 +24,6 @@ private:
 	void Start() override;
 	void Update(float _Delta) override;
 
+	void CuratinUpdate(float _Delta);
 	void OutButtonUpdate(float _Delta);
 };

@@ -62,6 +62,11 @@ private:
 	void RunUpdate(float _Delta);
 	void DeathUpdate(float _Delta);
 	void CaptureUpdate(float _Delta);
+
+	float MoveDist = 0.f;
+	float MaxDist = 8.f;
+	float MoveSpeed = 10.f;
+	float MoveDir = -1.f;
 	
 	void CollisionCheck(float _Delta);
 };
