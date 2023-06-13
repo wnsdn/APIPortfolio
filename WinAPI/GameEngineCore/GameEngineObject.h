@@ -14,9 +14,18 @@ public:
 	{
 		return Order;
 	}
-	void SetOrder(const int _Order)
+	void SetOrder(const int _RenderOrder)
 	{
-		Order = _Order;
+		Order = _RenderOrder;
+	}
+
+	bool GetOrderChange() const
+	{
+		return OrderChange;
+	}
+	void SetOrderChange(const bool _OrderChange)
+	{
+		OrderChange = _OrderChange;
 	}
 
 	void On()
@@ -54,14 +63,16 @@ public:
 	{
 		LiveTime += _Delta;
 	}
+
 protected:
 	int Order = 0;
+	bool OrderChange = false;
 	bool IsUpdateValue = true;
 	bool IsDeathValue = false;
 	float LiveTime = 0.0f;
 
 	virtual void Start() {}
 	virtual void Update(float _Delta) {}
-	virtual void Render() {}
+	virtual void Render(float _Delta) {}
 	virtual void Release() {}
 };

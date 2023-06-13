@@ -2,9 +2,11 @@
 #include <map>
 #include <list>
 #include <GameEngineBase/GameEngineMath.h>
+#include "GameEngineObject.h"
+#include "GameEngineSubObject.h"
 
 class GameEngineRenderer;
-class GameEngineCamera
+class GameEngineCamera : public GameEngineObject, public GameEngineSubObject
 {
 public:
 	GameEngineCamera();
@@ -14,26 +16,20 @@ public:
 	GameEngineCamera& operator=(const GameEngineCamera& _Other) = delete;
 	GameEngineCamera& operator=(GameEngineCamera&& _Other) noexcept = delete;
 
-	void InsertRenderer(GameEngineRenderer* _Renderer, bool _Ordered);
-	void InsertUIRenderer(GameEngineRenderer* _Renderer, bool _Front);
-	void Render(float _Delta);
-	void Release();
+	template<typename EnumTypeBegin, typename EnumTypeEnd>
+	void Init(EnumTypeBegin _ZOrderBegin, EnumTypeEnd _ZOrderEnd)
+	{
+		ZOrderBegin = static_cast<int>(_ZOrderBegin);
+		ZOrderEnd = static_cast<int>(_ZOrderEnd);
+	}
+	void InsertRenderer(GameEngineRenderer* _Renderer);
 
-	float4 GetPos() const
-	{
-		return Pos;
-	}
-	void SetRenderPos(const float4& _Pos)
-	{
-		Pos = _Pos;
-	}
-	void AddPos(const float4& _Pos)
-	{
-		Pos += _Pos;
-	}
+	void Update(float _Delta) override;
+	void Render(float _Delta) override;
+	void Release();
 private:
-	float4 Pos = {};
-	std::map<int, std::list<GameEngineRenderer*>> Ordered_Renderer;
-	std::map<int, std::list<GameEngineRenderer*>> Unordered_Renderer;
-	std::map<int, std::list<GameEngineRenderer*>> UI_Renderer;
+	int ZOrderBegin = 0;
+	int ZOrderEnd = 0;
+
+	std::map<int, std::list<GameEngineRenderer*>> AllRenderer;
 };

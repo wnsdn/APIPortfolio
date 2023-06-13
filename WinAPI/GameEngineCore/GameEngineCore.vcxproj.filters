@@ -21,10 +21,13 @@
       <Filter>Object\Parent</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCollision.cpp">
-      <Filter>Object\Rendering\SubObject</Filter>
+      <Filter>Object\Collision</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineRenderer.cpp">
-      <Filter>Object\Rendering\SubObject</Filter>
+      <Filter>Object\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineSubObject.cpp">
+      <Filter>Object\Parent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,10 +51,13 @@
       <Filter>Object\Parent</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineCollision.h">
-      <Filter>Object\Rendering\SubObject</Filter>
+      <Filter>Object\Collision</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineRenderer.h">
-      <Filter>Object\Rendering\SubObject</Filter>
+      <Filter>Object\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineSubObject.h">
+      <Filter>Object\Parent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +73,7 @@
     <Filter Include="Object\Parent">
       <UniqueIdentifier>{05c2c675-5a81-4fd6-9b7e-b3dccf1428c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Rendering\SubObject">
+    <Filter Include="Object\Collision">
       <UniqueIdentifier>{14e43864-2de0-4f3e-9d87-1cbaa5d1e58b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

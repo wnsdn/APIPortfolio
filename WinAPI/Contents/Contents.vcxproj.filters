@@ -37,9 +37,6 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
-    <ClCompile Include="Block.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
     <ClCompile Include="Global.cpp">
       <Filter>Header</Filter>
     </ClCompile>
@@ -49,8 +46,44 @@
     <ClCompile Include="UI.cpp">
       <Filter>Actor\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Actor\Block</Filter>
+    </ClCompile>
     <ClCompile Include="Object.cpp">
+      <Filter>Actor\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Curtain.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStart.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResult.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleLevel_Update.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Button_Update.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterLevel_Update.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_Collsion.cpp">
       <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Water_Collision.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_Collision.cpp">
+      <Filter>Actor\Block</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,17 +120,32 @@
     <ClInclude Include="Tile.h">
       <Filter>Actor</Filter>
     </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>Actor\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Actor\Block</Filter>
+    </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Actor</Filter>
+      <Filter>Actor\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Curtain.h">
+      <Filter>Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStart.h">
+      <Filter>Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResult.h">
+      <Filter>Actor\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +163,9 @@
     </Filter>
     <Filter Include="Actor\UI">
       <UniqueIdentifier>{3fafc6ff-5db7-483c-86b9-c51dad7ec302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Block">
+      <UniqueIdentifier>{f1bc405a-a3cc-4db8-98a9-880e809b703f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

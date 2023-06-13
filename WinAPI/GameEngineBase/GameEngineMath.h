@@ -184,6 +184,11 @@ public:
 	static const int2 Up;
 	static const int2 Down;
 
+	static const int2 UpLeft;
+	static const int2 UpRight;
+	static const int2 DownLeft;
+	static const int2 DownRight;
+
 	int X;
 	int Y;
 
@@ -205,7 +210,7 @@ public:
 		return { X * _Value, Y * _Value };
 	}
 
-	bool operator==(const int2& _Other)
+	bool operator==(const int2& _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
 	}

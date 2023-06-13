@@ -8,29 +8,7 @@ GameEngineCamera::GameEngineCamera()
 
 GameEngineCamera::~GameEngineCamera()
 {
-	for (auto& Pair : Ordered_Renderer)
-	{
-		for (auto& Renderer : Pair.second)
-		{
-			if (Renderer)
-			{
-				delete Renderer;
-				Renderer = nullptr;
-			}
-		}
-	}
-	for (auto& Pair : Unordered_Renderer)
-	{
-		for (auto& Renderer : Pair.second)
-		{
-			if (Renderer)
-			{
-				delete Renderer;
-				Renderer = nullptr;
-			}
-		}
-	}
-	for (auto& Pair : UI_Renderer)
+	for (auto& Pair : AllRenderer)
 	{
 		for (auto& Renderer : Pair.second)
 		{
@@ -43,66 +21,58 @@ GameEngineCamera::~GameEngineCamera()
 	}
 }
 
-void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer, bool _Ordered)
+void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer)
 {
-	if (_Ordered)
-	{
-		Ordered_Renderer[_Renderer->GetOrder()].emplace_back(_Renderer);
-	}
-	else
-	{
-		Unordered_Renderer[_Renderer->GetOrder()].emplace_back(_Renderer);
-	}
+	AllRenderer[_Renderer->GetOrder()].emplace_back(_Renderer);
 }
 
-void GameEngineCamera::InsertUIRenderer(GameEngineRenderer* _Renderer, bool _Front)
+void GameEngineCamera::Update(float _Delta)
 {
-	if (_Front)
+	for (int i = ZOrderBegin; i <= ZOrderEnd; ++i)
 	{
-		UI_Renderer[_Renderer->GetOrder()].emplace_back(_Renderer);
-	}
-	else
-	{
-		Ordered_Renderer[_Renderer->GetOrder()].emplace_back(_Renderer);
+		auto Iter = AllRenderer[i].begin();
+		auto End = AllRenderer[i].end();
+		for (; Iter != End;)
+		{
+			GameEngineRenderer* Renderer = *Iter;
+			if (Renderer->GetOrder() == Renderer->GetActor()->GetIndex().Y)
+			{
+				if (Renderer->GetOrderChange())
+				{
+					Iter = AllRenderer[i].erase(Iter);
+					AllRenderer[Renderer->GetOrder()].emplace_back(Renderer);
+
+					Renderer->SetOrderChange(false);
+				}
+				else
+				{
+					++Iter;
+				}
+			}
+			else
+			{
+				Renderer->SetOrder(Renderer->GetActor()->GetIndex().Y);
+				AllRenderer[Renderer->GetOrder()].emplace_back(Renderer);
+
+				Iter = AllRenderer[i].erase(Iter);
+			}
+		}
 	}
 }
 
 void GameEngineCamera::Render(float _Delta)
 {
-	for (auto& Pair : Unordered_Renderer)
+	for (auto& Pair : AllRenderer)
 	{
 		for (auto& Renderer : Pair.second)
 		{
-			if (!Renderer->IsUpdate())
+			if (Renderer->GetActor()->IsDeath())
 			{
 				continue;
 			}
 
-			Renderer->Render(_Delta);
-		}
-	}
-	for (int Y = 0; Y < 13; ++Y)
-	{
-		for (auto& Pair : Ordered_Renderer)
-		{
-			for (auto& Renderer : Pair.second)
-			{
-				if (!Renderer->IsUpdate())
-				{
-					continue;
-				}
+			Renderer->AddLiveTime(_Delta);
 
-				if (Renderer->GetMaster()->GetIndex().Y == Y)
-				{
-					Renderer->Render(_Delta);
-				}
-			}
-		}
-	}
-	for (auto& Pair : UI_Renderer)
-	{
-		for (auto& Renderer : Pair.second)
-		{
 			if (!Renderer->IsUpdate())
 			{
 				continue;
@@ -115,47 +85,7 @@ void GameEngineCamera::Render(float _Delta)
 
 void GameEngineCamera::Release()
 {
-	for (auto& Pair : Ordered_Renderer)
-	{
-		auto Iter = Pair.second.begin();
-		auto End = Pair.second.end();
-		for (; Iter != End;)
-		{
-			GameEngineRenderer* Renderer = *Iter;
-			if (Renderer->IsDeath())
-			{
-				delete Renderer;
-				Renderer = nullptr;
-
-				Iter = Pair.second.erase(Iter);
-			}
-			else
-			{
-				++Iter;
-			}
-		}
-	}
-	for (auto& Pair : Unordered_Renderer)
-	{
-		auto Iter = Pair.second.begin();
-		auto End = Pair.second.end();
-		for (; Iter != End;)
-		{
-			GameEngineRenderer* Renderer = *Iter;
-			if (Renderer->IsDeath())
-			{
-				delete Renderer;
-				Renderer = nullptr;
-
-				Iter = Pair.second.erase(Iter);
-			}
-			else
-			{
-				++Iter;
-			}
-		}
-	}
-	for (auto& Pair : UI_Renderer)
+	for (auto& Pair : AllRenderer)
 	{
 		auto Iter = Pair.second.begin();
 		auto End = Pair.second.end();
@@ -176,3 +106,4 @@ void GameEngineCamera::Release()
 		}
 	}
 }
+

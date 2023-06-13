@@ -9,32 +9,48 @@ GameEnginePath::~GameEnginePath()
 {
 }
 
-std::filesystem::path GameEnginePath::GetPath(const std::string& _ResourceType, const std::string& _Path)
+std::string GameEnginePath::FilenameToPath(const std::string& _Filename)
 {
-	std::filesystem::path Path = std::filesystem::current_path();
+	std::filesystem::path ResPath = std::filesystem::current_path();
 
 	while (true)
 	{
-		std::filesystem::path FindPath = Path;
-		FindPath.append(_ResourceType);
+		std::filesystem::directory_iterator DirIter(ResPath);
+		bool Find = false;
 
-		if (std::filesystem::exists(FindPath))
+		for (auto& Dir : DirIter)
 		{
-			Path = FindPath;
+			if (Dir.path().filename() == "Resource")
+			{
+				ResPath = Dir;
+				Find = true;
+				break;
+			}
+		}
+
+		if (Find)
+		{
 			break;
 		}
-		else
-		{
-			Path = Path.parent_path();
-		}
 
-		if (Path == Path.root_path())
+		ResPath = ResPath.parent_path();
+
+		if (ResPath == ResPath.root_path())
 		{
-			MsgBoxAssert("Fail to find PATH: " + _Path);
-			return std::filesystem::path();
+			MsgBoxAssert("FilenameToPath() ResPath " + _Filename);
+			return std::string();
 		}
 	}
 
-	Path.append(_Path);
-	return Path;
+	std::filesystem::recursive_directory_iterator RecDirIter(ResPath);
+	for (auto& Dir : RecDirIter)
+	{
+		if (Dir.path().filename() == _Filename)
+		{
+			return Dir.path().string();
+		}
+	}
+
+	MsgBoxAssert("FilenameToPath() Path " + _Filename);
+	return std::string();
 }

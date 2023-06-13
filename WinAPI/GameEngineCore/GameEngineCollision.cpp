@@ -13,8 +13,8 @@ bool GameEngineCollision::CollisionCheck(GameEngineActor* _Left, GameEngineActor
 {
 	if (_Left->Left() > _Right->Right() ||
 		_Left->Right() < _Right->Left() ||
-		_Left->Top() > _Right->Bot() ||
-		_Left->Bot() < _Right->Top())
+		_Left->Top() > _Right->Bottom() ||
+		_Left->Bottom() < _Right->Top())
 	{
 		return false;
 	}

@@ -5,6 +5,7 @@
 
 class GameEngineActor;
 class GameEngineCamera;
+class GameEngineProcess;
 class GameEngineLevel : public GameEngineObject
 {
 	friend class GameEngineProcess;
@@ -17,39 +18,52 @@ public:
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
 	template<typename ActorType, typename EnumType>
-	ActorType* CreateActor(EnumType _Order)
+	ActorType* CreateActor(EnumType _UpdateOrder)
 	{
-		return CreateActor<ActorType>(static_cast<int>(_Order));
+		return CreateActor<ActorType>(static_cast<int>(_UpdateOrder));
 	}
 	template<typename ActorType>
-	ActorType* CreateActor(int _Order)
+	ActorType* CreateActor(int _UpdateOrder)
 	{
 		GameEngineActor* NewActor = new ActorType();
 		ActorInit(NewActor);
-		AllActor[_Order].push_back(NewActor);
+		AllActor[_UpdateOrder].push_back(NewActor);
 
 		return dynamic_cast<ActorType*>(NewActor);
 	}
 
 	template<typename EnumType>
-	std::list<GameEngineActor*> FindActor(EnumType _Order)
+	std::list<GameEngineActor*> FindActor(EnumType _UpdateOrder)
 	{
-		return AllActor[static_cast<int>(_Order)];
+		return AllActor[static_cast<int>(_UpdateOrder)];
 	}
 
-	GameEngineCamera* GetMainCamera() const
+	GameEngineCamera* GetCamera() const
 	{
-		return MainCamera;
+		return Camera;
+	}
+	template<typename EnumTypeBegin, typename EnumTypeEnd>
+	void SetCameraZOrder(EnumTypeBegin _ZOrderBegin, EnumTypeEnd _ZOrderEnd)
+	{
+		SetCameraZOrder(static_cast<int>(_ZOrderBegin), static_cast<int>(_ZOrderEnd));
+	}
+	void SetCameraZOrder(int _ZOrderBegin, int _ZOrderEnd);
+
+	GameEngineProcess* GetProcess() const
+	{
+		return Process;
+	}
+	void SetProcess(GameEngineProcess* const _Process)
+	{
+		Process = _Process;
 	}
 protected:
 	std::map<int, std::list<GameEngineActor*>> AllActor;
-	GameEngineCamera* MainCamera = nullptr;
+	GameEngineCamera* Camera = nullptr;
+	GameEngineProcess* Process = nullptr;
 
-	bool IsDebugRender = false;
-
-	void Start() override;
 	void Update(float _Delta) override;
-	void Render() override;
+	void Render(float _Delta) override;
 	void Release() override;
 
 	void ActorInit(GameEngineActor* _Actor);

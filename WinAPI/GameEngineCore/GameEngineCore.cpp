@@ -52,9 +52,15 @@ void GameEngineCore::CoreUpdate()
 	{
 		Process->CurLevel = Process->NextLevel;
 		Process->NextLevel = nullptr;
+		if (Process->PrevLevel)
+		{
+			delete Process->PrevLevel;
+			Process->PrevLevel = nullptr;
+		}
 		GameEngineTime::Reset();
 	}
 
+	//Update
 	GameEngineSound::Update();
 	GameEngineTime::Update();
 	float Delta = GameEngineTime::GetFloatDelta();
@@ -66,20 +72,24 @@ void GameEngineCore::CoreUpdate()
 	{
 		GameEngineInput::Reset();
 	}
-
 	Process->Update(Delta);
+	Process->CurLevel->GetCamera()->Update(Delta);
 
-	Process->CurLevel->GetMainCamera()->Render(Delta);
-	Process->Render();
+	//Render
+	GameEngineWindow::GetInst().ClearBackBuffer();
+	Process->CurLevel->GetCamera()->Render(Delta);
 	GameEngineWindow::GetInst().DoubleBuffering();
 
-	Process->CurLevel->GetMainCamera()->Release();
+	//Release
 	Process->Release();
+	Process->CurLevel->GetCamera()->Release();
 }
 
 void GameEngineCore::CoreEnd()
 {
-	GameEngineSound::Release();
+	GameEngineSound::SoundRelease();
+	GameEngineSound::SystemRelease();
+	
 	if (Process)
 	{
 		delete Process;

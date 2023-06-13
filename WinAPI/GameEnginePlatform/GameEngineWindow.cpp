@@ -33,7 +33,6 @@ void GameEngineWindow::Open(HINSTANCE _Hinst, const std::string& _Title)
 	Wc.lpfnWndProc = WndProc;
 	Wc.lpszClassName = Title.c_str();
 	Wc.hInstance = Hinst;
-	Wc.hCursor = LoadCursorA(nullptr, IDC_ARROW);
 	Wc.style = CS_VREDRAW | CS_HREDRAW;
 	RegisterClassExA(&Wc);
 

@@ -12,6 +12,15 @@ public:
 		return Inst;
 	}
 
+	static float4 GetPos()
+	{
+		return GetInst().Scale.Half();
+	}
+	static float4 GetScale()
+	{
+		return GetInst().Scale;
+	}
+
 	void Open(HINSTANCE _Hinst, const std::string& _Title);
 	void MessageLoop(void(*_Start)(), void(*_Update)(), void(*_End)());
 
@@ -19,21 +28,25 @@ public:
 	void ClearBackBuffer();
 	void DoubleBuffering();
 
-	HDC GetHDC()
+	HDC GetHDC() const
 	{
 		return Hdc;
 	}
-	float4 GetScale()
-	{
-		return Scale;
-	}
-	GameEngineTexture* GetBackBuffer()
+	GameEngineTexture* GetBackBuffer() const
 	{
 		return BackBuffer;
 	}
 	bool IsFocus() const
 	{
 		return IsFocusValue;
+	}
+	bool GetIsWindowUpdate() const
+	{
+		return IsWindowUpdate;
+	}
+	void SetIsWindowUpdate(const bool _IsWindowUpdate)
+	{
+		IsWindowUpdate = _IsWindowUpdate;
 	}
 	float4 GetMousePos();
 private:

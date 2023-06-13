@@ -2,6 +2,7 @@
 #include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
+
 #include "Global.h"
 #include "Tile.h"
 #include "Water.h"
@@ -15,7 +16,7 @@ Bomb::~Bomb()
 {
 }
 
-void Bomb::Init(const int2& _Index, const std::string& _Path, int _Length, class Player* _Owner)
+void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
@@ -24,16 +25,22 @@ void Bomb::Init(const int2& _Index, const std::string& _Path, int _Length, class
 	Length = _Length;
 	Owner = _Owner;
 
-	CreateRenderer("Bomb\\BombShadow", "Shadow", RenderOrder::Shadow, true);
-	FindRenderer("Shadow")->SetRenderPos({ -3.f, 16.5f });
+	CreateRenderer("BubbleShadow.bmp", RenderOrder::InGameObject);
+	FindRenderer("BubbleShadow.bmp")->SetPos({ -3.f, 16.5f });
 
-	CreateRenderer(_Path, "Main", RenderOrder::Bomb, true, {0, 0}, {3, 1});
-	FindRenderer("Main")->CreateAnimation("bubble", 0, 0, 3, 0.2f, true);
-	FindRenderer("Main")->ChangeAnimation("bubble");
+	CreateRenderer("Bubble.bmp", RenderOrder::InGameObject, { 0, 0 }, { 3, 1 });
+	FindRenderer("Bubble.bmp")->CreateAnimation("Bubble", 0, 0, 3, 0.2f, true);
+	FindRenderer("Bubble.bmp")->ChangeAnimation("Bubble");
 
-	GameEngineSound::FindSound("Bomb\\Set.mp3")->Play();
+	GameEngineSound::FindSound("Set.mp3")->Play();
 
-	Tile::GetTile(Index)->Full();
+	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+	{
+		if (Ptr && Index == Ptr->GetIndex())
+		{
+			dynamic_cast<Tile*>(Ptr)->Full();
+		}
+	}
 }
 
 void Bomb::Update(float _Delta)
@@ -44,18 +51,19 @@ void Bomb::Update(float _Delta)
 	}
 }
 
-void Bomb::Render()
-{
-	DrawRect(Pos, Scale);
-}
-
 void Bomb::Release()
 {
 	Owner->AddCount(1);
-	Tile::GetTile(Index)->Empty();
 
-	Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
-	WaterPtr->Init(Index, Length);
+	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+	{
+		if (Ptr && Index == Ptr->GetIndex())
+		{
+			dynamic_cast<Tile*>(Ptr)->Empty();
+		}
+	}
 
-	GameEngineSound::FindSound("Bomb\\Explode.wav")->Play();
+	Level->CreateActor<Water>(UpdateOrder::Water)->Init(Index, Length);
+
+	GameEngineSound::FindSound("Explode.wav")->Play();
 }

@@ -1,9 +1,9 @@
 #include "CoreProcess.h"
+#include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
-#include <GameEnginePlatform/GameEngineInput.h>
 
 #include "Global.h"
-#include "MonsterLevel.h"
+#include "TitleLevel.h"
 
 CoreProcess::CoreProcess()
 {
@@ -18,10 +18,11 @@ void CoreProcess::Start()
 	GameEngineProcess::Start();
 
 	GameEngineWindow::GetInst().SetPosAndScale({ 100, 100 }, { 840, 630 });
-	CreateLevel<MonsterLevel>("MonsterLevel")->Init("Octopus1.txt");
-}
+	ShowCursor(false);
 
-void CoreProcess::Update(float _Delta)
-{
-	GameEngineProcess::Update(_Delta);
+	CreateLevel<TitleLevel>();
+
+	//Sound
+	GameEngineSound::CreateSound("On.wav", false);
+	GameEngineSound::CreateSound("Click.wav", false);
 }

@@ -14,7 +14,7 @@ const float MapRight = MapLeft + TileSize.X * IndexRight;
 const float MapBottom = MapTop + TileSize.Y * IndexBottom;
 
 const float TrimRatio = 0.6f;
-const float SpeedRatio = 0.7f;
+const float SpeedRatio = 0.8f;
 
 enum class UpdateOrder
 {
@@ -36,23 +36,22 @@ enum class UpdateOrder
 
 enum class RenderOrder
 {
-	BackUI,
-
+	//1
+	BackUI = -3,
 	BackGround,
 	Tile,
-	Shadow,
 
-	Water,
-	Block,
-	Object,
-	Bomb,
-	Item,
+	//2
+	InGameObject = 0,
+	InGameObjectEnd = 12,
+	//3
+	FrontUI = 13,
+	UI_GameResult,
+	UI_Curtain,
+	UI_GameStart,
+	UI_Cursor,
 
-	Player,
-	Monster,
-
-	FrontUI,
-
+	//4
 	None,
 };
 

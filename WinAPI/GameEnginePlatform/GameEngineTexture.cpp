@@ -30,7 +30,8 @@ void GameEngineTexture::ResLoad(const std::string& _Path)
 
 void GameEngineTexture::ResCreate(const float4& _Scale)
 {
-	Hbmp = CreateCompatibleBitmap(GameEngineWindow::GetInst().GetHDC(), _Scale.iX(), _Scale.iY());
+	Hbmp = CreateCompatibleBitmap(GameEngineWindow::GetInst().GetHDC(),
+		_Scale.iX(), _Scale.iY());
 
 	if (!Hbmp)
 	{
@@ -55,8 +56,8 @@ void GameEngineTexture::BitCopy(GameEngineTexture* _CopyTexture, const float4& _
 }
 
 void GameEngineTexture::TransCopy(GameEngineTexture* _CopyTexture,
-	const float4& _Pos, const float4& _Scale, 
-	const float4& _OtherPos, const float4& _OtherScale)
+	const float4& _Pos, const float4& _Scale,
+	const float4& _CopyPos, const float4& _CopyScale)
 {
 	TransparentBlt(ImageDC,
 		_Pos.iX() - _Scale.ihX(),
@@ -64,26 +65,47 @@ void GameEngineTexture::TransCopy(GameEngineTexture* _CopyTexture,
 		_Scale.iX(),
 		_Scale.iY(),
 		_CopyTexture->GetImageDC(),
-		_OtherPos.iX(),
-		_OtherPos.iY(),
-		_OtherScale.iX(),
-		_OtherScale.iY(),
+		_CopyPos.iX(),
+		_CopyPos.iY(),
+		_CopyScale.iX(),
+		_CopyScale.iY(),
 		RGB(255, 0, 255));
 }
 
-void GameEngineTexture::StretchCopy(GameEngineTexture* _CopyTexture, 
-	const float4& _Pos, const float4& _Scale, 
-	const float4& _OtherPos, const float4& _OtherScale)
+void GameEngineTexture::AlphaCopy(GameEngineTexture* _CopyTexture,
+	const float4& _Pos, const float4& _Scale,
+	const float4& _CopyPos, const float4& _CopyScale,
+	BYTE _Alpha)
 {
-	StretchBlt(ImageDC,
+	/*BLENDFUNCTION Bf = {};
+	Bf.BlendOp = AC_SRC_OVER;
+	Bf.BlendFlags = 0;
+	Bf.SourceConstantAlpha = _Alpha;
+	Bf.AlphaFormat = 0;*/
+
+	AlphaBlend(ImageDC,
 		_Pos.iX() - _Scale.ihX(),
 		_Pos.iY() - _Scale.ihY(),
 		_Scale.iX(),
 		_Scale.iY(),
 		_CopyTexture->GetImageDC(),
-		_OtherPos.iX(),
-		_OtherPos.iY(),
-		_OtherScale.iX(),
-		_OtherScale.iY(),
-		SRCCOPY);
+		_CopyPos.iX(),
+		_CopyPos.iY(),
+		_CopyScale.iX(),
+		_CopyScale.iY(),
+		{ AC_SRC_OVER, 0, _Alpha, 0 });
+}
+
+void GameEngineTexture::FillTexture(unsigned int _Color)
+{
+	RECT Rect{};
+	Rect.left = 0;
+	Rect.top = 0;
+	Rect.right = GetScale().iX();
+	Rect.bottom = GetScale().iY();
+
+	HBRUSH Hbrush = CreateSolidBrush(_Color);
+	FillRect(ImageDC, &Rect, Hbrush);
+
+	DeleteObject(Hbrush);
 }

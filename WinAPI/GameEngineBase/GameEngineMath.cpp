@@ -9,6 +9,10 @@ const int2 int2::Left = { -1, 0 };
 const int2 int2::Right = { 1, 0 };
 const int2 int2::Up = { 0, -1 };
 const int2 int2::Down = { 0, 1 };
+const int2 int2::UpLeft = { -1, -1 };
+const int2 int2::UpRight = { 1, -1 };
+const int2 int2::DownLeft = { -1, 1 };
+const int2 int2::DownRight = { 1, 1 };
 
 int2 float4::ToInt2() const
 {

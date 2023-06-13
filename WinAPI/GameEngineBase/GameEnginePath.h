@@ -4,7 +4,7 @@
 class GameEnginePath
 {
 public:
-	static std::filesystem::path GetPath(const std::string& _ResourceType, const std::string& _Path);
+	static std::string FilenameToPath(const std::string& _Filename);
 private:
 	GameEnginePath();
 	~GameEnginePath();

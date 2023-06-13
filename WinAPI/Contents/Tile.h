@@ -2,7 +2,6 @@
 #include <list>
 #include <GameEngineCore/GameEngineActor.h>
 
-class Block;
 class Tile : public GameEngineActor
 {
 public:
@@ -28,22 +27,7 @@ public:
 	{
 		IsEmpty = false;
 	}
-
-	Block* GetBlock() const
-	{
-		return BlockPtr;
-	}
-	void SetBlock(Block* const _BlockPtr)
-	{
-		BlockPtr = _BlockPtr;
-	}
 private:
 	static std::list<Tile*> AllTile;
-
-	Block* BlockPtr = nullptr;
-
 	bool IsEmpty = true;
-
-	void Update(float _Delta) override;
-	void Render() override;
 };

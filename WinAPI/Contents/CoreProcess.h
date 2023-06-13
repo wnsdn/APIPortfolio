@@ -12,5 +12,4 @@ public:
 	CoreProcess& operator=(CoreProcess&& _Other) noexcept = delete;
 private:
 	void Start() override;
-	void Update(float _Delta) override;
 };

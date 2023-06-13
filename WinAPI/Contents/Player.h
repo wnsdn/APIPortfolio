@@ -11,6 +11,8 @@ public:
 	Player& operator=(const Player& _Other) = delete;
 	Player& operator=(Player&& _Other) noexcept = delete;
 
+	static Player* MainPlayer;
+
 	void Init(const int2& _Index, const std::string& _Path);
 
 	int GetCount() const
@@ -25,38 +27,22 @@ public:
 	{
 		Count += _Count;
 	}
-
-	int GetLength() const
+	float GetSpeed() const
 	{
-		return Length;
-	}
-	void SetLength(const int _Length)
-	{
-		Length = _Length;
-	}
-	void AddLength(const int _Length)
-	{
-		Length += _Length;
-	}
-
-	float GetCurSpeed() const
-	{
-		return CurSpeed;
-	}
-	void SetCurSpeed(const float _CurSpeed)
-	{
-		CurSpeed = _CurSpeed;
-	}
-	void AddCurSpeed(const float _CurSpeed)
-	{
-		CurSpeed += _CurSpeed;
+		return Speed;
 	}
 
 	std::string GetDir() const
 	{
 		return Dir;
 	}
+	std::string GetState() const
+	{
+		return State;
+	}
 private:
+	std::string Main = "";
+
 	int Count = 0;
 	int MaxCount = 0;
 	int Length = 0;
@@ -68,11 +54,14 @@ private:
 	std::string Dir = "";
 	std::string State = "";
 
+	void Update(float _Delta) override;
+
 	void StateUpdate(float _Delta);
 	void DirCheck();
 	void IdleUpdate(float _Delta);
 	void RunUpdate(float _Delta);
-
-	void Update(float _Delta) override;
-	void Render() override;
+	void DeathUpdate(float _Delta);
+	void CaptureUpdate(float _Delta);
+	
+	void CollisionCheck(float _Delta);
 };

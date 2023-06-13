@@ -3,8 +3,12 @@
 #include <string>
 #include <GameEngineBase/GameEngineMath.h>
 #include "GameEngineObject.h"
+#include "GameEngineSubObject.h"
 
-class GameEngineRenderer : public GameEngineObject
+class GameEngineCamera;
+class GameEngineActor;
+class GameEngineTexture;
+class GameEngineRenderer : public GameEngineObject, public GameEngineSubObject
 {
 public:
 	GameEngineRenderer();
@@ -14,48 +18,37 @@ public:
 	GameEngineRenderer& operator=(const GameEngineRenderer& _Other) = delete;
 	GameEngineRenderer& operator=(GameEngineRenderer&& _Other) noexcept = delete;
 
-	void Init(const std::string& _Path, const float4& _Pos, const float4& _Size);
-	void Render(float _Delta);
+	void LoadTexture(const std::string& _Filename, const float4& _Pos, const float4& _Size);
+	void CreateTexture(const std::string& _Filename, const float4& _Size, unsigned int _Color);
+	void Render(float _Delta) override;
+	void TextRender(float _Delta);
+	void SetText(const std::string& _Text, int _TextScale = 20,
+		const std::string& _Face = "±¼¸²")
+	{
+		Text = _Text;
+		TextScale = _TextScale;
+		Face = _Face;
+	}
 
 	void CreateAnimation(const std::string& _AnimationName,
 		int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop);
 	void ChangeAnimation(const std::string& _AnimationName);
 
-	class GameEngineCamera* GetCamera() const
+	GameEngineCamera* GetCamera() const
 	{
 		return Camera;
 	}
-	void SetCamera(class GameEngineCamera* const _Camera)
+	void SetCamera(GameEngineCamera* const _Camera)
 	{
 		Camera = _Camera;
 	}
-	class GameEngineActor* GetMaster() const
+	GameEngineActor* GetActor() const
 	{
-		return Master;
+		return Actor;
 	}
-	void SetMaster(class GameEngineActor* const _Master)
+	void SetActor(GameEngineActor* const _Actor)
 	{
-		Master = _Master;
-	}
-	float4 GetRenderPos() const
-	{
-		return RenderPos;
-	}
-	void SetRenderPos(const float4& _RenderPos)
-	{
-		RenderPos = _RenderPos;
-	}
-	float4 GetRenderScale() const
-	{
-		return RenderScale;
-	}
-	void SetRenderScale(const float4& _RenderScale)
-	{
-		RenderScale = _RenderScale;
-	}
-	void AddRenderScale(const float4& _RenderScale)
-	{
-		RenderScale += _RenderScale;
+		Actor = _Actor;
 	}
 	float4 GetCopyPos() const
 	{
@@ -73,6 +66,49 @@ public:
 	{
 		CopyScale = _CopyScale;
 	}
+
+	bool GetAlphaRender() const
+	{
+		return AlphaRender;
+	}
+	void SetAlphaRender(const bool _AlphaRender)
+	{
+		AlphaRender = _AlphaRender;
+	}
+	unsigned char GetAlphaValue() const
+	{
+		return AlphaValue;
+	}
+	void SetAlphaValue(const unsigned char _AlphaValue)
+	{
+		AlphaValue = _AlphaValue;
+	}
+
+	bool IsAnimationEnd()
+	{
+		if (!CurAnimation)
+		{
+			return false;
+		}
+
+		int Count = CurAnimation->EndFrame - CurAnimation->StartFrame + 1;
+		if (!AnimationEnd && LiveTime >= static_cast<float>(Count) * CurAnimation->Inter)
+		{
+			AnimationEnd = true;
+			LiveTime = 0.0f;
+		}
+
+		return AnimationEnd;
+	}
+private:
+	GameEngineCamera* Camera = nullptr;
+	GameEngineActor* Actor = nullptr;
+	GameEngineTexture* Texture = nullptr;
+
+	float4 CopyPos = {};
+	float4 CopyScale = {};
+	bool AlphaRender = false;
+	unsigned char AlphaValue = 0;
 private:
 	class Animation
 	{
@@ -85,16 +121,11 @@ private:
 		float Inter = 0.1f;
 		bool Loop = true;
 	};
-
-	class GameEngineCamera* Camera = nullptr;
-	class GameEngineActor* Master = nullptr;
-	class GameEngineTexture* Texture = nullptr;
-
-	float4 RenderPos = {};
-	float4 RenderScale = {};
-	float4 CopyPos = {};
-	float4 CopyScale = {};
-
 	std::map<std::string, Animation> AllAnimation;
 	Animation* CurAnimation = nullptr;
+	bool AnimationEnd = false;
+private:
+	std::string Text = "";
+	int TextScale = 0;
+	std::string Face = "";
 };

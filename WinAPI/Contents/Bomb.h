@@ -11,12 +11,11 @@ public:
 	Bomb& operator=(const Bomb& _Other) = delete;
 	Bomb& operator=(Bomb&& _Other) noexcept = delete;
 
-	void Init(const int2& _Index, const std::string& _Path, int _Length, class Player* _Owner);
+	void Init(const int2& _Index, int _Length, class Player* _Owner);
 private:
 	class Player* Owner = nullptr;
 	int Length = 0;
 
 	void Update(float _Delta) override;
-	void Render() override;
 	void Release() override;
 };

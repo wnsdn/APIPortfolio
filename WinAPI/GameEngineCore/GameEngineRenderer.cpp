@@ -15,17 +15,35 @@ GameEngineRenderer::~GameEngineRenderer()
 {
 }
 
-void GameEngineRenderer::Init(const std::string& _Path, const float4& _Pos, const float4& _Size)
+void GameEngineRenderer::LoadTexture(const std::string& _Filename, const float4& _Pos, const float4& _Size)
 {
-	Texture = ResourceManager::GetInst().LoadTexture(_Path);
+	Texture = ResourceManager::GetInst().LoadTexture(_Filename);
 
-	RenderScale = Texture->GetScale() / _Size;
-	CopyScale = Texture->GetScale() / _Size;
+	Pos = {};
+	Scale = Texture->GetScale() / _Size;
 	CopyPos = _Pos;
+	CopyScale = Texture->GetScale() / _Size;
+}
+
+void GameEngineRenderer::CreateTexture(const std::string& _Filename, const float4& _Size, unsigned int _Color)
+{
+	Texture = ResourceManager::GetInst().CreateTexture(_Filename, _Size);
+	Texture->FillTexture(_Color);
+
+	Pos = {};
+	Scale = Texture->GetScale();
+	CopyPos = {};
+	CopyScale = Texture->GetScale();
 }
 
 void GameEngineRenderer::Render(float _Delta)
 {
+	if (Text != "")
+	{
+		TextRender(_Delta);
+		return;
+	}
+
 	if (CurAnimation)
 	{
 		CurAnimation->CurInter += _Delta;
@@ -54,11 +72,53 @@ void GameEngineRenderer::Render(float _Delta)
 		}
 	}
 
-	GameEngineWindow::GetInst().GetBackBuffer()->TransCopy(Texture,
-		Master->GetPos() + RenderPos - Camera->GetPos(),
-		RenderScale,
-		CopyPos * CopyScale,
-		CopyScale);
+	if (AlphaRender)
+	{
+		GameEngineWindow::GetInst().GetBackBuffer()->AlphaCopy(Texture,
+			Actor->GetPos() + Pos - Camera->GetPos(),
+			Scale,
+			CopyPos * CopyScale,
+			CopyScale,
+			AlphaValue);
+	}
+	else
+	{
+		GameEngineWindow::GetInst().GetBackBuffer()->TransCopy(Texture,
+			Actor->GetPos() + Pos - Camera->GetPos(),
+			Scale,
+			CopyPos * CopyScale,
+			CopyScale);
+	}
+}
+
+void GameEngineRenderer::TextRender(float _Delta)
+{
+	float4 TextPos = Actor->GetPos() + Pos - Camera->GetPos();
+
+	HDC Hdc = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
+	HFONT Hfont = nullptr, OldFont = nullptr;
+	LOGFONTA Lf{};
+	Lf.lfHeight = TextScale;
+	Lf.lfCharSet = HANGEUL_CHARSET;
+	Lf.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
+	lstrcpy(Lf.lfFaceName, Face.c_str());
+	Hfont = CreateFontIndirectA(&Lf);
+	OldFont = static_cast<HFONT>(SelectObject(Hdc, Hfont));
+
+	SetTextColor(Hdc, RGB(255, 0, 0));
+	SetBkMode(Hdc, TRANSPARENT);
+
+	RECT Rect{};
+	Rect.left = TextPos.iX();
+	Rect.top = TextPos.iY();
+	Rect.right = TextPos.iX() + TextScale * static_cast<int>(Text.size());
+	Rect.bottom = TextPos.iY() + TextScale;
+
+	DrawTextA(Hdc, Text.c_str(), static_cast<int>(Text.size()), &Rect,
+		static_cast<UINT>(DT_BOTTOM));
+
+	SelectObject(Hdc, OldFont);
+	DeleteObject(Hfont);
 }
 
 void GameEngineRenderer::CreateAnimation(const std::string& _AnimationName,
@@ -94,10 +154,11 @@ void GameEngineRenderer::ChangeAnimation(const std::string& _AnimationName)
 		return;
 	}
 
-	if(CurAnimation != &FindIter->second)
+	if (CurAnimation != &FindIter->second)
 	{
 		CurAnimation = &FindIter->second;
 		CurAnimation->CurFrame = CurAnimation->StartFrame;
 		CurAnimation->CurInter = CurAnimation->Inter;
+		LiveTime = 0.0f;
 	}
 }

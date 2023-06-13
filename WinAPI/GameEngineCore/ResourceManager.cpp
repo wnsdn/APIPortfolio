@@ -21,12 +21,9 @@ ResourceManager::~ResourceManager()
 	}
 }
 
-GameEngineTexture* ResourceManager::LoadTexture(const std::string& _Path)
+GameEngineTexture* ResourceManager::LoadTexture(const std::string& _Filename)
 {
-	std::string Path = GameEnginePath::GetPath("Texture", _Path + ".bmp").string();
-	std::string Filename = GameEnginePath::GetPath("Texture", _Path + ".bmp").filename().string();
-
-	std::string Upper = GameEngineString::ToUpperReturn(Filename);
+	std::string Upper = GameEngineString::ToUpperReturn(_Filename);
 	auto FindIter = AllTexture.find(Upper);
 
 	if (FindIter != AllTexture.end())
@@ -35,8 +32,25 @@ GameEngineTexture* ResourceManager::LoadTexture(const std::string& _Path)
 	}
 
 	GameEngineTexture* NewTexture = new GameEngineTexture();
-	NewTexture->ResLoad(Path);
-	AllTexture.emplace(std::make_pair(Upper, NewTexture));
+	NewTexture->ResLoad(GameEnginePath::FilenameToPath(_Filename));
+	AllTexture.emplace(Upper, NewTexture);
+
+	return NewTexture;
+}
+
+GameEngineTexture* ResourceManager::CreateTexture(const std::string& _Name, const float4& _Scale)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_Name);
+	auto FindIter = AllTexture.find(Upper);
+
+	if (FindIter != AllTexture.end())
+	{
+		return FindIter->second;
+	}
+
+	GameEngineTexture* NewTexture = new GameEngineTexture();
+	NewTexture->ResCreate(_Scale);
+	AllTexture.emplace(Upper, NewTexture);
 
 	return NewTexture;
 }

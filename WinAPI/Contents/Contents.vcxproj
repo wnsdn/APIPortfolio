@@ -164,11 +164,32 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Button.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Button_Update.cpp" />
     <ClCompile Include="CoreProcess.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Curtain.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EndingLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameResult.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameStart.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -181,11 +202,13 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="MonsterLevel_Update.cpp" />
     <ClCompile Include="Monster_State.cpp" />
     <ClCompile Include="Object.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Object_Collision.cpp" />
     <ClCompile Include="Player.cpp">
       <SubType>
       </SubType>
@@ -194,6 +217,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Player_Collsion.cpp" />
     <ClCompile Include="Player_State.cpp" />
     <ClCompile Include="Tile.cpp">
       <SubType>
@@ -203,11 +227,13 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TitleLevel_Update.cpp" />
     <ClCompile Include="UI.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="Water.cpp" />
+    <ClCompile Include="Water_Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h">
@@ -219,11 +245,31 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Button.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="CoreProcess.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Curtain.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EndingLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameResult.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameStart.h">
       <SubType>
       </SubType>
     </ClInclude>

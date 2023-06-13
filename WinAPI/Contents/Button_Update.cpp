@@ -1,0 +1,67 @@
+#include "Button.h"
+
+#include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEnginePlatform/GameEngineSound.h>
+#include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEngineCore/GameEngineRenderer.h>
+
+
+void Button::ActiveUpdate(float _Delta)
+{
+	float4 Pt = GameEngineWindow::GetInst().GetMousePos();
+
+	if (Pt.X > Left() && Pt.X < Right() &&
+		Pt.Y > Top() && Pt.Y < Bottom())
+	{
+		if (!IsMouseOnButton)
+		{
+			GameEngineSound::FindSound("On.wav")->Play();
+			FindRenderer(Main)->ChangeAnimation("Before");
+			IsMouseOnButton = true;
+		}
+
+		if (GameEngineInput::IsDown(VK_LBUTTON))
+		{
+			GameEngineSound::FindSound("Click.wav")->Play();
+			IsClick = true;
+			LiveTime = 0.f;
+		}
+	}
+	else
+	{
+		IsMouseOnButton = false;
+		FindRenderer(Main)->ChangeAnimation("After");
+	}
+}
+
+void Button::ClickUpdate(float _Delta)
+{
+	float4 Pt = GameEngineWindow::GetInst().GetMousePos();
+
+	if (Pt.X > Left() && Pt.X < Right() &&
+		Pt.Y > Top() && Pt.Y < Bottom())
+	{
+		if (!IsMouseOnButton)
+		{
+			GameEngineSound::FindSound("On.wav")->Play();
+			IsMouseOnButton = true;
+		}
+
+		if (GameEngineInput::IsDown(VK_LBUTTON))
+		{
+			GameEngineSound::FindSound("Click.wav")->Play();
+			FindRenderer(Main)->ChangeAnimation("After");
+			IsClick = true;
+			LiveTime = 0.f;
+		}
+		if (GameEngineInput::IsUp(VK_LBUTTON))
+		{
+			FindRenderer(Main)->ChangeAnimation("Before");
+		}
+	}
+	else
+	{
+		IsMouseOnButton = false;
+		FindRenderer(Main)->ChangeAnimation("Before");
+	}
+}

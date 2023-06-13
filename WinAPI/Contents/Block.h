@@ -11,5 +11,5 @@ public:
 	Block& operator=(const Block& _Other) = delete;
 	Block& operator=(Block&& _Other) noexcept = delete;
 
-	void Init(const int2& _Index, const std::string& _BlockSize, const float4& _Type);
+	void Init(const int2& _Index, const std::string& _Path, const float4& _Type);
 };

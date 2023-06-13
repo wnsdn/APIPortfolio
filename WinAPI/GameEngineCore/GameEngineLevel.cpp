@@ -1,10 +1,13 @@
 #include "GameEngineLevel.h"
+#include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEnginePlatform/GameEngineWindow.h>
 #include "GameEngineActor.h"
 #include "GameEngineCamera.h"
 #include "GameEngineCollision.h"
+#include "ResourceManager.h"
 
 GameEngineLevel::GameEngineLevel()
-	: MainCamera(new GameEngineCamera)
+	: Camera(new GameEngineCamera)
 {
 }
 
@@ -22,15 +25,16 @@ GameEngineLevel::~GameEngineLevel()
 		}
 	}
 
-	if (MainCamera)
+	if (Camera)
 	{
-		delete MainCamera;
-		MainCamera = nullptr;
+		delete Camera;
+		Camera = nullptr;
 	}
 }
 
-void GameEngineLevel::Start()
+void GameEngineLevel::SetCameraZOrder(int _ZOrderBegin, int _ZOrderEnd)
 {
+	Camera->Init(_ZOrderBegin, _ZOrderEnd);
 }
 
 void GameEngineLevel::Update(float _Delta)
@@ -39,7 +43,7 @@ void GameEngineLevel::Update(float _Delta)
 	{
 		for (auto& Actor : Pair.second)
 		{
-			if (Actor->IsDeath())
+			if (!Actor->IsUpdate())
 			{
 				continue;
 			}
@@ -50,13 +54,8 @@ void GameEngineLevel::Update(float _Delta)
 	}
 }
 
-void GameEngineLevel::Render()
+void GameEngineLevel::Render(float _Delta)
 {
-	if (!IsDebugRender)
-	{
-		return;
-	}
-
 	for (auto& Pair : AllActor)
 	{
 		for (auto& Actor : Pair.second)
@@ -66,7 +65,7 @@ void GameEngineLevel::Render()
 				continue;
 			}
 
-			Actor->Render();
+			Actor->Render(_Delta);
 		}
 	}
 }

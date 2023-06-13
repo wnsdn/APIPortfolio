@@ -1,7 +1,9 @@
 #pragma once
 #include <map>
 #include <string>
+#include <GameEngineBase/GameEngineMath.h>
 
+class GameEngineTexture;
 class ResourceManager
 {
 public:
@@ -11,9 +13,10 @@ public:
 		return Inst;
 	}
 
-	class GameEngineTexture* LoadTexture(const std::string& _Path);
+	GameEngineTexture* LoadTexture(const std::string& _Filename);
+	GameEngineTexture* CreateTexture(const std::string& _Path, const float4& _Scale);
 private:
-	std::map<std::string, class GameEngineTexture*> AllTexture;
+	std::map<std::string, GameEngineTexture*> AllTexture;
 
 	ResourceManager();
 	~ResourceManager();

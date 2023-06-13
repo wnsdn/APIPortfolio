@@ -9,7 +9,7 @@
 #pragma comment(lib, "..\\GameEnginePlatform\\ThirdParty\\FMOD\\lib\\x64\\fmod_vc.lib")
 #endif
 
-FMOD::System* GameEngineSound::SoundSystem = nullptr;
+FMOD::System* GameEngineSound::System = nullptr;
 std::map<std::string, GameEngineSound*> GameEngineSound::AllSound;
 
 GameEngineSound::GameEngineSound()
@@ -18,22 +18,22 @@ GameEngineSound::GameEngineSound()
 
 GameEngineSound::~GameEngineSound()
 {
-	if (SoundHandle)
+	if (Sound)
 	{
-		SoundHandle->release();
-		SoundHandle = nullptr;
+		Sound->release();
+		Sound = nullptr;
 	}
 }
 
 void GameEngineSound::Init()
 {
-	if (FMOD_RESULT::FMOD_OK != FMOD::System_Create(&SoundSystem))
+	if (FMOD::System_Create(&System) != FMOD_OK)
 	{
 		MsgBoxAssert("사운드 시스템 생성에 실패했습니다.");
 		return;
 	}
 
-	if (FMOD_RESULT::FMOD_OK != SoundSystem->init(32, FMOD_INIT_NORMAL, nullptr))
+	if (System->init(32, FMOD_INIT_NORMAL, nullptr) != FMOD_OK)
 	{
 		MsgBoxAssert("사운드 시스템 이니셜라이즈에 실패했습니다.");
 		return;
@@ -42,16 +42,14 @@ void GameEngineSound::Init()
 
 void GameEngineSound::Update()
 {
-	if (!SoundSystem)
+	if (System->update() != FMOD_OK)
 	{
-		MsgBoxAssert("SoundSystem이 생성되지 않아서 사운드 업데이트를 돌릴수가 없습니다.");
+		MsgBoxAssert("System->update()");
 		return;
 	}
-
-	SoundSystem->update();
 }
 
-void GameEngineSound::Release()
+void GameEngineSound::SoundRelease()
 {
 	for (auto& Pair : GameEngineSound::AllSound)
 	{
@@ -63,18 +61,19 @@ void GameEngineSound::Release()
 			Sound = nullptr;
 		}
 	}
+}
 
-	if (SoundSystem)
+void GameEngineSound::SystemRelease()
+{
+	if (System)
 	{
-		SoundSystem->close();
-		SoundSystem->release();
-		SoundSystem = nullptr;
+		System->release();
+		System = nullptr;
 	}
 }
 
 void GameEngineSound::CreateSound(const std::string& _Filename, bool _Loop)
 {
-	std::string Path = GameEnginePath::GetPath("Sound", _Filename).string();
 	std::string Upper = GameEngineString::ToUpperReturn(_Filename);
 	auto FindIter = AllSound.find(Upper);
 
@@ -84,9 +83,24 @@ void GameEngineSound::CreateSound(const std::string& _Filename, bool _Loop)
 	}
 
 	GameEngineSound* NewSound = new GameEngineSound();
-	NewSound->Load(Path, _Loop);
 
-	AllSound.insert(std::make_pair(Upper, NewSound));
+	FMOD_RESULT Result{};
+	if (_Loop)
+	{
+		Result = System->createSound(GameEnginePath::FilenameToPath(_Filename).c_str(), FMOD_LOOP_NORMAL, nullptr, &NewSound->Sound);
+	}
+	else
+	{
+		Result = System->createSound(GameEnginePath::FilenameToPath(_Filename).c_str(), FMOD_DEFAULT, nullptr, &NewSound->Sound);
+	}
+
+	if (Result != FMOD_OK)
+	{
+		MsgBoxAssert(_Filename + "System->createSound()");
+		return;
+	}
+
+	AllSound.emplace(Upper, NewSound);
 }
 
 GameEngineSound* GameEngineSound::FindSound(const std::string& _Filename)
@@ -102,37 +116,27 @@ GameEngineSound* GameEngineSound::FindSound(const std::string& _Filename)
 	return FindIter->second;
 }
 
-void GameEngineSound::Load(const std::string& _Path, bool _Loop)
-{
-	std::string UTF8 = GameEngineString::AnsiToUTF8(_Path);
-	if (_Loop)
-	{
-		SoundSystem->createSound(UTF8.c_str(), FMOD_LOOP_NORMAL, nullptr, &SoundHandle);
-	}
-	else
-	{
-		SoundSystem->createSound(UTF8.c_str(), FMOD_DEFAULT, nullptr, &SoundHandle);
-	}
-
-	if (nullptr == SoundHandle)
-	{
-		MsgBoxAssert(_Path + "사운드 로드에 실패했습니다.");
-		return;
-	}
-}
-
 void GameEngineSound::Play()
 {
-	SoundSystem->playSound(SoundHandle, nullptr, false, &SoundControl);
+	System->playSound(Sound, nullptr, false, &Channel);
+	Channel->setVolume(0.3f);
 }
 
 void GameEngineSound::Stop()
 {
-	SoundControl->stop();
+	Channel->stop();
 }
 
 void GameEngineSound::SetVolume(float _Volume)
 {
-	SoundControl->setVolume(_Volume);
+	if (_Volume >= 1.0f)
+	{
+		_Volume = 1.0f;
+	}
+	else if (_Volume <= 0.0f)
+	{
+		_Volume = 0.0f;
+	}
+	Channel->setVolume(_Volume);
 }
 

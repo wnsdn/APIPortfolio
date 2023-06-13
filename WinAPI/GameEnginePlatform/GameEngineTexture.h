@@ -17,8 +17,15 @@ public:
 	void ResCreate(const float4& _Scale);
 
 	void BitCopy(GameEngineTexture* _CopyTexture, const float4& _Pos);
-	void TransCopy(GameEngineTexture* _CopyTexture, const float4& _Pos, const float4& _Scale, const float4& _OtherPos, const float4& _OtherScale);
-	void StretchCopy(GameEngineTexture* _CopyTexture, const float4& _Pos, const float4& _Scale, const float4& _OtherPos, const float4& _OtherScale);
+	void TransCopy(GameEngineTexture* _CopyTexture, 
+		const float4& _Pos, const float4& _Scale, 
+		const float4& _CopyPos, const float4& _CopyScale);
+	void AlphaCopy(GameEngineTexture* _CopyTexture, 
+		const float4& _Pos, const float4& _Scale, 
+		const float4& _CopyPos, const float4& _CopyScale,
+		BYTE _Alpha);
+
+	void FillTexture(unsigned int _Color);
 
 	HDC GetImageDC() const
 	{

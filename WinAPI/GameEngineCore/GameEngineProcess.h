@@ -1,6 +1,4 @@
 #pragma once
-#include <map>
-#include <GameEngineBase/GameEngineString.h>
 #include "GameEngineObject.h"
 
 class GameEngineLevel;
@@ -16,33 +14,28 @@ public:
 	GameEngineProcess& operator=(GameEngineProcess&& _Other) noexcept = delete;
 
 	template<typename LevelType>
-	LevelType* CreateLevel(const std::string& _Level)
+	LevelType* CreateLevel()
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_Level);
-		auto FindIter = AllLevel.find(Upper);
-		
-		if (FindIter != AllLevel.end())
-		{
-			return dynamic_cast<LevelType*>(FindIter->second);
-		}
-
 		GameEngineLevel* NewLevel = new LevelType();
 		LevelInit(NewLevel);
-		AllLevel.emplace(Upper, NewLevel);
+
+		if (CurLevel)
+		{
+			PrevLevel = CurLevel;
+		}
+
 		NextLevel = NewLevel;
 
 		return dynamic_cast<LevelType*>(NewLevel);
 	}
-	GameEngineLevel* FindLevel(const std::string& _Level);
 protected:
-	std::map<std::string, GameEngineLevel*> AllLevel;
+	GameEngineLevel* PrevLevel = nullptr;
 	GameEngineLevel* NextLevel = nullptr;
 	GameEngineLevel* CurLevel = nullptr;
 
-	void Start() override;
-	void Update(float _Delta) override;
-	void Render() override;
-	void Release() override;
-
 	void LevelInit(GameEngineLevel* _Level);
+
+	void Update(float _Delta) override;
+	void Render(float _Delta) override;
+	void Release() override;
 };

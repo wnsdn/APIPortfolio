@@ -13,8 +13,9 @@ BackGround::~BackGround()
 
 void BackGround::Init(const std::string& _Path)
 {
-	Pos = GameEngineWindow::GetInst().GetScale().Half();
+	Pos = GameEngineWindow::GetPos();
+	Scale = GameEngineWindow::GetScale();
 
-	CreateRenderer(_Path, "Main", RenderOrder::BackGround, false);
-	FindRenderer("Main")->SetRenderScale(GameEngineWindow::GetInst().GetScale());
+	CreateRenderer(_Path, RenderOrder::BackGround);
+	FindRenderer(_Path)->SetScale(Scale);
 }

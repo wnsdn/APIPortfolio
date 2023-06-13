@@ -10,6 +10,17 @@ public:
 	UI(UI&& _Other) noexcept = delete;
 	UI& operator=(const UI& _Other) = delete;
 	UI& operator=(UI&& _Other) noexcept = delete;
+
+	template<typename EnumType>
+	void Init(const std::string& _Path, const float4& _Pos, EnumType _RenderOrder)
+	{
+		Init(_Path, _Pos, static_cast<int>(_RenderOrder));
+	}
+	void Init(const std::string& _Filename, const float4& _Pos, int _RenderOrder);
+	void SetRendererScale(const float4& _Scale);
+	void AddRendererScale(const float4& _Scale);
+	void OnRenderer();
+	void OffRenderer();
 private:
-	void Start() override;
+	std::string Main = "";
 };

@@ -108,23 +108,23 @@ void Monster::RunUpdate(float _Delta)
 		}
 
 		NextTile = Tile::GetTile(Index + int2::Up);
-		if (NextTile && !NextTile->GetIsEmpty() && Top() < NextTile->Bot())
+		if (NextTile && !NextTile->GetIsEmpty() && Top() < NextTile->Bottom())
 		{
-			Pos.Y = NextTile->Bot() + Scale.hY();
+			Pos.Y = NextTile->Bottom() + Scale.hY();
 			DirCheck();
 		}
 	}
 	else if (Dir == "Down")
 	{
 		Pos.Y += Speed * _Delta;
-		if (Bot() > MapBottom)
+		if (Bottom() > MapBottom)
 		{
 			Pos.Y = MapBottom - Scale.hY();
 			DirCheck();
 		}
 
 		NextTile = Tile::GetTile(Index + int2::Down);
-		if (NextTile && !NextTile->GetIsEmpty() && Bot() > NextTile->Top())
+		if (NextTile && !NextTile->GetIsEmpty() && Bottom() > NextTile->Top())
 		{
 			Pos.Y = NextTile->Top() - Scale.hY();
 			DirCheck();

@@ -14,5 +14,15 @@ public:
 
 	void Init(const std::string& _MapData);
 private:
+	bool Win = false;
+	bool Lose = false;
+
+	class Button* BtnOut = nullptr;
+	class Curtain* CurtainPtr = nullptr;
+	class GameResult* ResultPtr = nullptr;
+
+	void Start() override;
 	void Update(float _Delta) override;
+
+	void OutButtonUpdate(float _Delta);
 };
