@@ -54,16 +54,34 @@ void GameEngineRenderer::Render(float _Delta)
 
 			if (CurAnimation->Inter)
 			{
-				++CurAnimation->CurFrame;
-				if (CurAnimation->CurFrame > CurAnimation->EndFrame)
+				if (CurAnimation->Reverse)
 				{
-					if (CurAnimation->Loop)
+					--CurAnimation->CurFrame;
+					if (CurAnimation->CurFrame < CurAnimation->EndFrame)
 					{
-						CurAnimation->CurFrame = CurAnimation->StartFrame;
+						if (CurAnimation->Loop)
+						{
+							CurAnimation->CurFrame = CurAnimation->StartFrame;
+						}
+						else
+						{
+							++CurAnimation->CurFrame;
+						}
 					}
-					else
+				}
+				else
+				{
+					++CurAnimation->CurFrame;
+					if (CurAnimation->CurFrame > CurAnimation->EndFrame)
 					{
-						--CurAnimation->CurFrame;
+						if (CurAnimation->Loop)
+						{
+							CurAnimation->CurFrame = CurAnimation->StartFrame;
+						}
+						else
+						{
+							--CurAnimation->CurFrame;
+						}
 					}
 				}
 
@@ -122,7 +140,7 @@ void GameEngineRenderer::TextRender(float _Delta)
 }
 
 void GameEngineRenderer::CreateAnimation(const std::string& _AnimationName,
-	int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop)
+	int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop, bool _Reverse)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_AnimationName);
 	auto FindIter = AllAnimation.find(Upper);
@@ -136,11 +154,19 @@ void GameEngineRenderer::CreateAnimation(const std::string& _AnimationName,
 	NewAnimation.StartFrame = _XFrame;
 	NewAnimation.CurFrame = _XFrame;
 	NewAnimation.YFrame = _YFrame;
-	NewAnimation.EndFrame = _XFrame + (_Count - 1);
+	if (_Reverse)
+	{
+		NewAnimation.EndFrame = _XFrame - _Count + 1;
+	}
+	else
+	{
+		NewAnimation.EndFrame = _XFrame + (_Count - 1);
+	}
 	NewAnimation.Inter = _Inter;
 	NewAnimation.Loop = _Loop;
+	NewAnimation.Reverse = _Reverse;
 
-	AllAnimation.emplace(std::make_pair(Upper, NewAnimation));
+	AllAnimation.emplace(Upper, NewAnimation);
 }
 
 void GameEngineRenderer::ChangeAnimation(const std::string& _AnimationName)

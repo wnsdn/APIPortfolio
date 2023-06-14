@@ -31,7 +31,7 @@ public:
 	}
 
 	void CreateAnimation(const std::string& _AnimationName,
-		int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop);
+		int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop, bool _Reverse = false);
 	void ChangeAnimation(const std::string& _AnimationName);
 
 	GameEngineCamera* GetCamera() const
@@ -84,7 +84,7 @@ public:
 		AlphaValue = _AlphaValue;
 	}
 
-	bool IsAnimationEnd()
+	bool IsCurAnimationEnd()
 	{
 		if (!CurAnimation)
 		{
@@ -99,6 +99,16 @@ public:
 		}
 
 		return CurAnimation->AnimationEnd;
+	}
+	void ResetCurAnimation()
+	{
+		if (!CurAnimation || CurAnimation->Loop)
+		{
+			return;
+		}
+
+		CurAnimation->CurFrame = CurAnimation->StartFrame;
+		CurAnimation->AnimationEnd = false;
 	}
 private:
 	GameEngineCamera* Camera = nullptr;
@@ -120,6 +130,7 @@ private:
 		float CurInter = 0.f;
 		float Inter = 0.1f;
 		bool Loop = true;
+		bool Reverse = false;
 		bool AnimationEnd = false;
 	};
 	std::map<std::string, Animation> AllAnimation;

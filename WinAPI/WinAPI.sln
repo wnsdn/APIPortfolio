@@ -23,9 +23,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEnginePlatform", "GameE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineBase", "GameEngineBase\GameEngineBase.vcxproj", "{A3CCAD58-9B14-4EE4-BF90-B3EB349F918B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Text", "Text", "{AD244A5D-FCBA-4898-AA22-6369406CF78A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Text", "Text", "{1AC041B0-720A-4972-8537-18772E3CA879}"
 	ProjectSection(SolutionItems) = preProject
-		Assignment.txt = Assignment.txt
+		..\Assignment.txt = ..\Assignment.txt
 	EndProjectSection
 EndProject
 Global

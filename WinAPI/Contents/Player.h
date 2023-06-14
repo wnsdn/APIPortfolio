@@ -62,6 +62,7 @@ private:
 	void RunUpdate(float _Delta);
 	void DeathUpdate(float _Delta);
 	void CaptureUpdate(float _Delta);
+	void FreeUpdate(float _Delta);
 
 	float MoveDist = 0.f;
 	float MaxDist = 8.f;

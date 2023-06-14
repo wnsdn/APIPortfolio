@@ -68,11 +68,14 @@ void Player::CollisionCheck(float _Delta)
 		}
 	}
 
-	for (auto Ptr : Level->FindActor(UpdateOrder::Water))
+	if (State != "Free" && LiveTime >= 0.5f)
 	{
-		if (Index == Ptr->GetIndex())
+		for (auto Ptr : Level->FindActor(UpdateOrder::Water))
 		{
-			State = "Capture";
+			if (Index == Ptr->GetIndex())
+			{
+				State = "Capture";
+			}
 		}
 	}
 }

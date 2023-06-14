@@ -179,6 +179,7 @@ void MonsterLevel::Start()
 	GameEngineSound::CreateSound("GameWin.wav");
 	GameEngineSound::CreateSound("GameLose.mp3");
 	GameEngineSound::CreateSound("PlayerDeath.wav");
+	GameEngineSound::CreateSound("PlayerFree.wav");
 	GameEngineSound::FindSound("GameStart.mp3")->Play();
 }
 

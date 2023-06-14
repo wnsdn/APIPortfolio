@@ -2,14 +2,16 @@
 #include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineProcess.h>
 
+#include "Global.h"
 #include "Button.h"
 #include "Curtain.h"
 
+#include "Monster.h"
 #include "TitleLevel.h"
 
 void MonsterLevel::CuratinUpdate(float _Delta)
 {
-	if (LiveTime >= 2.6f)
+	if (Once)
 	{
 		return;
 	}
@@ -22,7 +24,18 @@ void MonsterLevel::CuratinUpdate(float _Delta)
 	}
 	else if (LiveTime >= 2.5f)
 	{
-		CurtainPtr->Reset();
+		if (!Once)
+		{
+			CurtainPtr->Reset();
+			for (auto Ptr : FindActor(UpdateOrder::Monster))
+			{
+				if (Ptr)
+				{
+					dynamic_cast<Monster*>(Ptr)->RandomMove();
+				}
+			}
+			Once = true;
+		}
 	}
 }
 

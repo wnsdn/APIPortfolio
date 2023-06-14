@@ -21,21 +21,19 @@ public:
 	}
 
 	void Init(const int2& _Index, const std::string& _Path);
-	void Reset();
 	void RandomMove();
 private:
 	static int Count;
 
 	std::string Main = "";
-
 	float Speed = 0.f;
 	std::string Dir = "";
 	std::string State = "";
-	bool IsRelease = false;
 
 	void StateUpdate(float _Delta);
 	void DirCheck();
 	void RunUpdate(float _Delta);
+	void ChangeDir();
 
 	void Update(float _Delta) override;
 };

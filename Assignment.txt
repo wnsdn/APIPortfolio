@@ -1,11 +1,9 @@
-파일 읽고 쓰기
-GetTile 없애기
-몬스터 변경
+몬스터 변경 ---
 플레이어 죽으면 게임오버
 GameResult UI 구현
-플레이어 Revive구현 (버튼 눌러서 임시 구현)
 아이템 효과 구현
 
 맵에디터 만들기
 
 <random>
+파일 읽고 쓰기 <fstream> <sstream>

@@ -26,6 +26,10 @@ void Player::StateUpdate(float _Delta)
 	{
 		DeathUpdate(_Delta);
 	}
+	else if (State == "Free")
+	{
+		FreeUpdate(_Delta);
+	}
 }
 
 void Player::DirCheck()
@@ -297,7 +301,7 @@ void Player::DeathUpdate(float _Delta)
 		Death();
 	}
 
-	if (FindRenderer(Main)->IsAnimationEnd())
+	if (FindRenderer(Main)->IsCurAnimationEnd())
 	{
 		if (FindRenderer(Main)->GetLiveTime() <= 0.1f)
 		{
@@ -318,7 +322,7 @@ void Player::DeathUpdate(float _Delta)
 
 void Player::CaptureUpdate(float _Delta)
 {
-	if (FindRenderer(Main)->IsAnimationEnd())
+	if (FindRenderer(Main)->IsCurAnimationEnd())
 	{
 		GameEngineSound::FindSound("PlayerDeath.wav")->Play();
 
@@ -326,12 +330,25 @@ void Player::CaptureUpdate(float _Delta)
 		State = "Death";
 		LiveTime = 0.0f;
 		FindRenderer(Main)->SetPos({ 0, -11 });
+		return;
 	}
+
+	if (GameEngineInput::IsDown(VK_LCONTROL))
+	{
+		Dir = "Down";
+		if (State == "Capture")
+		{
+			GameEngineSound::FindSound("PlayerFree.wav")->Play();
+			State = "Free";
+		}
+		FindRenderer(Main)->SetPos({ 0, -11 });
+		return;
+	}
+
 	Speed = 20.0f;
 
 	FindRenderer(Main)->AddPos({ 0, MoveDir * MoveSpeed * _Delta });
 	MoveDist += MoveSpeed * _Delta;
-
 	if (MoveDist >= MaxDist)
 	{
 		MoveDir *= -1.f;
@@ -547,6 +564,32 @@ void Player::CaptureUpdate(float _Delta)
 			}
 		}
 	}
-
 	Index = PosToIndex(Pos);
+}
+
+void Player::FreeUpdate(float _Delta)
+{
+	if (GameEngineInput::IsPress(VK_UP))
+	{
+		Dir = "Up";
+	}
+	else if (GameEngineInput::IsPress(VK_DOWN))
+	{
+		Dir = "Down";
+	}
+	else if (GameEngineInput::IsPress(VK_LEFT))
+	{
+		Dir = "Left";
+	}
+	else if (GameEngineInput::IsPress(VK_RIGHT))
+	{
+		Dir = "Right";
+	}
+
+	if (FindRenderer(Main)->IsCurAnimationEnd())
+	{
+		State = "Run";
+		LiveTime = 0.0f;
+		FindRenderer(Main)->ResetCurAnimation();
+	}
 }

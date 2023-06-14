@@ -53,7 +53,7 @@ void Player::Init(const int2& _Index, const std::string& _Path)
 	FindRenderer(Main)->ChangeAnimation(Dir + State);
 
 	FindRenderer(Main)->CreateAnimation("Capture", 0, 4, 4, 1.5f, false);
-	FindRenderer(Main)->CreateAnimation("Free", 0, 5, 5, 0.1f, false);
+	FindRenderer(Main)->CreateAnimation("Free", 0, 5, 5, 0.05f, false);
 	FindRenderer(Main)->CreateAnimation("Death", 0, 6, 5, 0.1f, false);
 }
 
@@ -61,7 +61,7 @@ void Player::Update(float _Delta)
 {
 	StateUpdate(_Delta);
 	CollisionCheck(_Delta);
-	if (State == "Capture")
+	if (State == "Capture" || State == "Free")
 	{
 		FindRenderer(Main)->ChangeAnimation(State);
 	}

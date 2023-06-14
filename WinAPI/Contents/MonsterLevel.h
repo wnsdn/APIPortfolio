@@ -16,6 +16,7 @@ public:
 private:
 	bool Win = false;
 	bool Lose = false;
+	bool Once = false;
 
 	class Button* BtnOut = nullptr;
 	class Curtain* CurtainPtr = nullptr;
