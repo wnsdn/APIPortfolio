@@ -43,6 +43,10 @@ void Object::Init(const int2& _Index, const float4& _Type)
 	{
 		CanMove = true;
 	}
+	if (_Type.X == 0 && _Type.Y == 3)
+	{
+		CanMove = true;
+	}
 
 	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 	{
@@ -79,7 +83,7 @@ void Object::Release()
 {
 	if (HasItem)
 	{
-		GameEngineSound::FindSound("On.wav")->Play();
+		GameEngineSound::FindSound("ButtonOn.wav")->Play();
 		Level->CreateActor<Item>(UpdateOrder::Item)->Init(Index, Type);
 	}
 

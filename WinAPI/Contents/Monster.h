@@ -31,9 +31,13 @@ private:
 	std::string State = "";
 
 	void StateUpdate(float _Delta);
-	void DirCheck();
+	void StartUpdate(float _Delta);
 	void RunUpdate(float _Delta);
+	void DeathUpdate(float _Delta);
 	void ChangeDir();
 
+	void CollisionCheck();
+
 	void Update(float _Delta) override;
+	void Render(float _Delta) override;
 };

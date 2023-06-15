@@ -10,8 +10,9 @@ GameEngineCamera::~GameEngineCamera()
 {
 	for (auto& Pair : AllRenderer)
 	{
-		for (auto& Renderer : Pair.second)
+		for (auto& Tmp : Pair.second)
 		{
+			GameEngineRenderer* Renderer = Tmp.second;
 			if (Renderer)
 			{
 				delete Renderer;
@@ -21,9 +22,9 @@ GameEngineCamera::~GameEngineCamera()
 	}
 }
 
-void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer)
+void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer, int _ZOrder)
 {
-	AllRenderer[_Renderer->GetOrder()].emplace_back(_Renderer);
+	AllRenderer[_ZOrder].emplace(_Renderer->GetOrder(), _Renderer);
 }
 
 void GameEngineCamera::Update(float _Delta)
@@ -35,7 +36,7 @@ void GameEngineCamera::Update(float _Delta)
 		for (; Iter != End;)
 		{
 			GameEngineRenderer* Renderer = *Iter;
-			if (Renderer->GetOrder() == Renderer->GetActor()->GetIndex().Y)
+			if (Renderer->GetOrder() == Renderer->GetActor()->GetIndex().Y)//인덱스랑 오더가 같으면
 			{
 				if (Renderer->GetOrderChange())
 				{
@@ -49,10 +50,19 @@ void GameEngineCamera::Update(float _Delta)
 					++Iter;
 				}
 			}
-			else
+			else//인덱스랑 오더가 다르면
 			{
+				Renderer->SetPreOrder(Renderer->GetOrder());
 				Renderer->SetOrder(Renderer->GetActor()->GetIndex().Y);
-				AllRenderer[Renderer->GetOrder()].emplace_back(Renderer);
+
+				if (Renderer->GetOrder() - Renderer->GetPreOrder() < 0)//아래서 위로 이동
+				{
+					AllRenderer[Renderer->GetOrder()].emplace_back(Renderer);
+				}
+				else//위에서 아래로 이동
+				{
+					AllRenderer[Renderer->GetOrder()].emplace_front(Renderer);
+				}
 
 				Iter = AllRenderer[i].erase(Iter);
 			}
@@ -64,8 +74,9 @@ void GameEngineCamera::Render(float _Delta)
 {
 	for (auto& Pair : AllRenderer)
 	{
-		for (auto& Renderer : Pair.second)
+		for (auto& Tmp : Pair.second)
 		{
+			GameEngineRenderer* Renderer = Tmp.second;
 			if (Renderer->GetActor()->IsDeath())
 			{
 				continue;
@@ -87,23 +98,19 @@ void GameEngineCamera::Release()
 {
 	for (auto& Pair : AllRenderer)
 	{
-		auto Iter = Pair.second.begin();
-		auto End = Pair.second.end();
-		for (; Iter != End;)
-		{
-			GameEngineRenderer* Renderer = *Iter;
-			if (Renderer->IsDeath())
+		auto& Map = Pair.second;
+		std::erase_if(Map,
+			[](const std::pair<int, GameEngineRenderer*> _Pair)
 			{
-				delete Renderer;
-				Renderer = nullptr;
+				GameEngineRenderer* Renderer = _Pair.second;
+				if (Renderer->IsDeath())
+				{
+					delete Renderer;
+					Renderer = nullptr;
+				}
 
-				Iter = Pair.second.erase(Iter);
-			}
-			else
-			{
-				++Iter;
-			}
-		}
+				return _Pair.second == nullptr;
+			})
 	}
 }
 

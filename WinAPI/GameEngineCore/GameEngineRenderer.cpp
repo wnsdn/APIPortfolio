@@ -188,3 +188,57 @@ void GameEngineRenderer::ChangeAnimation(const std::string& _AnimationName)
 		LiveTime = 0.0f;
 	}
 }
+
+bool GameEngineRenderer::IsAnimationEnd(const std::string& _AnimationName)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_AnimationName);
+	auto FindIter = AllAnimation.find(Upper);
+
+	if (FindIter == AllAnimation.end())
+	{
+		MsgBoxAssert("존재하지 않는 애니메이션 IsAnimationEnd(). " + _AnimationName);
+		return false;
+	}
+
+	if (&FindIter->second != CurAnimation)
+	{
+		return false;
+	}
+
+	int Count = 0;
+	if (CurAnimation->Reverse)
+	{
+		Count = CurAnimation->StartFrame - CurAnimation->EndFrame + 1;
+	}
+	else
+	{
+		Count = CurAnimation->EndFrame - CurAnimation->StartFrame + 1;
+	}
+	if (!CurAnimation->AnimationEnd && LiveTime >= static_cast<float>(Count) * CurAnimation->Inter)
+	{
+		CurAnimation->AnimationEnd = true;
+		LiveTime = 0.0f;
+	}
+
+	return CurAnimation->AnimationEnd;
+}
+
+void GameEngineRenderer::ResetAnimation(const std::string& _AnimationName)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_AnimationName);
+	auto FindIter = AllAnimation.find(Upper);
+
+	if (FindIter == AllAnimation.end())
+	{
+		MsgBoxAssert("존재하지 않는 애니메이션 ResetAnimation(). " + _AnimationName);
+		return;
+	}
+
+	if (&FindIter->second != CurAnimation || CurAnimation->Loop)
+	{
+		return;
+	}
+
+	CurAnimation->CurFrame = CurAnimation->StartFrame;
+	CurAnimation->AnimationEnd = false;
+}

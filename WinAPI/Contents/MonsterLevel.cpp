@@ -98,6 +98,8 @@ void MonsterLevel::Init(const std::string& _MapData)
 		Init({ 3, 3 }, { 8, 4 });
 	CreateActor<Object>(UpdateOrder::Object)->
 		Init({ 3, 4 }, { 8, 4 });
+	CreateActor<Object>(UpdateOrder::Object)->
+		Init({ 7, 7 }, { 0, 3 });
 
 	/*Object* ObjectPtr = nullptr;
 	std::getline(Read, Str);
@@ -123,7 +125,7 @@ void MonsterLevel::Init(const std::string& _MapData)
 
 	Monster* MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
 	MonsterPtr->Init({ 9, 6 }, "Octopus1.bmp");
-	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
+	/*MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
 	MonsterPtr->Init({ 10, 6 }, "Octopus1.bmp");
 	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
 	MonsterPtr->Init({ 11, 6 }, "Octopus1.bmp");
@@ -132,7 +134,7 @@ void MonsterLevel::Init(const std::string& _MapData)
 	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
 	MonsterPtr->Init({ 7, 1 }, "Octopus2.bmp");
 	MonsterPtr = CreateActor<Monster>(UpdateOrder::Monster);
-	MonsterPtr->Init({ 7, 11 }, "Octopus2.bmp");
+	MonsterPtr->Init({ 7, 11 }, "Octopus2.bmp");*/
 
 	Item* ItemPtr = CreateActor<Item>(UpdateOrder::Item);
 	ItemPtr->Init({ 6, 0 }, { 2, 0 });
@@ -153,6 +155,8 @@ void MonsterLevel::Init(const std::string& _MapData)
 
 void MonsterLevel::Start()
 {
+	State = "Start";
+
 	float4 WindowPos = GameEngineWindow::GetPos();
 	float4 WindowScale = GameEngineWindow::GetScale();
 
@@ -171,22 +175,24 @@ void MonsterLevel::Start()
 	ResultPtr = CreateActor<GameResult>(UpdateOrder::UI);//GameResult
 
 	//Sound
-	GameEngineSound::CreateSound("Set.mp3");
-	GameEngineSound::CreateSound("Explode.wav");
-	GameEngineSound::CreateSound("Get.mp3");
-	GameEngineSound::CreateSound("Death.wav");
 	GameEngineSound::CreateSound("GameStart.mp3");
 	GameEngineSound::CreateSound("GameWin.wav");
 	GameEngineSound::CreateSound("GameLose.mp3");
+	GameEngineSound::CreateSound("MonsterDeath.wav");
 	GameEngineSound::CreateSound("PlayerDeath.wav");
 	GameEngineSound::CreateSound("PlayerFree.wav");
+	GameEngineSound::CreateSound("BombSet.mp3");
+	GameEngineSound::CreateSound("BombExplode.wav");
+	GameEngineSound::CreateSound("ItemGet.mp3");
+
 	GameEngineSound::FindSound("GameStart.mp3")->Play();
 }
 
 void MonsterLevel::Update(float _Delta)
 {
+	LiveTime += _Delta;
+
 	GameEngineLevel::Update(_Delta);
-	
-	CuratinUpdate(_Delta);
-	OutButtonUpdate(_Delta);
+
+	StateUpdate(_Delta);
 }

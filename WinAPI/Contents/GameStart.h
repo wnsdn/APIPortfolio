@@ -11,6 +11,8 @@ public:
 	GameStart& operator=(const GameStart& _Other) = delete;
 	GameStart& operator=(GameStart&& _Other) noexcept = delete;
 private:
+	float Speed = 6400.0f;
+
 	void Start() override;
 	void Update(float _Delta) override;
 };

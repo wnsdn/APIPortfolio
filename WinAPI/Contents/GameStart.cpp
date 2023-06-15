@@ -67,7 +67,7 @@ void GameStart::Update(float _Delta)
 			{
 				if (LiveTime >= 0.2f * i)
 				{
-					FindRenderer(Game[i] + ".bmp")->AddPos({ 0, 3200.0f * _Delta });
+					FindRenderer(Game[i] + ".bmp")->AddPos({ 0, Speed * _Delta });
 				}
 			}
 			else if (FindRenderer(Game[i] + ".bmp")->GetPos().Y > -45)
@@ -93,9 +93,9 @@ void GameStart::Update(float _Delta)
 		{
 			if (i <= 4 && i >= 1)
 			{
-				FindRenderer(Game[i - 1] + ".bmp")->AddPos({ 0, -3200.0f * _Delta });
+				FindRenderer(Game[i - 1] + ".bmp")->AddPos({ 0, -Speed * _Delta });
 			}
-			FindRenderer(Start[i] + ".bmp")->AddPos({ 0, 3200.0f * _Delta });
+			FindRenderer(Start[i] + ".bmp")->AddPos({ 0, Speed * _Delta });
 		}
 	}
 

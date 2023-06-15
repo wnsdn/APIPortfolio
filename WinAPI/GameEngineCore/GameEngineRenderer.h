@@ -84,32 +84,9 @@ public:
 		AlphaValue = _AlphaValue;
 	}
 
-	bool IsCurAnimationEnd()
-	{
-		if (!CurAnimation)
-		{
-			return false;
-		}
-
-		int Count = CurAnimation->EndFrame - CurAnimation->StartFrame + 1;
-		if (!CurAnimation->AnimationEnd && LiveTime >= static_cast<float>(Count) * CurAnimation->Inter)
-		{
-			CurAnimation->AnimationEnd = true;
-			LiveTime = 0.0f;
-		}
-
-		return CurAnimation->AnimationEnd;
-	}
-	void ResetCurAnimation()
-	{
-		if (!CurAnimation || CurAnimation->Loop)
-		{
-			return;
-		}
-
-		CurAnimation->CurFrame = CurAnimation->StartFrame;
-		CurAnimation->AnimationEnd = false;
-	}
+	bool IsAnimationEnd(const std::string& _AnimationName);
+	void ResetAnimation(const std::string& _AnimationName);
+	
 private:
 	GameEngineCamera* Camera = nullptr;
 	GameEngineActor* Actor = nullptr;

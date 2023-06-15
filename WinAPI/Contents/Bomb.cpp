@@ -32,7 +32,7 @@ void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner)
 	FindRenderer("Bubble.bmp")->CreateAnimation("Bubble", 0, 0, 3, 0.2f, true);
 	FindRenderer("Bubble.bmp")->ChangeAnimation("Bubble");
 
-	GameEngineSound::FindSound("Set.mp3")->Play();
+	GameEngineSound::FindSound("BombSet.mp3")->Play();
 
 	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 	{
@@ -65,5 +65,5 @@ void Bomb::Release()
 
 	Level->CreateActor<Water>(UpdateOrder::Water)->Init(Index, Length);
 
-	GameEngineSound::FindSound("Explode.wav")->Play();
+	GameEngineSound::FindSound("BombExplode.wav")->Play();
 }

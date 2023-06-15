@@ -22,12 +22,12 @@ void Player::Init(const int2& _Index, const std::string& _Path)
 {
 	Main = _Path;
 
-	Count = 1 + 1;
+	Count = 1 + 10;
 	MaxCount = 6;
 	Length = 1 + 0;
 	MaxLength = 7;
 	StdSpeed = 33.f;
-	CurSpeed = 5.f + 0;
+	CurSpeed = 50.f + 10.0f;
 	Speed = CurSpeed * StdSpeed;
 	MaxSpeed = 9.f;
 	Dir = "Down";

@@ -23,6 +23,6 @@ void CoreProcess::Start()
 	CreateLevel<TitleLevel>();
 
 	//Sound
-	GameEngineSound::CreateSound("On.wav", false);
-	GameEngineSound::CreateSound("Click.wav", false);
+	GameEngineSound::CreateSound("ButtonOn.wav", false);
+	GameEngineSound::CreateSound("ButtonClick.wav", false);
 }

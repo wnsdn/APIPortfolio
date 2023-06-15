@@ -3,21 +3,34 @@
 #include <algorithm>
 #include <GameEngineBase/GameEngineRandom.h>
 #include <GameEngineCore/GameEngineLevel.h>
-#include <GameEngineCore/GameEngineCollision.h>
+#include <GameEngineCore/GameEngineRenderer.h>
 #include "Global.h"
 #include "Tile.h"
 
 void Monster::StateUpdate(float _Delta)
 {
-	if (State == "Run")
+	if (State == "Start")
+	{
+		StartUpdate(_Delta);
+	}
+	else if (State == "Run")
 	{
 		RunUpdate(_Delta);
 	}
+	else if (State == "Death")
+	{
+		DeathUpdate(_Delta);
+	}
 }
 
-void Monster::DirCheck()
+void Monster::StartUpdate(float _Delta)
 {
-	int Random = GameEngineRandom::RandomInt(2);
+	if (FindRenderer(Main)->IsAnimationEnd("Start")
+		&& LiveTime >= 1.75f)
+	{
+		RandomMove();
+		LiveTime = 0.0f;
+	}
 }
 
 void Monster::RunUpdate(float _Delta)
@@ -25,80 +38,90 @@ void Monster::RunUpdate(float _Delta)
 	if (Dir == "Left")
 	{
 		Pos.X -= Speed * _Delta;
-	}
-	else if (Dir == "Right")
-	{
-		Pos.X += Speed * _Delta;
-	}
-	else if (Dir == "Up")
-	{
-		Pos.Y -= Speed * _Delta;
-	}
-	else if (Dir == "Down")
-	{
-		Pos.Y += Speed * _Delta;
-	}
-	else
-	{
-		ChangeDir();
-	}
 
-	if (Left() < MapLeft)
-	{
-		Pos.X += Speed * _Delta;
-		ChangeDir();
-	}
-	else if (Right() > MapRight)
-	{
-		Pos.X -= Speed * _Delta;
-		ChangeDir();
-	}
-	else if (Top() < MapTop)
-	{
-		Pos.Y += Speed * _Delta;
-		ChangeDir();
-	}
-	else if (Bottom() > MapBottom)
-	{
-		Pos.Y -= Speed * _Delta;
-		ChangeDir();
-	}
-
-	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
-	{
-		if (!Ptr)
-		{
-			continue;
-		}
-
-		if (Ptr->GetIndex() == (Index + int2::Left)
-			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
-			&& Left() < Ptr->Right())
+		if (Left() < MapLeft)
 		{
 			Pos.X += Speed * _Delta;
 			ChangeDir();
 		}
-		if (Ptr->GetIndex() == (Index + int2::Right)
-			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
-			&& Right() > Ptr->Left())
+
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Ptr->GetIndex() == Index + int2::Left
+				&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
+				&& Left() < Ptr->Right())
+			{
+				Pos.X = Ptr->GetPos().X + TileSize.X;
+				ChangeDir();
+			}
+		}
+	}
+	else if (Dir == "Right")
+	{
+		Pos.X += Speed * _Delta;
+
+		if (Right() > MapRight)
 		{
 			Pos.X -= Speed * _Delta;
 			ChangeDir();
 		}
-		if (Ptr->GetIndex() == (Index + int2::Up)
-			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
-			&& Top() < Ptr->Bottom())
+
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Ptr->GetIndex() == Index + int2::Right
+				&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
+				&& Right() > Ptr->Left())
+			{
+				Pos.X = Ptr->GetPos().X - TileSize.X;
+				ChangeDir();
+			}
+		}
+	}
+	else if (Dir == "Up")
+	{
+		Pos.Y -= Speed * _Delta;
+
+		if (Top() < MapTop)
 		{
 			Pos.Y += Speed * _Delta;
 			ChangeDir();
 		}
-		if (Ptr->GetIndex() == (Index + int2::Down)
-			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
-			&& Bottom() > Ptr->Top())
+
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Ptr->GetIndex() == Index + int2::Up
+				&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
+				&& Top() < Ptr->Bottom())
+			{
+				Pos.Y = Ptr->GetPos().Y + TileSize.Y;
+				ChangeDir();
+			}
+		}
+	}
+	else if (Dir == "Down")
+	{
+		Pos.Y += Speed * _Delta;
+
+		if (Bottom() > MapBottom)
 		{
 			Pos.Y -= Speed * _Delta;
 			ChangeDir();
 		}
+
+		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		{
+			if (Ptr && Ptr->GetIndex() == Index + int2::Down
+				&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty()
+				&& Bottom() > Ptr->Top())
+			{
+				Pos.Y = Ptr->GetPos().Y - TileSize.Y;
+				ChangeDir();
+			}
+		}
+	}
+	else
+	{
+		ChangeDir();
 	}
 
 	Index = PosToIndex(Pos);
@@ -106,59 +129,103 @@ void Monster::RunUpdate(float _Delta)
 
 void Monster::ChangeDir()
 {
-	std::vector<std::string> DirArr{"Left", "Right", "Up", "Down"};
 	bool DirOn[4] = { true, true, true, true };
-	if (Index.X == 0)
+
+	if (DirOn[0] && Pos.X - TileSize.X < MapLeft)
 	{
 		DirOn[0] = false;
 	}
-	else if (Index.X == 14)
+	else if (DirOn[1] && Pos.X + TileSize.X > MapRight)
 	{
 		DirOn[1] = false;
 	}
 
-	if (Index.Y == 0)
+	if (DirOn[2] && Pos.Y - TileSize.Y < MapTop)
 	{
 		DirOn[2] = false;
 	}
-	else if (Index.Y == 12)
+	else if (DirOn[3] && Pos.Y + TileSize.Y > MapBottom)
 	{
 		DirOn[3] = false;
 	}
 
 	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 	{
-		if (!Ptr)
-		{
-			continue;
-		}
-
-		if (DirOn[0] && Ptr->GetIndex() == (Index + int2::Left)
+		if (DirOn[0] && Ptr && Ptr->GetIndex() == Index + int2::Left
 			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
 		{
 			DirOn[0] = false;
 		}
-		if (DirOn[1] && Ptr->GetIndex() == (Index + int2::Right)
+		if (DirOn[1] && Ptr && Ptr->GetIndex() == Index + int2::Right
 			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
 		{
 			DirOn[1] = false;
 		}
-		if (DirOn[2] && Ptr->GetIndex() == (Index + int2::Up)
+		if (DirOn[2] && Ptr && Ptr->GetIndex() == Index + int2::Up
 			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
 		{
 			DirOn[2] = false;
 		}
-		if (DirOn[3] && Ptr->GetIndex() == (Index + int2::Down)
+		if (DirOn[3] && Ptr && Ptr->GetIndex() == Index + int2::Down
 			&& !dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
 		{
 			DirOn[3] = false;
 		}
 	}
 
-	int RndCnt = static_cast<int>(DirArr.size());
-	if (RndCnt)
+	if (!DirOn[0] && !DirOn[1] && !DirOn[2] && !DirOn[3])
 	{
-		int Random = GameEngineRandom::RandomInt(RndCnt);
-		Dir = DirArr[Random - 1];
+		Dir = "";
+		return;
+	}
+
+	std::vector<std::string> DirArr = { "Left", "Right", "Up", "Down" };
+	if (!DirOn[0])
+	{
+		DirArr.erase(std::remove_if(DirArr.begin(), DirArr.end(),
+			[](std::string _Str)
+			{
+				return _Str == "Left";
+			}),
+			DirArr.end());
+	}
+	if (!DirOn[1])
+	{
+		DirArr.erase(std::remove_if(DirArr.begin(), DirArr.end(),
+			[](std::string _Str)
+			{
+				return _Str == "Right";
+			}),
+			DirArr.end());
+	}
+	if (!DirOn[2])
+	{
+		DirArr.erase(std::remove_if(DirArr.begin(), DirArr.end(),
+			[](std::string _Str)
+			{
+				return _Str == "Up";
+			}),
+			DirArr.end());
+	}
+	if (!DirOn[3])
+	{
+		DirArr.erase(std::remove_if(DirArr.begin(), DirArr.end(),
+			[](std::string _Str)
+			{
+				return _Str == "Down";
+			}),
+			DirArr.end());
+	}
+
+	int RndCnt = static_cast<int>(DirArr.size());
+	int RndInt = GameEngineRandom::RandomInt(RndCnt);
+	Dir = DirArr[RndInt - 1];
+}
+
+void Monster::DeathUpdate(float _Delta)
+{
+	if (FindRenderer(Main)->IsAnimationEnd("Death"))
+	{
+		Death();
 	}
 }

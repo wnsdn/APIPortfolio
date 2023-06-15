@@ -21,7 +21,7 @@ void Player::CollisionCheck(float _Delta)
 			if (Index == Ptr->GetIndex())
 			{
 				float4 Type = dynamic_cast<Item*>(Ptr)->GetType();
-				GameEngineSound::FindSound("Get.mp3")->Play();
+				GameEngineSound::FindSound("ItemGet.mp3")->Play();
 				if (Type.X == 0 && Type.Y == 0)
 				{
 					++CurSpeed;
@@ -60,7 +60,10 @@ void Player::CollisionCheck(float _Delta)
 	{
 		if (Index == Ptr->GetIndex())
 		{
-			GameEngineSound::FindSound("PlayerDeath.wav")->Play();
+			if (State != "Death")
+			{
+				GameEngineSound::FindSound("PlayerDeath.wav")->Play();
+			}
 
 			Dir = "";
 			State = "Death";

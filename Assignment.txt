@@ -1,5 +1,6 @@
-몬스터 변경 ---
-플레이어 죽으면 게임오버
+camera renderer -> map(zorder) map(renderorder)
+그림자 렌더 순서를 젤 아래로 깔기
+Delta 를 더한값이 실제 시간의 절반밖에 안됨
 GameResult UI 구현
 아이템 효과 구현
 

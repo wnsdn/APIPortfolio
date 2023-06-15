@@ -84,3 +84,25 @@ GameEngineRenderer* GameEngineActor::FindRenderer(const std::string& _Filename)
 
 	return FindIter->second;
 }
+
+void GameEngineActor::DrawRect(const float4& _Pos, const float4& _Scale,
+	unsigned int _Color)
+{
+	HDC BackDC = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
+
+	HPEN Hpen = CreatePen(PS_SOLID, 3, _Color);
+	HPEN OldPen = static_cast<HPEN>(SelectObject(BackDC, Hpen));
+	HBRUSH Hbrush = static_cast<HBRUSH>(GetStockObject(HOLLOW_BRUSH));
+	HBRUSH OldBrush = static_cast<HBRUSH>(SelectObject(BackDC, Hbrush));
+
+	Rectangle(BackDC,
+		_Pos.iX() - _Scale.ihX(),
+		_Pos.iY() - _Scale.ihY(),
+		_Pos.iX() + _Scale.ihX(),
+		_Pos.iY() + _Scale.ihY());
+
+	SelectObject(BackDC, OldPen);
+	SelectObject(BackDC, OldBrush);
+	DeleteObject(Hpen);
+	DeleteObject(Hbrush);
+}

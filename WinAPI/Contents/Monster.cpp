@@ -1,6 +1,5 @@
 #include "Monster.h"
 #include <iostream>
-#include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
@@ -20,7 +19,7 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 {
 	Main = _Path;
 	Dir = "";
-	State = "Run";
+	State = "Start";
 
 	Index = _Index;
 	Pos = IndexToPos(Index);
@@ -38,7 +37,7 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 	FindRenderer(Main)->CreateAnimation("LeftRun", 4, 0, 2, 0.35f, true);
 	FindRenderer(Main)->CreateAnimation("RightRun", 4, 1, 2, 0.35f, true);
 	FindRenderer(Main)->CreateAnimation("Start", 0, 1, 4, 0.2f, false);
-	FindRenderer(Main)->CreateAnimation("Death", 3, 1, 4, 0.2f, false, true);
+	FindRenderer(Main)->CreateAnimation("Death", 3, 1, 4, 0.1f, false, true);
 	FindRenderer(Main)->CreateAnimation("Run", 3, 1, 1, 0.0f, false);
 
 	++Count;
@@ -47,12 +46,19 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 void Monster::Update(float _Delta)
 {
 	StateUpdate(_Delta);
+	CollisionCheck();
 	FindRenderer(Main)->ChangeAnimation(Dir + State);
+}
+
+void Monster::Render(float _Delta)
+{
+	DrawRect(Pos, {30, 30}, (255 | (0 << 8)) | (0 << 16));
+	DrawRect(IndexToPos(Index), Scale, (0 | (255 << 8)) | (0 << 16));
 }
 
 void Monster::RandomMove()
 {
-	Speed = 250.f;
+	Speed = 50.f;
 	switch (rand() % 4)
 	{
 	case 0:

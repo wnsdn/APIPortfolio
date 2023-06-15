@@ -32,6 +32,8 @@ public:
 	GameEngineRenderer* CreateRenderer(const std::string& _Name, int _RenderOrder, const float4& _Size, unsigned int _Color);
 	GameEngineRenderer* FindRenderer(const std::string& _Filename);
 
+	void DrawRect(const float4& _Pos, const float4& _Scale, unsigned int _Color);
+
 	GameEngineLevel* GetLevel() const
 	{
 		return Level;

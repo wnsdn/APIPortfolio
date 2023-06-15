@@ -154,24 +154,25 @@ void Object::CollisionCheck(float _Delta)
 
 	if (MoveDir == "Left")
 	{
-		Pos.X -= 120.f * _Delta;
-		MoveDist += 120.f * _Delta;
+		Pos.X -= MoveSpeed * _Delta;
+		MoveDist += MoveSpeed * _Delta;
 	}
 	else if (MoveDir == "Right")
 	{
-		Pos.X += 120.f * _Delta;
-		MoveDist += 120.f * _Delta;
+		Pos.X += MoveSpeed * _Delta;
+		MoveDist += MoveSpeed * _Delta;
 	}
 	else if (MoveDir == "Up")
 	{
-		Pos.Y -= 120.f * _Delta;
-		MoveDist += 120.f * _Delta;
+		Pos.Y -= MoveSpeed * _Delta;
+		MoveDist += MoveSpeed * _Delta;
 	}
 	else if (MoveDir == "Down")
 	{
-		Pos.Y += 120.f * _Delta;
-		MoveDist += 120.f * _Delta;
+		Pos.Y += MoveSpeed * _Delta;
+		MoveDist += MoveSpeed * _Delta;
 	}
+	Index = PosToIndex(Pos);
 
 	if (MoveDist >= TileSize.X)
 	{
@@ -201,7 +202,7 @@ void Object::CollisionCheck(float _Delta)
 		MoveDist = 0.f;
 		MoveDir = "";
 
-		Index = PosToIndex(Pos);
+		//Index = PosToIndex(Pos);
 		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 		{
 			if (Ptr && Index == Ptr->GetIndex())

@@ -78,6 +78,7 @@ void GameEngineCore::CoreUpdate()
 	//Render
 	GameEngineWindow::GetInst().ClearBackBuffer();
 	Process->CurLevel->GetCamera()->Render(Delta);
+	Process->Render(Delta);
 	GameEngineWindow::GetInst().DoubleBuffering();
 
 	//Release

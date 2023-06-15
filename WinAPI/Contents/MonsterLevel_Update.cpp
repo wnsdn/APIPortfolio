@@ -5,41 +5,48 @@
 #include "Global.h"
 #include "Button.h"
 #include "Curtain.h"
+#include "GameResult.h"
 
-#include "Monster.h"
+#include "Player.h"
 #include "TitleLevel.h"
 
 void MonsterLevel::CuratinUpdate(float _Delta)
 {
-	if (Once)
-	{
-		return;
-	}
-
-	LiveTime += _Delta;
-
 	if (LiveTime <= 1.0f)
 	{
 		CurtainPtr->SetBright(_Delta, 1.0f, 100.0f);
 	}
 	else if (LiveTime >= 2.5f)
 	{
-		if (!Once)
+		if (State != "InGame")
 		{
 			CurtainPtr->Reset();
-			for (auto Ptr : FindActor(UpdateOrder::Monster))
-			{
-				if (Ptr)
-				{
-					dynamic_cast<Monster*>(Ptr)->RandomMove();
-				}
-			}
-			Once = true;
+			State = "InGame";
 		}
 	}
 }
 
-void MonsterLevel::OutButtonUpdate(float _Delta)
+void MonsterLevel::PlayerCheck()
+{
+	if (!Player::MainPlayer)
+	{
+		return;
+	}
+
+	if (Player::MainPlayer->GetState() == "Death")
+	{
+		if (State != "Lose")
+		{
+			ResultPtr->RendererOn();
+			GameEngineSound::FindSound("Octopus.mp3")->Stop();
+			GameEngineSound::FindSound("GameLose.mp3")->Play();
+			LiveTime = 0.0f;
+			State = "Lose";
+		}
+	}
+}
+
+void MonsterLevel::OutButtonUpdate()
 {
 	if (BtnOut->GetAction())
 	{

@@ -301,7 +301,7 @@ void Player::DeathUpdate(float _Delta)
 		Death();
 	}
 
-	if (FindRenderer(Main)->IsCurAnimationEnd())
+	if (FindRenderer(Main)->IsAnimationEnd("Death"))
 	{
 		if (FindRenderer(Main)->GetLiveTime() <= 0.1f)
 		{
@@ -322,7 +322,7 @@ void Player::DeathUpdate(float _Delta)
 
 void Player::CaptureUpdate(float _Delta)
 {
-	if (FindRenderer(Main)->IsCurAnimationEnd())
+	if (FindRenderer(Main)->IsAnimationEnd("Capture"))
 	{
 		GameEngineSound::FindSound("PlayerDeath.wav")->Play();
 
@@ -586,10 +586,10 @@ void Player::FreeUpdate(float _Delta)
 		Dir = "Right";
 	}
 
-	if (FindRenderer(Main)->IsCurAnimationEnd())
+	if (FindRenderer(Main)->IsAnimationEnd("Free"))
 	{
 		State = "Run";
 		LiveTime = 0.0f;
-		FindRenderer(Main)->ResetCurAnimation();
+		FindRenderer(Main)->ResetAnimation("Free");
 	}
 }

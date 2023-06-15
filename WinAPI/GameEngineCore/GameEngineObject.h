@@ -18,6 +18,14 @@ public:
 	{
 		Order = _RenderOrder;
 	}
+	int GetPreOrder() const
+	{
+		return PreOrder;
+	}
+	void SetPreOrder(const int _PreOrder)
+	{
+		PreOrder = _PreOrder;
+	}
 
 	bool GetOrderChange() const
 	{
@@ -65,6 +73,7 @@ public:
 	}
 
 protected:
+	int PreOrder = 0;
 	int Order = 0;
 	bool OrderChange = false;
 	bool IsUpdateValue = true;

@@ -27,6 +27,7 @@ private:
 	float MoveUp = 0.f;
 	float MoveDown = 0.f;
 	float MoveDist = 0.f;
+	float MoveSpeed = 120.0f;
 	float4 Type = {};
 
 	void Update(float _Delta) override;

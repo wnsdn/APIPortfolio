@@ -14,8 +14,7 @@ public:
 
 	void Init(const std::string& _MapData);
 private:
-	bool Win = false;
-	bool Lose = false;
+	std::string State = "";
 	bool Once = false;
 
 	class Button* BtnOut = nullptr;
@@ -25,6 +24,12 @@ private:
 	void Start() override;
 	void Update(float _Delta) override;
 
+	void StateUpdate(float _Delta);
+	void StartUpdate(float _Delta);
+	void InGameUpdate(float _Delta);
+	void LoseUpdate(float _Delta);
+
 	void CuratinUpdate(float _Delta);
-	void OutButtonUpdate(float _Delta);
+	void PlayerCheck();
+	void OutButtonUpdate();
 };

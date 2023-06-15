@@ -34,7 +34,7 @@ enum class UpdateOrder
 	None,
 };
 
-enum class RenderOrder
+enum class ZOrder
 {
 	//1
 	BackUI = -3,
@@ -52,6 +52,13 @@ enum class RenderOrder
 	UI_Cursor,
 
 	//4
+	None,
+};
+
+enum class RenderOrder
+{
+
+
 	None,
 };
 
