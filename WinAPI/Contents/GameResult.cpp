@@ -22,7 +22,7 @@ void GameResult::Start()
 
 	AddPos({ -84, -22 });
 
-	CreateRenderer("GameResult.bmp", RenderOrder::UI_GameResult);
+	CreateRenderer("GameResult.bmp", ZOrder::UI_GameResult, RenderOrder::None);
 	FindRenderer("GameResult.bmp")->SetAlphaRender(true);
 	FindRenderer("GameResult.bmp")->SetAlphaValue(150);
 	FindRenderer("GameResult.bmp")->Off();

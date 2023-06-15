@@ -30,7 +30,7 @@ void TitleLevel::Start()
 
 	//UI
 	UI* UIPtr = CreateActor<UI>(UpdateOrder::UI);
-	UIPtr->Init("Menu.bmp", WindowPos, RenderOrder::FrontUI);
+	UIPtr->Init("Menu.bmp", WindowPos, ZOrder::FrontUI);
 	UIPtr->AddPos({ 0, 227 });
 	StartButton = CreateActor<Button>(UpdateOrder::UI);//Button
 	StartButton->Init("TitleStart.bmp", WindowPos, true);

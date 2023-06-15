@@ -25,7 +25,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineBase", "GameEngin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Text", "Text", "{1AC041B0-720A-4972-8537-18772E3CA879}"
 	ProjectSection(SolutionItems) = preProject
-		..\Assignment.txt = ..\Assignment.txt
+		..\ToDo.txt = ..\ToDo.txt
 	EndProjectSection
 EndProject
 Global

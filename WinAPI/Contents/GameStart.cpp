@@ -15,36 +15,36 @@ void GameStart::Start()
 {
 	Pos = GameEngineWindow::GetPos();
 
-	CreateRenderer("G.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("G.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("G.bmp")->AddPos({ -176, -45 - Pos.Y });
-	CreateRenderer("A.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("A.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("A.bmp")->AddPos({ -112, -45 - Pos.Y });
-	CreateRenderer("M.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("M.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("M.bmp")->AddPos({ -47, -45 - Pos.Y });
-	CreateRenderer("E.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("E.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("E.bmp")->AddPos({ 16, -45 - Pos.Y });
 
-	CreateRenderer("S.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("S.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("S.bmp")->AddPos({ -267, 25 });
 	FindRenderer("S.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("S.bmp")->Off();
-	CreateRenderer("T.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("T.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("T.bmp")->AddPos({ -202, 25 });
 	FindRenderer("T.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("T.bmp")->Off();
-	CreateRenderer("A1.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("A1.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("A1.bmp")->AddPos({ -135, 25 });
 	FindRenderer("A1.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("A1.bmp")->Off();
-	CreateRenderer("R.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("R.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("R.bmp")->AddPos({ -43, 25 });
 	FindRenderer("R.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("R.bmp")->Off();
-	CreateRenderer("T1.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("T1.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("T1.bmp")->AddPos({ 39, 25 });
 	FindRenderer("T1.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("T1.bmp")->Off();
-	CreateRenderer("EM.bmp", RenderOrder::UI_GameStart);
+	CreateRenderer("EM.bmp", ZOrder::UI_GameStart, RenderOrder::None);
 	FindRenderer("EM.bmp")->AddPos({ 115, 25 });
 	FindRenderer("EM.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("EM.bmp")->Off();

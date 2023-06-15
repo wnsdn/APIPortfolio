@@ -12,9 +12,9 @@ public:
 	UI& operator=(UI&& _Other) noexcept = delete;
 
 	template<typename EnumType>
-	void Init(const std::string& _Path, const float4& _Pos, EnumType _RenderOrder)
+	void Init(const std::string& _Path, const float4& _Pos, EnumType _ZOrder)
 	{
-		Init(_Path, _Pos, static_cast<int>(_RenderOrder));
+		Init(_Path, _Pos, static_cast<int>(_ZOrder));
 	}
 	void Init(const std::string& _Filename, const float4& _Pos, int _RenderOrder);
 	void SetRendererScale(const float4& _Scale);

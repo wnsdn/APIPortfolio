@@ -16,7 +16,7 @@ void Cursor::Start()
 {
 	Pos = GameEngineWindow::GetInst().GetMousePos();
 
-	CreateRenderer("Cursor.bmp", RenderOrder::UI_Cursor, {}, { 2, 1 });
+	CreateRenderer("Cursor.bmp", ZOrder::UI_Cursor, RenderOrder::None, {}, { 2, 1 });
 	FindRenderer("Cursor.bmp")->CreateAnimation("NotClick", 0, 0, 1, 0.f, false);
 	FindRenderer("Cursor.bmp")->CreateAnimation("Click", 1, 0, 1, 0.f, false);
 	FindRenderer("Cursor.bmp")->ChangeAnimation("NotClick");

@@ -19,7 +19,7 @@ void Tile::Init(const int2& _Index, const float4& _Type)
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
 
-	CreateRenderer("Tile1x1.bmp", RenderOrder::Tile, _Type, { 10, 10 });
+	CreateRenderer("Tile1x1.bmp", ZOrder::Tile, RenderOrder::None, _Type, { 10, 10 });
 	FindRenderer("Tile1x1.bmp")->SetScale(TileSize);
 	AllTile.emplace_back(this);
 }

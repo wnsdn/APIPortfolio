@@ -29,11 +29,11 @@ void Object::Init(const int2& _Index, const float4& _Type)
 		Type.Y = static_cast<float>(GameEngineRandom::RandomInt(4, 0));
 	}
 
-	CreateRenderer("Object.bmp", RenderOrder::InGameObject, _Type, { 10, 9 });
+	CreateRenderer("Object.bmp", ZOrder::InGameObject, RenderOrder::Object, _Type, { 10, 9 });
 	FindRenderer("Object.bmp")->AddScale({ 2, 2 });
 	FindRenderer("Object.bmp")->SetPos({ 0, -20 });
 
-	CreateRenderer("ObjectBoom.bmp", RenderOrder::InGameObject, {}, { 6, 1 });
+	CreateRenderer("ObjectBoom.bmp", ZOrder::InGameObject, RenderOrder::Object, {}, { 6, 1 });
 	FindRenderer("ObjectBoom.bmp")->CreateAnimation("Death", 0, 0, 6, 0.05f, true);
 	FindRenderer("ObjectBoom.bmp")->ChangeAnimation("Death");
 	FindRenderer("ObjectBoom.bmp")->SetPos({ -1, -3 });

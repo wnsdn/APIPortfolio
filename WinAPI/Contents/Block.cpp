@@ -18,7 +18,7 @@ void Block::Init(const int2& _Index, const std::string& _Path, const float4& _Ty
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
 
-	CreateRenderer(_Path, RenderOrder::InGameObject, _Type, { 10, 9 });
+	CreateRenderer(_Path, ZOrder::InGameObject, RenderOrder::Block, _Type, { 10, 9 });
 	FindRenderer(_Path)->SetScale({TileSize.X, TileSize.Y * 2});
 	FindRenderer(_Path)->SetPos({0, -TileSize.hY()});
 

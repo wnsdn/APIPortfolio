@@ -25,7 +25,7 @@ GameEngineActor::~GameEngineActor()
 	}
 }
 
-GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename, int _RenderOrder, const float4& _Pos, const float4& _Size)
+GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename, int _ZOrder, int _RenderOrder, const float4& _Pos, const float4& _Size)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Filename);
 	auto FindIter = AllRenderer.find(Upper);
@@ -39,6 +39,7 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename
 
 	NewRenderer->SetCamera(Level->GetCamera());
 	NewRenderer->SetActor(this);
+	NewRenderer->SetZOrder(_ZOrder);
 	NewRenderer->SetOrder(_RenderOrder);
 	NewRenderer->LoadTexture(_Filename, _Pos, _Size);
 
@@ -48,7 +49,7 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename
 	return NewRenderer;
 }
 
-GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Name, int _RenderOrder, const float4& _Size, unsigned int _Color)
+GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Name, int _ZOrder, int _RenderOrder, const float4& _Size, unsigned int _Color)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Name);
 	auto FindIter = AllRenderer.find(Upper);
@@ -62,6 +63,7 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Name, in
 
 	NewRenderer->SetCamera(Level->GetCamera());
 	NewRenderer->SetActor(this);
+	NewRenderer->SetZOrder(_ZOrder);
 	NewRenderer->SetOrder(_RenderOrder);
 	NewRenderer->CreateTexture(_Name, _Size, _Color);
 

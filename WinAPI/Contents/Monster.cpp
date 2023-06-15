@@ -28,10 +28,10 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 	int Pos = static_cast<int>(Main.find('.'));
 	std::string TmpStr = Main.substr(0, Pos);
 
-	CreateRenderer(TmpStr + "Shadow.bmp", RenderOrder::InGameObject);
+	CreateRenderer(TmpStr + "Shadow.bmp", ZOrder::InGameObject, RenderOrder::Monster);
 	FindRenderer(TmpStr + "Shadow.bmp")->SetPos({ 0.f, 5.f });
 
-	CreateRenderer(Main, RenderOrder::InGameObject, {2, 0}, {6, 2});
+	CreateRenderer(Main, ZOrder::InGameObject, RenderOrder::Monster, {2, 0}, {6, 2});
 	FindRenderer(Main)->CreateAnimation("UpRun", 0, 0, 2, 0.35f, true);
 	FindRenderer(Main)->CreateAnimation("DownRun", 2, 0, 2, 0.35f, true);
 	FindRenderer(Main)->CreateAnimation("LeftRun", 4, 0, 2, 0.35f, true);

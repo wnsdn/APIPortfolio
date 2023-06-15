@@ -10,12 +10,12 @@ UI::~UI()
 {
 }
 
-void UI::Init(const std::string& _Filename, const float4& _Pos, int _RenderOrder)
+void UI::Init(const std::string& _Filename, const float4& _Pos, int _ZOrder)
 {
 	Main = _Filename;
 	Pos = _Pos;
 
-	CreateRenderer(Main, _RenderOrder);
+	CreateRenderer(Main, _ZOrder, RenderOrder::None);
 }
 
 void UI::SetRendererScale(const float4& _Scale)

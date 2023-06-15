@@ -18,7 +18,7 @@ void Button::Init(const std::string& _Path, const float4& _Pos, bool _IsActive, 
 	IsActiveButton = _IsActive;
 	Time = _Time;
 
-	CreateRenderer(_Path, RenderOrder::FrontUI, {}, { 2, 1 });
+	CreateRenderer(_Path, ZOrder::UI_Button, RenderOrder::None, {}, { 2, 1 });
 	FindRenderer(_Path)->CreateAnimation("Before", 0, 0, 1, 0.f, false);
 	FindRenderer(_Path)->CreateAnimation("After", 1, 0, 1, 0.f, false);
 

@@ -161,11 +161,11 @@ void MonsterLevel::Start()
 	float4 WindowScale = GameEngineWindow::GetScale();
 
 	//Camera ZOrder Setting
-	Camera->Init(RenderOrder::InGameObject, RenderOrder::InGameObjectEnd);
+	Camera->Init(ZOrder::InGameObject, ZOrder::InGameObjectEnd);
 
 	//UI
 	UI* UIPtr = CreateActor<UI>(UpdateOrder::UI);//Frame
-	UIPtr->Init("Frame.bmp", WindowPos, RenderOrder::BackUI);
+	UIPtr->Init("Frame.bmp", WindowPos, ZOrder::BackUI);
 	UIPtr->SetRendererScale(WindowScale);
 	BtnOut = CreateActor<Button>(UpdateOrder::UI);//Button
 	BtnOut->Init("InGameOut.bmp", { 752, 606 }, false);

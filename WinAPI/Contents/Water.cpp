@@ -53,7 +53,7 @@ void Water::Init(const int2& _Index, int _Length)
 
 void Water::Start()
 {
-	CreateRenderer("BubbleWater.bmp", RenderOrder::InGameObject, { 0, 0 }, { 8, 5 });
+	CreateRenderer("BubbleWater.bmp", ZOrder::InGameObject, RenderOrder::Water, { 0, 0 }, { 8, 5 });
 	FindRenderer("BubbleWater.bmp")->CreateAnimation("Mid", 0, 0, 3, Duration / 8, true);
 	FindRenderer("BubbleWater.bmp")->CreateAnimation("Up", 0, 1, 8, Duration / 8, false);
 	FindRenderer("BubbleWater.bmp")->CreateAnimation("Down", 0, 2, 8, Duration / 8, false);

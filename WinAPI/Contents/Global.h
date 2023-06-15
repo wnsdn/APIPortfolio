@@ -46,6 +46,7 @@ enum class ZOrder
 	InGameObjectEnd = 12,
 	//3
 	FrontUI = 13,
+	UI_Button,
 	UI_GameResult,
 	UI_Curtain,
 	UI_GameStart,
@@ -57,7 +58,13 @@ enum class ZOrder
 
 enum class RenderOrder
 {
-
+	Water,
+	Block,
+	Object,
+	Bomb,
+	Item,
+	Player,
+	Monster,
 
 	None,
 };

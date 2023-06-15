@@ -8,63 +8,55 @@ GameEngineCamera::GameEngineCamera()
 
 GameEngineCamera::~GameEngineCamera()
 {
-	for (auto& Pair : AllRenderer)
+	for (auto& Pair1 : AllRenderer)
 	{
-		for (auto& Tmp : Pair.second)
+		for (auto& Pair2 : Pair1.second)
 		{
-			GameEngineRenderer* Renderer = Tmp.second;
-			if (Renderer)
+			for (auto& Renderer : Pair2.second)
 			{
-				delete Renderer;
-				Renderer = nullptr;
+				if (Renderer)
+				{
+					delete Renderer;
+					Renderer = nullptr;
+				}
 			}
 		}
 	}
 }
 
-void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer, int _ZOrder)
+void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer)
 {
-	AllRenderer[_ZOrder].emplace(_Renderer->GetOrder(), _Renderer);
+	AllRenderer[_Renderer->GetZOrder()][_Renderer->GetOrder()].emplace_back(_Renderer);
 }
 
 void GameEngineCamera::Update(float _Delta)
 {
-	for (int i = ZOrderBegin; i <= ZOrderEnd; ++i)
+	for (int CurGroupZOrder = ZOrderBegin; CurGroupZOrder <= ZOrderEnd; ++CurGroupZOrder)
 	{
-		auto Iter = AllRenderer[i].begin();
-		auto End = AllRenderer[i].end();
-		for (; Iter != End;)
+		for (auto& Pair : AllRenderer[CurGroupZOrder])
 		{
-			GameEngineRenderer* Renderer = *Iter;
-			if (Renderer->GetOrder() == Renderer->GetActor()->GetIndex().Y)//인덱스랑 오더가 같으면
+			auto Iter = Pair.second.begin();
+			auto End = Pair.second.end();
+			for (; Iter != End;)
 			{
-				if (Renderer->GetOrderChange())
+				GameEngineRenderer* Renderer = *Iter;
+				int ZOrder = Renderer->GetActor()->GetIndex().Y;
+				if (CurGroupZOrder != ZOrder)//랑 Z오더가 다르면
 				{
-					Iter = AllRenderer[i].erase(Iter);
-					AllRenderer[Renderer->GetOrder()].emplace_back(Renderer);
-
-					Renderer->SetOrderChange(false);
+					if (CurGroupZOrder - ZOrder > 0)
+					{
+						AllRenderer[ZOrder][Renderer->GetOrder()].emplace_back(Renderer);
+					}
+					else
+					{
+						AllRenderer[ZOrder][Renderer->GetOrder()].emplace_front(Renderer);
+					}
+					Iter = AllRenderer[CurGroupZOrder][Renderer->GetOrder()].erase(Iter);
 				}
 				else
 				{
 					++Iter;
 				}
-			}
-			else//인덱스랑 오더가 다르면
-			{
-				Renderer->SetPreOrder(Renderer->GetOrder());
-				Renderer->SetOrder(Renderer->GetActor()->GetIndex().Y);
-
-				if (Renderer->GetOrder() - Renderer->GetPreOrder() < 0)//아래서 위로 이동
-				{
-					AllRenderer[Renderer->GetOrder()].emplace_back(Renderer);
-				}
-				else//위에서 아래로 이동
-				{
-					AllRenderer[Renderer->GetOrder()].emplace_front(Renderer);
-				}
-
-				Iter = AllRenderer[i].erase(Iter);
 			}
 		}
 	}
@@ -72,45 +64,43 @@ void GameEngineCamera::Update(float _Delta)
 
 void GameEngineCamera::Render(float _Delta)
 {
-	for (auto& Pair : AllRenderer)
+	for (auto& Pair1 : AllRenderer)
 	{
-		for (auto& Tmp : Pair.second)
+		for (auto& Pair2 : Pair1.second)
 		{
-			GameEngineRenderer* Renderer = Tmp.second;
-			if (Renderer->GetActor()->IsDeath())
+			for (auto& Renderer : Pair2.second)
 			{
-				continue;
+				if (Renderer->GetActor()->IsDeath())
+				{
+					continue;
+				}
+
+				Renderer->AddLiveTime(_Delta);
+
+				if (!Renderer->IsUpdate())
+				{
+					continue;
+				}
+
+				Renderer->Render(_Delta);
 			}
-
-			Renderer->AddLiveTime(_Delta);
-
-			if (!Renderer->IsUpdate())
-			{
-				continue;
-			}
-
-			Renderer->Render(_Delta);
 		}
 	}
 }
 
 void GameEngineCamera::Release()
 {
-	for (auto& Pair : AllRenderer)
+	/*for (auto& Pair1 : AllRenderer)
 	{
-		auto& Map = Pair.second;
-		std::erase_if(Map,
-			[](const std::pair<int, GameEngineRenderer*> _Pair)
-			{
-				GameEngineRenderer* Renderer = _Pair.second;
-				if (Renderer->IsDeath())
+		for (auto& Pair2 : Pair1.second)
+		{
+			auto& List = Pair2.second;
+			std::erase_if(List,
+				[]()
 				{
-					delete Renderer;
-					Renderer = nullptr;
-				}
 
-				return _Pair.second == nullptr;
-			})
-	}
+				});
+		}
+	}*/
 }
 

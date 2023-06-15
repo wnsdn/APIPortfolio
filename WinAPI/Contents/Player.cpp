@@ -37,10 +37,10 @@ void Player::Init(const int2& _Index, const std::string& _Path)
 	Pos = IndexToPos(Index);
 	Scale = TileSize - 2;
 
-	CreateRenderer("PlayerShadow.bmp", RenderOrder::InGameObject);
+	CreateRenderer("PlayerShadow.bmp", ZOrder::InGameObject, RenderOrder::Player);
 	FindRenderer("PlayerShadow.bmp")->SetPos({ -1.f, -1.4f });
 
-	CreateRenderer(Main, RenderOrder::InGameObject, { 0, 0 }, { 5, 7 });
+	CreateRenderer(Main, ZOrder::InGameObject, RenderOrder::Player, { 0, 0 }, { 5, 7 });
 	FindRenderer(Main)->CreateAnimation("UpRun", 1, 0, 4, 0.15f, true);
 	FindRenderer(Main)->CreateAnimation("DownRun", 1, 1, 4, 0.15f, true);
 	FindRenderer(Main)->CreateAnimation("RightRun", 1, 2, 3, 0.15f, true);

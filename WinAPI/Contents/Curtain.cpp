@@ -16,7 +16,7 @@ void Curtain::Start()
 	Pos = GameEngineWindow::GetPos();
 	Scale = GameEngineWindow::GetScale();
 
-	CreateRenderer("Black", RenderOrder::UI_Curtain, Scale, RGB(0, 0, 0));
+	CreateRenderer("Black", ZOrder::UI_Curtain, RenderOrder::None, Scale, RGB(0, 0, 0));
 	FindRenderer("Black")->SetAlphaRender(true);
 }
 

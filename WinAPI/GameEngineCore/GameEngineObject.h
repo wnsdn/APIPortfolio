@@ -10,6 +10,14 @@ public:
 	GameEngineObject& operator=(const GameEngineObject& _Other) = delete;
 	GameEngineObject& operator=(GameEngineObject&& _Other) noexcept = delete;
 
+	int GetZOrder() const
+	{
+		return ZOrder;
+	}
+	void SetZOrder(const int _ZOrder)
+	{
+		ZOrder = _ZOrder;
+	}
 	int GetOrder() const
 	{
 		return Order;
@@ -73,6 +81,7 @@ public:
 	}
 
 protected:
+	int ZOrder = 0;
 	int PreOrder = 0;
 	int Order = 0;
 	bool OrderChange = false;

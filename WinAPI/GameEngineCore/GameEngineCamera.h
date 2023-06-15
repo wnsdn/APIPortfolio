@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-//#include <list>
+#include <list>
 #include <GameEngineBase/GameEngineMath.h>
 #include "GameEngineObject.h"
 #include "GameEngineSubObject.h"
@@ -22,13 +22,7 @@ public:
 		ZOrderBegin = static_cast<int>(_ZOrderBegin);
 		ZOrderEnd = static_cast<int>(_ZOrderEnd);
 	}
-	template<typename ZOrder>
-	void InsertRenderer(GameEngineRenderer* _Renderer, ZOrder _ZOrder)
-	{
-		InsertRenderer(_Renderer, static_cast<int>(_ZOrder));
-
-	}
-	void InsertRenderer(GameEngineRenderer* _Renderer, int _ZOrder);
+	void InsertRenderer(GameEngineRenderer* _Renderer);
 
 	void Update(float _Delta) override;
 	void Render(float _Delta) override;
@@ -37,5 +31,5 @@ private:
 	int ZOrderBegin = 0;
 	int ZOrderEnd = 0;
 
-	std::map<int, std::map<int, GameEngineRenderer*>> AllRenderer;
+	std::map<int, std::map<int, std::list<GameEngineRenderer*>>> AllRenderer;
 };
