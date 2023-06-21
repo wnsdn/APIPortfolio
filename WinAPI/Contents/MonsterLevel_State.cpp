@@ -13,6 +13,10 @@ void MonsterLevel::StateUpdate(float _Delta)
 	{
 		InGameUpdate(_Delta);
 	}
+	else if (State == "Win")
+	{
+		WinUpdate(_Delta);
+	}
 	else if (State == "Lose")
 	{
 		LoseUpdate(_Delta);
@@ -22,20 +26,33 @@ void MonsterLevel::StateUpdate(float _Delta)
 void MonsterLevel::StartUpdate(float _Delta)
 {
 	CuratinUpdate(_Delta);
+	OutButtonUpdate(_Delta);
 }
 
 void MonsterLevel::InGameUpdate(float _Delta)
 {
 	PlayerCheck();
-	OutButtonUpdate();
+	MonsterCheck();
+	OutButtonUpdate(_Delta);
+}
+
+void MonsterLevel::WinUpdate(float _Delta)
+{
+	//10초 지나면 다음 스테이지로 넘어가는 기능
+	if (LiveTime >= 10.0f)
+	{
+
+	}
+
+	OutButtonUpdate(_Delta);
 }
 
 void MonsterLevel::LoseUpdate(float _Delta)
 {
-	LiveTime += _Delta;
-	
-	if (LiveTime >= 20.0f)
+	if (LiveTime >= 10.0f)
 	{
 		Process->CreateLevel<TitleLevel>();
 	}
+
+	OutButtonUpdate(_Delta);
 }

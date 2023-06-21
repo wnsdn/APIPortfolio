@@ -61,9 +61,6 @@
     <ClCompile Include="Curtain.cpp">
       <Filter>Actor\UI</Filter>
     </ClCompile>
-    <ClCompile Include="GameStart.cpp">
-      <Filter>Actor\UI</Filter>
-    </ClCompile>
     <ClCompile Include="GameResult.cpp">
       <Filter>Actor\UI</Filter>
     </ClCompile>
@@ -76,7 +73,7 @@
     <ClCompile Include="MonsterLevel_Update.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Player_Collision.cpp">
+    <ClCompile Include="Player_Update.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="Water_Collision.cpp">
@@ -90,6 +87,18 @@
     </ClCompile>
     <ClCompile Include="MonsterLevel_State.cpp">
       <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResultText.cpp">
+      <Filter>Actor\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStart.cpp">
+      <Filter>Actor\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrame.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadMapData.cpp">
+      <Filter>FileRead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,11 +156,20 @@
     <ClInclude Include="Curtain.h">
       <Filter>Actor\UI</Filter>
     </ClInclude>
-    <ClInclude Include="GameStart.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
     <ClInclude Include="GameResult.h">
       <Filter>Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResultText.h">
+      <Filter>Actor\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStart.h">
+      <Filter>Actor\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFrame.h">
+      <Filter>Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadMapData.h">
+      <Filter>FileRead</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +190,12 @@
     </Filter>
     <Filter Include="Actor\Block">
       <UniqueIdentifier>{f1bc405a-a3cc-4db8-98a9-880e809b703f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\UI\Text">
+      <UniqueIdentifier>{ce002d60-3a61-4af1-8ad0-c14f2222eecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileRead">
+      <UniqueIdentifier>{160a3edf-d884-4e30-9fd5-aceb669515c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

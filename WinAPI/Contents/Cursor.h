@@ -11,6 +11,7 @@ public:
 	Cursor& operator=(const Cursor& _Other) = delete;
 	Cursor& operator=(Cursor&& _Other) noexcept = delete;
 private:
+	bool IsCursorOn = false;
 	void Start() override;
 	void Update(float _Delta) override;
 };

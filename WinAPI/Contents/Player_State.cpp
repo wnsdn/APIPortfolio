@@ -10,7 +10,11 @@
 
 void Player::StateUpdate(float _Delta)
 {
-	if (State == "Idle")
+	if (State == "Ready")
+	{
+		ReadyUpdate(_Delta);
+	}
+	else if (State == "Idle")
 	{
 		IdleUpdate(_Delta);
 	}
@@ -29,6 +33,10 @@ void Player::StateUpdate(float _Delta)
 	else if (State == "Free")
 	{
 		FreeUpdate(_Delta);
+	}
+	else if (State == "Stop")
+	{
+		StopUpdate(_Delta);
 	}
 }
 
@@ -61,6 +69,18 @@ void Player::DirCheck()
 		Dir = "Right";
 		return;
 	}
+}
+
+void Player::ReadyUpdate(float _Delta)
+{
+	if (FindRenderer("BazziReady.bmp")->IsAnimationEnd("Ready"))
+	{
+		Dir = "Down";
+		State = "Idle";
+		FindRenderer("BazziReady.bmp")->Off();
+		FindRenderer(Main)->On();
+	}
+
 }
 
 void Player::IdleUpdate(float _Delta)
@@ -298,7 +318,7 @@ void Player::DeathUpdate(float _Delta)
 {
 	if (LiveTime >= 2.5f)
 	{
-		Death();
+		Off();
 	}
 
 	if (FindRenderer(Main)->IsAnimationEnd("Death"))
@@ -592,4 +612,8 @@ void Player::FreeUpdate(float _Delta)
 		LiveTime = 0.0f;
 		FindRenderer(Main)->ResetAnimation("Free");
 	}
+}
+
+void Player::StopUpdate(float _Delta)
+{
 }

@@ -1,5 +1,6 @@
 #include "GameEngineWindow.h"
 #include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngineBase/GameEnginePath.h>
 
 bool GameEngineWindow::IsWindowUpdate = true;
 bool GameEngineWindow::IsFocusValue = true;
@@ -34,6 +35,7 @@ void GameEngineWindow::Open(HINSTANCE _Hinst, const std::string& _Title)
 	Wc.lpszClassName = Title.c_str();
 	Wc.hInstance = Hinst;
 	Wc.style = CS_VREDRAW | CS_HREDRAW;
+	Wc.hCursor = LoadCursorA(nullptr, IDC_ARROW);
 	RegisterClassExA(&Wc);
 
 	Hwnd = CreateWindowA(Title.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW,

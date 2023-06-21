@@ -36,8 +36,5 @@ void TitleLevel::ExitButtonUpdate(float _Delta)
 	{
 		ExitButton->Reset();
 		GameEngineWindow::GetInst().SetIsWindowUpdate(false);
-
-		CurtainPtr->Reset();
-		CurtainPtr->SetDark(_Delta, StartButton->GetTime());
 	}
 }

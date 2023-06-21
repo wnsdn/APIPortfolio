@@ -72,17 +72,28 @@ void GameEngineTexture::TransCopy(GameEngineTexture* _CopyTexture,
 		RGB(255, 0, 255));
 }
 
+void GameEngineTexture::TransCopy2(GameEngineTexture* _CopyTexture,
+	const float4& _Pos, const float4& _Scale,
+	const float4& _CopyPos, const float4& _CopyScale)
+{
+	TransparentBlt(ImageDC,
+		_Pos.iX(),
+		_Pos.iY(),
+		_Scale.iX(),
+		_Scale.iY(),
+		_CopyTexture->GetImageDC(),
+		_CopyPos.iX(),
+		_CopyPos.iY(),
+		_CopyScale.iX(),
+		_CopyScale.iY(),
+		RGB(255, 0, 255));
+}
+
 void GameEngineTexture::AlphaCopy(GameEngineTexture* _CopyTexture,
 	const float4& _Pos, const float4& _Scale,
 	const float4& _CopyPos, const float4& _CopyScale,
 	BYTE _Alpha)
 {
-	/*BLENDFUNCTION Bf = {};
-	Bf.BlendOp = AC_SRC_OVER;
-	Bf.BlendFlags = 0;
-	Bf.SourceConstantAlpha = _Alpha;
-	Bf.AlphaFormat = 0;*/
-
 	AlphaBlend(ImageDC,
 		_Pos.iX() - _Scale.ihX(),
 		_Pos.iY() - _Scale.ihY(),

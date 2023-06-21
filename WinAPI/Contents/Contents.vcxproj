@@ -185,6 +185,15 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="ReadMapData.cpp" />
+    <ClCompile Include="UIFrame.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameResultText.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameResult.cpp">
       <SubType>
       </SubType>
@@ -219,7 +228,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Player_Collision.cpp" />
+    <ClCompile Include="Player_Update.cpp" />
     <ClCompile Include="Player_State.cpp" />
     <ClCompile Include="Tile.cpp">
       <SubType>
@@ -264,6 +273,15 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="EndingLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ReadMapData.h" />
+    <ClInclude Include="UIFrame.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameResultText.h">
       <SubType>
       </SubType>
     </ClInclude>

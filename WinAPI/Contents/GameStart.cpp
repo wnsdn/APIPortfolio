@@ -15,39 +15,40 @@ void GameStart::Start()
 {
 	Pos = GameEngineWindow::GetPos();
 
-	CreateRenderer("G.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("G.bmp", RenderOrder::UI_Text);
 	FindRenderer("G.bmp")->AddPos({ -176, -45 - Pos.Y });
-	CreateRenderer("A.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("A.bmp", RenderOrder::UI_Text);
 	FindRenderer("A.bmp")->AddPos({ -112, -45 - Pos.Y });
-	CreateRenderer("M.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("M.bmp", RenderOrder::UI_Text);
 	FindRenderer("M.bmp")->AddPos({ -47, -45 - Pos.Y });
-	CreateRenderer("E.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("E.bmp", RenderOrder::UI_Text);
 	FindRenderer("E.bmp")->AddPos({ 16, -45 - Pos.Y });
 
-	CreateRenderer("S.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("S.bmp", RenderOrder::UI_Text);
 	FindRenderer("S.bmp")->AddPos({ -267, 25 });
 	FindRenderer("S.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("S.bmp")->Off();
-	CreateRenderer("T.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("T.bmp", RenderOrder::UI_Text);
 	FindRenderer("T.bmp")->AddPos({ -202, 25 });
 	FindRenderer("T.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("T.bmp")->Off();
-	CreateRenderer("A1.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("A1.bmp", RenderOrder::UI_Text);
 	FindRenderer("A1.bmp")->AddPos({ -135, 25 });
 	FindRenderer("A1.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("A1.bmp")->Off();
-	CreateRenderer("R.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("R.bmp", RenderOrder::UI_Text);
 	FindRenderer("R.bmp")->AddPos({ -43, 25 });
 	FindRenderer("R.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("R.bmp")->Off();
-	CreateRenderer("T1.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("T1.bmp", RenderOrder::UI_Text);
 	FindRenderer("T1.bmp")->AddPos({ 39, 25 });
 	FindRenderer("T1.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("T1.bmp")->Off();
-	CreateRenderer("EM.bmp", ZOrder::UI_GameStart, RenderOrder::None);
+	CreateRenderer("EM.bmp", RenderOrder::UI_Text);
 	FindRenderer("EM.bmp")->AddPos({ 115, 25 });
 	FindRenderer("EM.bmp")->AddScale({ -3.33f, -10 });
 	FindRenderer("EM.bmp")->Off();
+	InsertRenderer();
 }
 
 void GameStart::Update(float _Delta)
@@ -59,13 +60,13 @@ void GameStart::Update(float _Delta)
 
 	std::string Game[4] = { "G", "A", "M", "E" };
 	std::string Start[6] = { "S", "T", "A1", "R", "T1", "EM" };
-	if (LiveTime <= 0.8f)
+	if (LiveTime <= 0.14f * 4)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
 			if (FindRenderer(Game[i] + ".bmp")->GetPos().Y < -45)
 			{
-				if (LiveTime >= 0.2f * i)
+				if (LiveTime >= 0.14f * i)
 				{
 					FindRenderer(Game[i] + ".bmp")->AddPos({ 0, Speed * _Delta });
 				}
@@ -89,7 +90,7 @@ void GameStart::Update(float _Delta)
 
 	for (int i = 0; i < 6; ++i)
 	{
-		if (LiveTime >= 2.0f + 0.2f * i)
+		if (LiveTime >= 2.0f + 0.14f * i)
 		{
 			if (i <= 4 && i >= 1)
 			{

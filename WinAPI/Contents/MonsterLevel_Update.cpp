@@ -8,15 +8,14 @@
 #include "GameResult.h"
 
 #include "Player.h"
+#include "Monster.h"
 #include "TitleLevel.h"
 
 void MonsterLevel::CuratinUpdate(float _Delta)
 {
-	if (LiveTime <= 1.0f)
-	{
-		CurtainPtr->SetBright(_Delta, 1.0f, 100.0f);
-	}
-	else if (LiveTime >= 2.5f)
+	CurtainPtr->SetBright(_Delta, 1.0f, 100.0f);
+
+	if (LiveTime >= 2.5f)
 	{
 		if (State != "InGame")
 		{
@@ -28,7 +27,7 @@ void MonsterLevel::CuratinUpdate(float _Delta)
 
 void MonsterLevel::PlayerCheck()
 {
-	if (!Player::MainPlayer)
+	if (!Player::MainPlayer->IsUpdate())
 	{
 		return;
 	}
@@ -37,17 +36,51 @@ void MonsterLevel::PlayerCheck()
 	{
 		if (State != "Lose")
 		{
-			ResultPtr->RendererOn();
+			Player::MainPlayer->AddCurExp(Player::MainPlayer->GetKill() * Monster::GetExp());
+
+			CreateActor<GameResult>(UpdateOrder::UI)->Init(Player::MainPlayer, false);
+
 			GameEngineSound::FindSound("Octopus.mp3")->Stop();
-			GameEngineSound::FindSound("GameLose.mp3")->Play();
 			LiveTime = 0.0f;
+			for (auto Ptr : FindActor(UpdateOrder::Monster))
+			{
+				dynamic_cast<Monster*>(Ptr)->Stop();
+			}
 			State = "Lose";
 		}
 	}
 }
 
-void MonsterLevel::OutButtonUpdate()
+void MonsterLevel::MonsterCheck()
 {
+	if (State == "Win")
+	{
+		return;
+	}
+
+	if (Monster::GetCount() == 0)
+	{
+		if (State != "Win")
+		{
+			Player::MainPlayer->AddCurExp(Player::MainPlayer->GetKill() * Monster::GetExp());
+
+			CreateActor<GameResult>(UpdateOrder::UI)->Init(Player::MainPlayer, true);
+
+			GameEngineSound::FindSound("Octopus.mp3")->Stop();
+			LiveTime = 0.0f;
+			Player::MainPlayer->Stop();
+			State = "Win";
+		}
+	}
+}
+
+void MonsterLevel::OutButtonUpdate(float _Delta)
+{
+	if (BtnOut->GetIsClick())
+	{
+		CurtainPtr->SetDark(_Delta, BtnOut->GetTime());
+	}
+
 	if (BtnOut->GetAction())
 	{
 		BtnOut->Reset();

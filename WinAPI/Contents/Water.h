@@ -11,8 +11,18 @@ public:
 	Water& operator=(const Water& _Other) = delete;
 	Water& operator=(Water&& _Other) noexcept = delete;
 
-	void Init(const int2& _Index, int _Length);
+	void Init(const int2& _Index, int _Length, class Player* _Owner);
+
+	class Player* GetOwner() const
+	{
+		return Owner;
+	}
+	void SetOwner(class Player* const _Owner)
+	{
+		Owner = _Owner;
+	}
 private:
+	class Player* Owner = nullptr;
 	float Duration = 0.5f;
 
 	int2 DirIdx[4] = { int2::Left, int2::Up, int2::Right, int2::Down };

@@ -3,6 +3,7 @@
 #include <GameEngineBase/GameEngineString.h>
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineTexture.h>
+#include <GameEnginePlatform/GameEngineGraphics.h>
 #include "ResourceManager.h"
 #include "GameEngineActor.h"
 #include "GameEngineCamera.h"
@@ -23,6 +24,7 @@ void GameEngineRenderer::LoadTexture(const std::string& _Filename, const float4&
 	Scale = Texture->GetScale() / _Size;
 	CopyPos = _Pos;
 	CopyScale = Texture->GetScale() / _Size;
+	AdjScale = CopyScale;
 }
 
 void GameEngineRenderer::CreateTexture(const std::string& _Filename, const float4& _Size, unsigned int _Color)
@@ -34,13 +36,20 @@ void GameEngineRenderer::CreateTexture(const std::string& _Filename, const float
 	Scale = Texture->GetScale();
 	CopyPos = {};
 	CopyScale = Texture->GetScale();
+	AdjScale = CopyScale;
 }
 
 void GameEngineRenderer::Render(float _Delta)
 {
-	if (Text != "")
+	if (Text.Str != "")
 	{
 		TextRender(_Delta);
+		return;
+	}
+
+	if (IsGauge)
+	{
+		GaugeRender(_Delta);
 		return;
 	}
 
@@ -111,32 +120,19 @@ void GameEngineRenderer::Render(float _Delta)
 
 void GameEngineRenderer::TextRender(float _Delta)
 {
-	float4 TextPos = Actor->GetPos() + Pos - Camera->GetPos();
+	int2 TextPos = Actor->GetPos().ToInt2() + Pos.ToInt2() - Camera->GetPos().ToInt2();
+	HDC BackDC = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
 
-	HDC Hdc = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
-	HFONT Hfont = nullptr, OldFont = nullptr;
-	LOGFONTA Lf{};
-	Lf.lfHeight = TextScale;
-	Lf.lfCharSet = HANGEUL_CHARSET;
-	Lf.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
-	lstrcpy(Lf.lfFaceName, Face.c_str());
-	Hfont = CreateFontIndirectA(&Lf);
-	OldFont = static_cast<HFONT>(SelectObject(Hdc, Hfont));
+	GameEngineGraphics::DrawGPText(BackDC, Text.Str, Text.Face, Text.Size, TextPos, Text.Outline, Text.Color);
+}
 
-	SetTextColor(Hdc, RGB(255, 0, 0));
-	SetBkMode(Hdc, TRANSPARENT);
-
-	RECT Rect{};
-	Rect.left = TextPos.iX();
-	Rect.top = TextPos.iY();
-	Rect.right = TextPos.iX() + TextScale * static_cast<int>(Text.size());
-	Rect.bottom = TextPos.iY() + TextScale;
-
-	DrawTextA(Hdc, Text.c_str(), static_cast<int>(Text.size()), &Rect,
-		static_cast<UINT>(DT_BOTTOM));
-
-	SelectObject(Hdc, OldFont);
-	DeleteObject(Hfont);
+void GameEngineRenderer::GaugeRender(float _Delta)
+{
+	GameEngineWindow::GetInst().GetBackBuffer()->TransCopy2(Texture,
+		Actor->GetPos() + Pos - Camera->GetPos(),
+		Scale - AdjPos,
+		AdjPos,
+		Scale - AdjPos);
 }
 
 void GameEngineRenderer::CreateAnimation(const std::string& _AnimationName,

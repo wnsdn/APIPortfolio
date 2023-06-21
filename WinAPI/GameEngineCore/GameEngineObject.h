@@ -10,38 +10,13 @@ public:
 	GameEngineObject& operator=(const GameEngineObject& _Other) = delete;
 	GameEngineObject& operator=(GameEngineObject&& _Other) noexcept = delete;
 
-	int GetZOrder() const
+	int GetRenderOrder() const
 	{
-		return ZOrder;
+		return RenderOrder;
 	}
-	void SetZOrder(const int _ZOrder)
+	void SetRenderOrder(const int _RenderOrder)
 	{
-		ZOrder = _ZOrder;
-	}
-	int GetOrder() const
-	{
-		return Order;
-	}
-	void SetOrder(const int _RenderOrder)
-	{
-		Order = _RenderOrder;
-	}
-	int GetPreOrder() const
-	{
-		return PreOrder;
-	}
-	void SetPreOrder(const int _PreOrder)
-	{
-		PreOrder = _PreOrder;
-	}
-
-	bool GetOrderChange() const
-	{
-		return OrderChange;
-	}
-	void SetOrderChange(const bool _OrderChange)
-	{
-		OrderChange = _OrderChange;
+		RenderOrder = _RenderOrder;
 	}
 
 	void On()
@@ -81,10 +56,7 @@ public:
 	}
 
 protected:
-	int ZOrder = 0;
-	int PreOrder = 0;
-	int Order = 0;
-	bool OrderChange = false;
+	int RenderOrder = 0;
 	bool IsUpdateValue = true;
 	bool IsDeathValue = false;
 	float LiveTime = 0.0f;

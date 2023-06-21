@@ -25,10 +25,10 @@ void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner)
 	Length = _Length;
 	Owner = _Owner;
 
-	CreateRenderer("BubbleShadow.bmp", ZOrder::InGameObject, RenderOrder::Bomb);
+	CreateRenderer("BubbleShadow.bmp", RenderOrder::InGameObject);
 	FindRenderer("BubbleShadow.bmp")->SetPos({ -3.f, 16.5f });
 
-	CreateRenderer("Bubble.bmp", ZOrder::InGameObject, RenderOrder::Bomb, { 0, 0 }, { 3, 1 });
+	CreateRenderer("Bubble.bmp", RenderOrder::InGameObject, { 0, 0 }, { 3, 1 });
 	FindRenderer("Bubble.bmp")->CreateAnimation("Bubble", 0, 0, 3, 0.2f, true);
 	FindRenderer("Bubble.bmp")->ChangeAnimation("Bubble");
 
@@ -41,6 +41,7 @@ void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner)
 			dynamic_cast<Tile*>(Ptr)->Full();
 		}
 	}
+	InsertRenderer();
 }
 
 void Bomb::Update(float _Delta)
@@ -63,7 +64,7 @@ void Bomb::Release()
 		}
 	}
 
-	Level->CreateActor<Water>(UpdateOrder::Water)->Init(Index, Length);
+	Level->CreateActor<Water>(UpdateOrder::Water)->Init(Index, Length, Owner);
 
 	GameEngineSound::FindSound("BombExplode.wav")->Play();
 }

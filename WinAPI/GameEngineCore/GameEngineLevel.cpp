@@ -52,6 +52,18 @@ void GameEngineLevel::Update(float _Delta)
 			Actor->Update(_Delta);
 		}
 	}
+
+	if (GameEngineInput::IsDown('R'))
+	{
+		if (IsRender)
+		{
+			IsRender = false;
+		}
+		else
+		{
+			IsRender = true;
+		}
+	}
 }
 
 void GameEngineLevel::Render(float _Delta)
@@ -60,7 +72,7 @@ void GameEngineLevel::Render(float _Delta)
 	{
 		for (auto& Actor : Pair.second)
 		{
-			if (Actor->IsDeath())
+			if (Actor->IsDeath() || !IsRender)
 			{
 				continue;
 			}

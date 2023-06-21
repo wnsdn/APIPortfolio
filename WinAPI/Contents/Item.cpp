@@ -20,16 +20,17 @@ void Item::Init(const int2& _Index, const float4& _Type)
 
 	Type = _Type;
 
-	CreateRenderer("Item.bmp", ZOrder::InGameObject, RenderOrder::Player, Type, {4, 3});
+	CreateRenderer("Item.bmp", RenderOrder::InGameObject, Type, {4, 3});
 	FindRenderer("Item.bmp")->SetPos({ 0, -18.f });
 	FindRenderer("Item.bmp")->SetScale(TileSize);
 
-	CreateRenderer("ItemShadow.bmp", ZOrder::InGameObject, RenderOrder::Player, {}, { 2, 1 });
+	CreateRenderer("ItemShadow.bmp", RenderOrder::InGameObject, {}, { 2, 1 });
 	FindRenderer("ItemShadow.bmp")->SetPos({0, 5});
 	FindRenderer("ItemShadow.bmp")->SetScale({25, 25});
 	FindRenderer("ItemShadow.bmp")->CreateAnimation("Big", 0, 0, 1, 0, false);
 	FindRenderer("ItemShadow.bmp")->CreateAnimation("Small", 1, 0, 1, 0, false);
 	FindRenderer("ItemShadow.bmp")->ChangeAnimation("Big");
+	InsertRenderer();
 }
 
 void Item::Update(float _Delta)

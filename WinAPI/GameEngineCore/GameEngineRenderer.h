@@ -20,20 +20,33 @@ public:
 
 	void LoadTexture(const std::string& _Filename, const float4& _Pos, const float4& _Size);
 	void CreateTexture(const std::string& _Filename, const float4& _Size, unsigned int _Color);
+
 	void Render(float _Delta) override;
 	void TextRender(float _Delta);
-	void SetText(const std::string& _Text, int _TextScale = 20,
-		const std::string& _Face = "±¼¸²")
+	void GaugeRender(float _Delta);
+
+	void SetText(const std::string& _Text, float _Size = 20.0f, float _Outline = 1.0f,
+		const std::string& _Face = "Digital-7", int _Color = ((246 | (234 << 8)) | (46 << 16)))
 	{
-		Text = _Text;
-		TextScale = _TextScale;
-		Face = _Face;
+		Text.Str = _Text;
+		Text.Size = _Size;
+		Text.Face = _Face;
+		Text.Outline = _Outline;
+		Text.Color = _Color;
 	}
 
 	void CreateAnimation(const std::string& _AnimationName,
 		int _XFrame, int _YFrame, int _Count, float _Inter, bool _Loop, bool _Reverse = false);
 	void ChangeAnimation(const std::string& _AnimationName);
 
+	std::string GetName() const
+	{
+		return Name;
+	}
+	void SetName(const std::string& _Name)
+	{
+		Name = _Name;
+	}
 	GameEngineCamera* GetCamera() const
 	{
 		return Camera;
@@ -86,8 +99,44 @@ public:
 
 	bool IsAnimationEnd(const std::string& _AnimationName);
 	void ResetAnimation(const std::string& _AnimationName);
-	
+
+	bool GetIsGauge() const
+	{
+		return IsGauge;
+	}
+	void SetIsGauge(const bool _IsGauge)
+	{
+		IsGauge = _IsGauge;
+		Pos -= Scale.Half();
+		Pos.X += 1;
+		Pos.Y += 1;
+	}
+	float4 GetAdjPos() const
+	{
+		return AdjPos;
+	}
+	void SetAdjPos(const float4& _AdjPos)
+	{
+		AdjPos = _AdjPos;
+	}
+	void AddAdjPos(const float4& _AdjPos)
+	{
+		AdjPos += _AdjPos;
+	}
+	float4 GetAdjScale() const
+	{
+		return AdjScale;
+	}
+	void SetAdjScale(const float4& _AdjScale)
+	{
+		AdjScale = _AdjScale;
+	}
+	void AddAdjScale(const float4& _AdjScale)
+	{
+		AdjScale += _AdjScale;
+	}
 private:
+	std::string Name = "";
 	GameEngineCamera* Camera = nullptr;
 	GameEngineActor* Actor = nullptr;
 	GameEngineTexture* Texture = nullptr;
@@ -96,6 +145,10 @@ private:
 	float4 CopyScale = {};
 	bool AlphaRender = false;
 	unsigned char AlphaValue = 0;
+
+	bool IsGauge = false;
+	float4 AdjPos = {};
+	float4 AdjScale = {};
 private:
 	class Animation
 	{
@@ -113,7 +166,13 @@ private:
 	std::map<std::string, Animation> AllAnimation;
 	Animation* CurAnimation = nullptr;
 private:
-	std::string Text = "";
-	int TextScale = 0;
-	std::string Face = "";
+	class tText
+	{
+	public:
+		std::string Str = "";
+		std::string Face = "";
+		float Size = 0.0f;
+		float Outline = 0.0f;
+		int Color = 0;
+	}Text;
 };

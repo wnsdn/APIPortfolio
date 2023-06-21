@@ -17,6 +17,8 @@ public:
 private:
 	float Dark = 0.0f;
 	float Bright = 255.0f;
+	bool IsDark = false;
+	bool IsBright = false;
 
 	void Start() override;
 };

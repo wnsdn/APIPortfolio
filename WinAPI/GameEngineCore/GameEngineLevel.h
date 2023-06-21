@@ -57,10 +57,17 @@ public:
 	{
 		Process = _Process;
 	}
+	
+	void SetIsRender(bool _IsRender)
+	{
+		IsRender = _IsRender;
+	}
 protected:
 	std::map<int, std::list<GameEngineActor*>> AllActor;
 	GameEngineCamera* Camera = nullptr;
 	GameEngineProcess* Process = nullptr;
+
+	bool IsRender = false;
 
 	void Update(float _Delta) override;
 	void Render(float _Delta) override;

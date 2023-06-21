@@ -13,7 +13,7 @@ public:
 		return FloatDelta;
 	}
 private:
-	static LARGE_INTEGER Count;
+	static LARGE_INTEGER Freq;
 	static LARGE_INTEGER Prev;
 	static LARGE_INTEGER Cur;
 	static double DoubleDelta;

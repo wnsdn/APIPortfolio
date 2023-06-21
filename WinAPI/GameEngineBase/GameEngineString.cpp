@@ -24,23 +24,13 @@ std::string GameEngineString::ToUpperReturn(const std::string& _Str)
 
 std::wstring GameEngineString::AnsiToUnicode(const std::string& _Text)
 {
+	std::wstring Result;
 	int Size = MultiByteToWideChar(CP_ACP, 0, _Text.c_str(), 
 		static_cast<int>(_Text.size()), nullptr, 0);
-	if (!Size)
-	{
-		MsgBoxAssert("문자열 반환 실패");
-		return std::wstring();
-	}
 
-	std::wstring Result;
 	Result.resize(Size);
-	Size = MultiByteToWideChar(CP_ACP, 0, _Text.c_str(), 
+	MultiByteToWideChar(CP_ACP, 0, _Text.c_str(),
 		static_cast<int>(_Text.size()), &Result[0], Size);
-	if (!Size)
-	{
-		MsgBoxAssert("문자열 반환 실패");
-		return std::wstring();
-	}
 
 	return Result;
 }

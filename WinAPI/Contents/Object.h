@@ -31,6 +31,7 @@ private:
 	float4 Type = {};
 
 	void Update(float _Delta) override;
+	void Render(float _Delta) override;
 	void Release() override;
 
 	void CollisionCheck(float _Delta);

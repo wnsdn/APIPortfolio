@@ -201,6 +201,10 @@ public:
 	{
 		return { X + _Other.X, Y + _Other.Y };
 	}
+	int2 operator-(const int2& _Other)
+	{
+		return { X - _Other.X, Y - _Other.Y };
+	}
 	int2 operator*(const int2& _Other)
 	{
 		return { X * _Other.X, Y * _Other.Y };

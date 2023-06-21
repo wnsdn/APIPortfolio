@@ -14,7 +14,6 @@ public:
 
 	void Init(const int2& _Index, const float4& _Type);
 
-	static Tile* GetTile(const int2& _Index);
 	bool GetIsEmpty() const
 	{
 		return IsEmpty;
@@ -28,6 +27,5 @@ public:
 		IsEmpty = false;
 	}
 private:
-	static std::list<Tile*> AllTile;
 	bool IsEmpty = true;
 };

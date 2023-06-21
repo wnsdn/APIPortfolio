@@ -8,11 +8,11 @@ GameEngineCamera::GameEngineCamera()
 
 GameEngineCamera::~GameEngineCamera()
 {
-	for (auto& Pair1 : AllRenderer)
+	for (auto& Pair : AllRenderer)
 	{
-		for (auto& Pair2 : Pair1.second)
+		for (auto& Vec : Pair.second)
 		{
-			for (auto& Renderer : Pair2.second)
+			for (auto& Renderer : Vec)
 			{
 				if (Renderer)
 				{
@@ -24,39 +24,47 @@ GameEngineCamera::~GameEngineCamera()
 	}
 }
 
-void GameEngineCamera::InsertRenderer(GameEngineRenderer* _Renderer)
+void GameEngineCamera::InsertRenderer(const std::vector<GameEngineRenderer*>& _VecRenderer)
 {
-	AllRenderer[_Renderer->GetZOrder()][_Renderer->GetOrder()].emplace_back(_Renderer);
+	AllRenderer[_VecRenderer[0]->GetRenderOrder()].emplace_back(_VecRenderer);
 }
 
 void GameEngineCamera::Update(float _Delta)
 {
-	for (int CurGroupZOrder = ZOrderBegin; CurGroupZOrder <= ZOrderEnd; ++CurGroupZOrder)
+	for (int CurGrpRO = ZOrderBegin; CurGrpRO <= ZOrderEnd; ++CurGrpRO)
 	{
-		for (auto& Pair : AllRenderer[CurGroupZOrder])
+		auto Iter = AllRenderer[CurGrpRO].begin();
+		auto End = AllRenderer[CurGrpRO].end();
+		for (; Iter != End;)
 		{
-			auto Iter = Pair.second.begin();
-			auto End = Pair.second.end();
-			for (; Iter != End;)
+			bool Check = true;
+			for (auto Renderer : *Iter)
 			{
-				GameEngineRenderer* Renderer = *Iter;
-				int ZOrder = Renderer->GetActor()->GetIndex().Y;
-				if (CurGroupZOrder != ZOrder)//랑 Z오더가 다르면
+				if (!Renderer)
 				{
-					if (CurGroupZOrder - ZOrder > 0)
-					{
-						AllRenderer[ZOrder][Renderer->GetOrder()].emplace_back(Renderer);
-					}
-					else
-					{
-						AllRenderer[ZOrder][Renderer->GetOrder()].emplace_front(Renderer);
-					}
-					Iter = AllRenderer[CurGroupZOrder][Renderer->GetOrder()].erase(Iter);
+					continue;
 				}
-				else
+
+				int IdxY = Renderer->GetActor()->GetIndex().Y;
+				if (IdxY < CurGrpRO)
 				{
-					++Iter;
+					AllRenderer[IdxY].emplace_back(*Iter);
+					Iter = AllRenderer[CurGrpRO].erase(Iter);
+					Check = false;
+					break;
 				}
+				else if (IdxY > CurGrpRO)
+				{
+					AllRenderer[IdxY].emplace_front(*Iter);
+					Iter = AllRenderer[CurGrpRO].erase(Iter);
+					Check = false;
+					break;
+				}
+			}
+
+			if (Check)
+			{
+				++Iter;
 			}
 		}
 	}
@@ -64,13 +72,13 @@ void GameEngineCamera::Update(float _Delta)
 
 void GameEngineCamera::Render(float _Delta)
 {
-	for (auto& Pair1 : AllRenderer)
+	for (auto& Pair : AllRenderer)
 	{
-		for (auto& Pair2 : Pair1.second)
+		for (auto& Vec : Pair.second)
 		{
-			for (auto& Renderer : Pair2.second)
+			for (auto& Renderer : Vec)
 			{
-				if (Renderer->GetActor()->IsDeath())
+				if (!Renderer || Renderer->GetActor()->IsDeath())
 				{
 					continue;
 				}
@@ -90,17 +98,33 @@ void GameEngineCamera::Render(float _Delta)
 
 void GameEngineCamera::Release()
 {
-	/*for (auto& Pair1 : AllRenderer)
+	for (auto& Pair : AllRenderer)
 	{
-		for (auto& Pair2 : Pair1.second)
+		auto Iter = Pair.second.begin();
+		auto End = Pair.second.end();
+		for (; Iter != End;)
 		{
-			auto& List = Pair2.second;
-			std::erase_if(List,
-				[]()
+			bool IsErase = false;
+			auto& Vec = *Iter;
+			for (auto Renderer : Vec)
+			{
+				if (Renderer && Renderer->IsDeath())
 				{
+					delete Renderer;
+					Renderer = nullptr;
+					IsErase = true;
+				}
+			}
 
-				});
+			if (IsErase)
+			{
+				Iter = Pair.second.erase(Iter);
+			}
+			else
+			{
+				++Iter;
+			}
 		}
-	}*/
+	}
 }
 

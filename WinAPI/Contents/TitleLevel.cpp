@@ -29,8 +29,8 @@ void TitleLevel::Start()
 	CreateActor<BackGround>(UpdateOrder::None)->Init("Title.bmp");
 
 	//UI
-	UI* UIPtr = CreateActor<UI>(UpdateOrder::UI);
-	UIPtr->Init("Menu.bmp", WindowPos, ZOrder::FrontUI);
+	UI* UIPtr = CreateActor<UI>(UpdateOrder::UI);//Menu
+	UIPtr->Init("Menu.bmp", WindowPos, RenderOrder::FrontUI);
 	UIPtr->AddPos({ 0, 227 });
 	StartButton = CreateActor<Button>(UpdateOrder::UI);//Button
 	StartButton->Init("TitleStart.bmp", WindowPos, true);
@@ -50,10 +50,7 @@ void TitleLevel::Update(float _Delta)
 {
 	GameEngineLevel::Update(_Delta);
 
-	if (LiveTime <= 0.5f)
-	{
-		CurtainPtr->SetBright(_Delta, 0.5f);
-	}
+	CurtainPtr->SetBright(_Delta, 0.5f);
 
 	StartButtonUpdate(_Delta);
 	ExitButtonUpdate(_Delta);

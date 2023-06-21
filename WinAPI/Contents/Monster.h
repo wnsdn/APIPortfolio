@@ -20,13 +20,24 @@ public:
 		Count = _Count;
 	}
 
+	static int GetExp()
+	{
+		return Exp;
+	}
+	static void SetExp(const int _Exp)
+	{
+		Exp = _Exp;
+	}
+
 	void Init(const int2& _Index, const std::string& _Path);
 	void RandomMove();
+	void Stop();
 private:
 	static int Count;
+	static int Exp;
 
 	std::string Main = "";
-	float Speed = 0.f;
+	float Speed = 0.0f;
 	std::string Dir = "";
 	std::string State = "";
 

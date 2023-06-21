@@ -5,6 +5,7 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 #include <GameEnginePlatform/GameEngineSound.h>
+#include <GameEnginePlatform/GameEngineGraphics.h>
 #include "GameEngineProcess.h"
 #include "GameEngineLevel.h"
 #include "GameEngineCamera.h"
@@ -42,6 +43,7 @@ void GameEngineCore::CoreStart()
 	GameEngineInput::Init();
 	GameEngineRandom::Init();
 	GameEngineSound::Init();
+	GameEngineGraphics::Init();
 
 	Process->Start();
 }
@@ -90,7 +92,8 @@ void GameEngineCore::CoreEnd()
 {
 	GameEngineSound::SoundRelease();
 	GameEngineSound::SystemRelease();
-	
+	GameEngineGraphics::Release();
+
 	if (Process)
 	{
 		delete Process;

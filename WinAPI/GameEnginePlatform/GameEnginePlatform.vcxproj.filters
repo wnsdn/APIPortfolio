@@ -5,12 +5,14 @@
     <ClCompile Include="GameEngineInput.cpp" />
     <ClCompile Include="GameEngineTexture.cpp" />
     <ClCompile Include="GameEngineSound.cpp" />
+    <ClCompile Include="GameEngineGraphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineWindow.h" />
     <ClInclude Include="GameEngineInput.h" />
     <ClInclude Include="GameEngineTexture.h" />
     <ClInclude Include="GameEngineSound.h" />
+    <ClInclude Include="GameEngineGraphics.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FMOD">

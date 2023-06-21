@@ -19,7 +19,6 @@ private:
 
 	class Button* BtnOut = nullptr;
 	class Curtain* CurtainPtr = nullptr;
-	class GameResult* ResultPtr = nullptr;
 
 	void Start() override;
 	void Update(float _Delta) override;
@@ -27,9 +26,11 @@ private:
 	void StateUpdate(float _Delta);
 	void StartUpdate(float _Delta);
 	void InGameUpdate(float _Delta);
+	void WinUpdate(float _Delta);
 	void LoseUpdate(float _Delta);
 
 	void CuratinUpdate(float _Delta);
 	void PlayerCheck();
-	void OutButtonUpdate();
+	void MonsterCheck();
+	void OutButtonUpdate(float _Delta);
 };

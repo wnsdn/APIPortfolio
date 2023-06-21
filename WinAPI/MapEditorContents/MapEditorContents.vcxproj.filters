@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{235bb35d-27d3-4102-8d72-4521382bc94f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{675cad57-c596-44db-9489-07cc1243a1c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process">
+      <UniqueIdentifier>{8d001bfb-fe69-40f1-8cc2-b4c33dd55470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{f135f380-4ea4-4025-ab73-8d20387a3827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileRead">
+      <UniqueIdentifier>{a80880eb-6617-4925-86f4-036b06f55ee4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CoreProcess.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu_Update.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu_Render.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadMapData.cpp">
+      <Filter>FileRead</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CoreProcess.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadMapData.h">
+      <Filter>FileRead</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

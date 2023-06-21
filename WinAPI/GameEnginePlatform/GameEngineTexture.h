@@ -20,6 +20,9 @@ public:
 	void TransCopy(GameEngineTexture* _CopyTexture, 
 		const float4& _Pos, const float4& _Scale, 
 		const float4& _CopyPos, const float4& _CopyScale);
+	void TransCopy2(GameEngineTexture* _CopyTexture,
+		const float4& _Pos, const float4& _Scale,
+		const float4& _CopyPos, const float4& _CopyScale);
 	void AlphaCopy(GameEngineTexture* _CopyTexture, 
 		const float4& _Pos, const float4& _Scale, 
 		const float4& _CopyPos, const float4& _CopyScale,

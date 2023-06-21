@@ -5,7 +5,10 @@
 #include "Global.h"
 #include "Player.h"
 
+#include <format>
+
 int Monster::Count = 0;
+int Monster::Exp = 11;
 
 Monster::Monster()
 {
@@ -13,6 +16,7 @@ Monster::Monster()
 
 Monster::~Monster()
 {
+	--Count;
 }
 
 void Monster::Init(const int2& _Index, const std::string& _Path)
@@ -28,10 +32,10 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 	int Pos = static_cast<int>(Main.find('.'));
 	std::string TmpStr = Main.substr(0, Pos);
 
-	CreateRenderer(TmpStr + "Shadow.bmp", ZOrder::InGameObject, RenderOrder::Monster);
+	CreateRenderer(TmpStr + "Shadow.bmp", RenderOrder::InGameObject);
 	FindRenderer(TmpStr + "Shadow.bmp")->SetPos({ 0.f, 5.f });
 
-	CreateRenderer(Main, ZOrder::InGameObject, RenderOrder::Monster, {2, 0}, {6, 2});
+	CreateRenderer(Main, RenderOrder::InGameObject, { 2, 0 }, { 6, 2 });
 	FindRenderer(Main)->CreateAnimation("UpRun", 0, 0, 2, 0.35f, true);
 	FindRenderer(Main)->CreateAnimation("DownRun", 2, 0, 2, 0.35f, true);
 	FindRenderer(Main)->CreateAnimation("LeftRun", 4, 0, 2, 0.35f, true);
@@ -41,18 +45,26 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 	FindRenderer(Main)->CreateAnimation("Run", 3, 1, 1, 0.0f, false);
 
 	++Count;
+	InsertRenderer();
 }
 
 void Monster::Update(float _Delta)
 {
 	StateUpdate(_Delta);
 	CollisionCheck();
-	FindRenderer(Main)->ChangeAnimation(Dir + State);
+	if (State != "Stop")
+	{
+		FindRenderer(Main)->ChangeAnimation(Dir + State);
+	}
+	else
+	{
+		FindRenderer(Main)->ChangeAnimation("Run");
+	}
 }
 
 void Monster::Render(float _Delta)
 {
-	DrawRect(Pos, {30, 30}, (255 | (0 << 8)) | (0 << 16));
+	DrawRect(Pos, { 30, 30 }, (255 | (0 << 8)) | (0 << 16));
 	DrawRect(IndexToPos(Index), Scale, (0 | (255 << 8)) | (0 << 16));
 }
 
@@ -75,4 +87,10 @@ void Monster::RandomMove()
 		break;
 	}
 	State = "Run";
+}
+
+void Monster::Stop()
+{
+	Dir = "";
+	State = "Stop";
 }

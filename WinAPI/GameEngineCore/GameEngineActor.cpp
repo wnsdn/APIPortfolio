@@ -1,4 +1,5 @@
 #include "GameEngineActor.h"
+#include <vector>
 #include <GameEngineBase/GameEngineDebug.h>
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEngineBase/GameEngineString.h>
@@ -13,10 +14,8 @@ GameEngineActor::GameEngineActor()
 
 GameEngineActor::~GameEngineActor()
 {
-	for (auto& Pair : AllRenderer)
+	for (auto& Renderer : AllRenderer)
 	{
-		GameEngineRenderer* Renderer = Pair.second;
-
 		if (Renderer)
 		{
 			Renderer->Death();
@@ -25,50 +24,74 @@ GameEngineActor::~GameEngineActor()
 	}
 }
 
-GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename, int _ZOrder, int _RenderOrder, const float4& _Pos, const float4& _Size)
+GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename, int _RenderOrder, const float4& _Pos, const float4& _Size)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Filename);
-	auto FindIter = AllRenderer.find(Upper);
-
-	if (FindIter != AllRenderer.end())
+	for (auto& Renderer : AllRenderer)
 	{
-		return FindIter->second;
+		if (Renderer->GetName() == Upper)
+		{
+			return Renderer;
+		}
 	}
 
 	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
 
+	NewRenderer->SetName(Upper);
 	NewRenderer->SetCamera(Level->GetCamera());
 	NewRenderer->SetActor(this);
-	NewRenderer->SetZOrder(_ZOrder);
-	NewRenderer->SetOrder(_RenderOrder);
+	NewRenderer->SetRenderOrder(_RenderOrder);
 	NewRenderer->LoadTexture(_Filename, _Pos, _Size);
 
-	Level->GetCamera()->InsertRenderer(NewRenderer);
-	AllRenderer.emplace(Upper, NewRenderer);
+	AllRenderer.emplace_back(NewRenderer);
 
 	return NewRenderer;
 }
 
-GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Name, int _ZOrder, int _RenderOrder, const float4& _Size, unsigned int _Color)
+GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Name, int _RenderOrder, const float4& _Size, unsigned int _Color)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Name);
-	auto FindIter = AllRenderer.find(Upper);
-
-	if (FindIter != AllRenderer.end())
+	for (auto& Renderer : AllRenderer)
 	{
-		return FindIter->second;
+		if (Renderer->GetName() == Upper)
+		{
+			return Renderer;
+		}
 	}
 
 	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
 
+	NewRenderer->SetName(Upper);
 	NewRenderer->SetCamera(Level->GetCamera());
 	NewRenderer->SetActor(this);
-	NewRenderer->SetZOrder(_ZOrder);
-	NewRenderer->SetOrder(_RenderOrder);
+	NewRenderer->SetRenderOrder(_RenderOrder);
 	NewRenderer->CreateTexture(_Name, _Size, _Color);
 
-	Level->GetCamera()->InsertRenderer(NewRenderer);
-	AllRenderer.emplace(Upper, NewRenderer);
+	AllRenderer.emplace_back(NewRenderer);
+
+	return NewRenderer;
+}
+
+GameEngineRenderer* GameEngineActor::CreateTextRenderer(const std::string& _Text, int _RenderOrder)
+{
+	std::string Upper = GameEngineString::ToUpperReturn(_Text);
+	for (auto& Renderer : AllRenderer)
+	{
+		if (Renderer->GetName() == Upper)
+		{
+			return Renderer;
+		}
+	}
+
+	GameEngineRenderer* NewRenderer = new GameEngineRenderer();
+
+	NewRenderer->SetName(Upper);
+	NewRenderer->SetCamera(Level->GetCamera());
+	NewRenderer->SetActor(this);
+	NewRenderer->SetRenderOrder(_RenderOrder);
+	NewRenderer->SetText(_Text);
+
+	AllRenderer.emplace_back(NewRenderer);
 
 	return NewRenderer;
 }
@@ -76,15 +99,21 @@ GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Name, in
 GameEngineRenderer* GameEngineActor::FindRenderer(const std::string& _Filename)
 {
 	std::string Upper = GameEngineString::ToUpperReturn(_Filename);
-	auto FindIter = AllRenderer.find(Upper);
-
-	if (FindIter == AllRenderer.end())
+	for (auto& Renderer : AllRenderer)
 	{
-		MsgBoxAssert(Upper + " FindRenderer() ½ÇÆÐ");
-		return nullptr;
+		if (Renderer->GetName() == Upper)
+		{
+			return Renderer;
+		}
 	}
 
-	return FindIter->second;
+	MsgBoxAssert(_Filename + " FindRenderer()");
+	return nullptr;
+}
+
+void GameEngineActor::InsertRenderer()
+{
+	Level->GetCamera()->InsertRenderer(AllRenderer);
 }
 
 void GameEngineActor::DrawRect(const float4& _Pos, const float4& _Scale,
@@ -107,4 +136,12 @@ void GameEngineActor::DrawRect(const float4& _Pos, const float4& _Scale,
 	SelectObject(BackDC, OldBrush);
 	DeleteObject(Hpen);
 	DeleteObject(Hbrush);
+}
+
+void GameEngineActor::DrawLine(const float4& _StartPos, const float4& _EndPos)
+{
+	HDC BackDC = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
+
+	MoveToEx(BackDC, _StartPos.iX(), _StartPos.iY(), nullptr);
+	LineTo(BackDC, _EndPos.iX(), _EndPos.iY());
 }

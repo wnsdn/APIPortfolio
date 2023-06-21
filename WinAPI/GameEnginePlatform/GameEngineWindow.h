@@ -49,6 +49,11 @@ public:
 		IsWindowUpdate = _IsWindowUpdate;
 	}
 	float4 GetMousePos();
+
+	HWND GetHwnd() const
+	{
+		return Hwnd;
+	}
 private:
 	HINSTANCE Hinst = nullptr;
 	HWND Hwnd = nullptr;
