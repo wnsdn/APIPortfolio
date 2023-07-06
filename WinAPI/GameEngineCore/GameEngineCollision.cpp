@@ -1,20 +1,21 @@
 #include "GameEngineCollision.h"
-#include "GameEngineActor.h"
 
-GameEngineCollision::GameEngineCollision()
+GameEngineCollision::GameEngineCollision(const float4& _Pos, const float4& _Scale)
 {
+	Pos = _Pos;
+	Scale = _Scale;
 }
 
 GameEngineCollision::~GameEngineCollision()
 {
 }
 
-bool GameEngineCollision::CollisionCheck(GameEngineActor* _Left, GameEngineActor* _Right)
+bool GameEngineCollision::CollisionCheck(GameEngineCollision* _Col1, GameEngineCollision* _Col2)
 {
-	if (_Left->Left() > _Right->Right() ||
-		_Left->Right() < _Right->Left() ||
-		_Left->Top() > _Right->Bottom() ||
-		_Left->Bottom() < _Right->Top())
+	if (_Col1->Left() > _Col2->Right() ||
+		_Col1->Right() < _Col2->Left() ||
+		_Col1->Top() > _Col2->Bottom() ||
+		_Col1->Bottom() < _Col2->Top())
 	{
 		return false;
 	}

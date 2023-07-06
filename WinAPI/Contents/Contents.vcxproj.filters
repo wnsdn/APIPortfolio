@@ -100,6 +100,24 @@
     <ClCompile Include="ReadMapData.cpp">
       <Filter>FileRead</Filter>
     </ClCompile>
+    <ClCompile Include="Bomb_Update.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb_State.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrameInit.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrameUpdate.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_Collision.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterBoss.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EndingLevel.h">
@@ -170,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="ReadMapData.h">
       <Filter>FileRead</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterBoss.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

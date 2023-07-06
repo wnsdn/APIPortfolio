@@ -5,13 +5,14 @@
 class ReadMapData
 {
 public:
-	ReadMapData(const std::string& _Filename, class GameEngineLevel* _Level);
+	ReadMapData();
 	~ReadMapData();
 	ReadMapData(const ReadMapData& _Other) = delete;
 	ReadMapData(ReadMapData&& _Other) noexcept = delete;
 	ReadMapData& operator=(const ReadMapData& _Other) = delete;
 	ReadMapData& operator=(ReadMapData&& _Other) noexcept = delete;
 
+	void Read(const std::string& _Filename, class GameEngineLevel* _Level);
 private:
 	class GameEngineLevel* Level = nullptr;
 

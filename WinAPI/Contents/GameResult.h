@@ -11,7 +11,7 @@ public:
 	GameResult& operator=(const GameResult& _Other) = delete;
 	GameResult& operator=(GameResult&& _Other) noexcept = delete;
 
-	void Init(class Player* const _Player, bool _Win);
+	void Init(bool _Win);
 private:
 	int Rank = 0;
 	int Kill = 0;

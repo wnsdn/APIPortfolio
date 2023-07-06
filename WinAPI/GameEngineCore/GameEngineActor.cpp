@@ -24,14 +24,29 @@ GameEngineActor::~GameEngineActor()
 	}
 }
 
-GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename, int _RenderOrder, const float4& _Pos, const float4& _Size)
+GameEngineRenderer* GameEngineActor::CreateRenderer(const std::string& _Filename, int _RenderOrder, const float4& _Pos, const float4& _Size, const std::string& _Name)
 {
-	std::string Upper = GameEngineString::ToUpperReturn(_Filename);
-	for (auto& Renderer : AllRenderer)
+	std::string Upper{};
+	if (_Name == "")
 	{
-		if (Renderer->GetName() == Upper)
+		Upper = GameEngineString::ToUpperReturn(_Filename);
+		for (auto& Renderer : AllRenderer)
 		{
-			return Renderer;
+			if (Renderer->GetName() == Upper)
+			{
+				return Renderer;
+			}
+		}
+	}
+	else
+	{
+		Upper = GameEngineString::ToUpperReturn(_Name);
+		for (auto& Renderer : AllRenderer)
+		{
+			if (Renderer->GetName() == Upper)
+			{
+				return Renderer;
+			}
 		}
 	}
 

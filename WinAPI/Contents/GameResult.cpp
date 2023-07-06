@@ -17,19 +17,19 @@ GameResult::~GameResult()
 {
 }
 
-void GameResult::Init(class Player* const _Player, bool _Win)
+void GameResult::Init(bool _Win)
 {
-	if (!_Player)
+	if (!Player::MainPlayer)
 	{
 		return;
 	}
 
-	Rank = _Player->GetRank();
-	Kill = _Player->GetKill();
-	PreExp = _Player->GetPreExp();
-	CurExp = _Player->GetCurExp();
-	MaxExp = _Player->GetMaxExp();
-	ExpDelta = _Player->GetExpDelta();
+	Rank = Player::MainPlayer->GetRank();
+	Kill = Player::MainPlayer->GetKill();
+	PreExp = Player::MainPlayer->GetPreExp();
+	CurExp = Player::MainPlayer->GetCurExp();
+	MaxExp = Player::MainPlayer->GetMaxExp();
+	ExpDelta = Player::MainPlayer->GetExpDelta();
 	ExpStart = static_cast<float>(PreExp) / static_cast<float>(MaxExp) * 100;
 	ExpEnd = static_cast<float>(CurExp) / static_cast<float>(MaxExp) * 100;
 
@@ -146,7 +146,12 @@ void GameResult::Update(float _Delta)
 		LiveTime = 0.0f;
 	}
 
-
+	if (Player::MainPlayer)
+	{
+		Rank = Player::MainPlayer->GetRank();
+		FindRenderer("PlayerRank.bmp")
+			->SetCopyPos({ static_cast<float>(Rank / 10), static_cast<float>(Rank % 10) });
+	}
 
 	if (!JobDone)
 	{

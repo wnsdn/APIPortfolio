@@ -55,11 +55,20 @@ public:
 		LiveTime += _Delta;
 	}
 
+	bool GetTheFirst() const
+	{
+		return TheFirst;
+	}
+	void SetTheFirst(bool _TheFirst)
+	{
+		TheFirst = _TheFirst;
+	}
 protected:
 	int RenderOrder = 0;
 	bool IsUpdateValue = true;
 	bool IsDeathValue = false;
 	float LiveTime = 0.0f;
+	bool TheFirst = false;
 
 	virtual void Start() {}
 	virtual void Update(float _Delta) {}

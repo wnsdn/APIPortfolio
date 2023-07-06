@@ -135,6 +135,8 @@ public:
 	{
 		AdjScale += _AdjScale;
 	}
+
+	void InsertSingleRenderer();
 private:
 	std::string Name = "";
 	GameEngineCamera* Camera = nullptr;

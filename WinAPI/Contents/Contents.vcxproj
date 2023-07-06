@@ -164,6 +164,8 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Bomb_State.cpp" />
+    <ClCompile Include="Bomb_Update.cpp" />
     <ClCompile Include="Button.cpp">
       <SubType>
       </SubType>
@@ -185,6 +187,11 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="MonsterBoss.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Player_Collision.cpp" />
     <ClCompile Include="ReadMapData.cpp" />
     <ClCompile Include="UIFrame.cpp">
       <SubType>
@@ -243,6 +250,8 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="UIFrameInit.cpp" />
+    <ClCompile Include="UIFrameUpdate.cpp" />
     <ClCompile Include="Water.cpp" />
     <ClCompile Include="Water_Collision.cpp" />
   </ItemGroup>
@@ -273,6 +282,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="EndingLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="MonsterBoss.h">
       <SubType>
       </SubType>
     </ClInclude>

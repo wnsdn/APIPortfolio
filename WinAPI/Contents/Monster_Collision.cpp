@@ -1,28 +1,25 @@
 #include "Monster.h"
 #include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineLevel.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include "Global.h"
 #include "Water.h"
 #include "Player.h"
 
 void Monster::CollisionCheck()
 {
+	Collider->SetPos(Pos);
+
+	if (State == "Stop")
+	{
+		return;
+	}
+
 	for (auto Ptr : Level->FindActor(UpdateOrder::Water))
 	{
 		if (Index == Ptr->GetIndex())
 		{
-			if (State != "Death")
-			{
-				GameEngineSound::FindSound("MonsterDeath.wav")->Play();
-				Player* PlayerPtr = dynamic_cast<Water*>(Ptr)->GetOwner();
-				if (PlayerPtr)
-				{
-					PlayerPtr->AddKill(1);
-				}
-			}
-
-			Dir = "";
-			State = "Death";
+			Kill();
 		}
 	}
 }

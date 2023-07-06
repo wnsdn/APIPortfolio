@@ -53,7 +53,7 @@ void GameEngineLevel::Update(float _Delta)
 		}
 	}
 
-	if (GameEngineInput::IsDown('R'))
+	if (GameEngineInput::IsDown('Q'))
 	{
 		if (IsRender)
 		{

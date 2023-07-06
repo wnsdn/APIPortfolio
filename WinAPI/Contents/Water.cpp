@@ -1,4 +1,5 @@
 #include "Water.h"
+#include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
 #include "Global.h"
@@ -18,6 +19,15 @@ void Water::Init(const int2& _Index, int _Length, Player* _Owner)
 	Index = _Index;
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
+	FindRenderer("RectWater.bmp")->Off();
+
+	for (auto Ptr : Level->FindActor(UpdateOrder::Item))
+	{
+		if (Index == Ptr->GetIndex())
+		{
+			Ptr->Death();
+		}
+	}
 
 	Owner = _Owner;
 
@@ -51,8 +61,62 @@ void Water::Init(const int2& _Index, int _Length, Player* _Owner)
 			WaterPtr->Pos = IndexToPos(WaterPtr->Index);
 			WaterPtr->SetOwner(Owner);
 			WaterPtr->FindRenderer("BubbleWater.bmp")->ChangeAnimation(DirStr[j]);
+			WaterPtr->FindRenderer("RectWater.bmp")->Off();
 		}
 	}
+	GameEngineSound::FindSound("BombExplode.wav")->Play();
+}
+
+void Water::Rect(const int2& _Index, int _Length)
+{
+	int Left = _Index.X - _Length;
+	int Right = _Index.X + _Length;
+	int Top = _Index.Y - _Length;
+	int Bottom = _Index.Y + _Length;
+
+	for (int x = Left; x <= Right; ++x)
+	{
+		int y[2] = { Top, Bottom };
+		for (auto _Y : y)
+		{
+			bool Check = false;
+
+			int2 CurIndex = { x, _Y };
+			CollisionCheck2(CurIndex, Check);
+
+			if (Check)
+			{
+				continue;
+			}
+
+			Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
+			WaterPtr->Index = CurIndex;
+			WaterPtr->Pos = IndexToPos(WaterPtr->Index);
+			WaterPtr->FindRenderer("BubbleWater.bmp")->Off();
+		}
+	}
+	for (int y = Top + 1; y < Bottom; ++y)
+	{
+		int x[2] = { Left, Right };
+		for (auto _X : x)
+		{
+			bool Check = false;
+
+			int2 CurIndex = { _X, y };
+			CollisionCheck2(CurIndex, Check);
+
+			if (Check)
+			{
+				continue;
+			}
+
+			Water* WaterPtr = Level->CreateActor<Water>(UpdateOrder::Water);
+			WaterPtr->Index = CurIndex;
+			WaterPtr->Pos = IndexToPos(WaterPtr->Index);
+			WaterPtr->FindRenderer("BubbleWater.bmp")->Off();
+		}
+	}
+	GameEngineSound::FindSound("BombExplode.wav")->Play();
 }
 
 void Water::Start()
@@ -64,6 +128,12 @@ void Water::Start()
 	FindRenderer("BubbleWater.bmp")->CreateAnimation("Left", 0, 3, 8, Duration / 8, false);
 	FindRenderer("BubbleWater.bmp")->CreateAnimation("Right", 0, 4, 8, Duration / 8, false);
 	FindRenderer("BubbleWater.bmp")->ChangeAnimation("Mid");
+
+	CreateRenderer("RectWater.bmp", RenderOrder::InGameObject, {}, { 4, 1 });
+	FindRenderer("RectWater.bmp")->CreateAnimation("Water", 0, 0, 4, Duration / 4, false);
+	FindRenderer("RectWater.bmp")->ChangeAnimation("Water");
+
+
 	InsertRenderer();
 }
 

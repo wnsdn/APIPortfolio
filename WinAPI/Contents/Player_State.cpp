@@ -38,6 +38,10 @@ void Player::StateUpdate(float _Delta)
 	{
 		StopUpdate(_Delta);
 	}
+	else if (State == "Jump")
+	{
+		JumpUpdate(_Delta);
+	}
 }
 
 void Player::DirCheck()
@@ -107,44 +111,54 @@ void Player::RunUpdate(float _Delta)
 			Pos.X += Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto LeftTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (LeftTile->GetIndex() == Index + int2::Left &&
+				!dynamic_cast<Tile*>(LeftTile)->GetIsEmpty() &&
+				Left() <= LeftTile->Right())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.X > Ptr->GetIndex().X)
+				Pos.X += Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.Y == Ptr->GetIndex().Y)
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y < LeftTile->GetPos().Y - LeftTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y > LeftTile->GetPos().Y + LeftTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (LeftTile->GetIndex() == Index + int2::Left &&
+				dynamic_cast<Tile*>(LeftTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Left() <= Ptr->Right() && Top() <= Ptr->Bottom())
 					{
 						Pos.X += Speed * _Delta;
-					}
-
-					if (Pos.Y > Ptr->GetPos().Y + Ptr->GetScale().hY() * TrimRatio)
-					{
-						for (auto DownTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y += Speed * _Delta * SpeedRatio;
+						if (Pos.Y > IndexToPos(Index).Y)
 						{
-							if (DownTile && (Ptr->GetIndex() + int2::Down) == DownTile->GetIndex()
-								&& dynamic_cast<Tile*>(DownTile)->GetIsEmpty())
-							{
-								Pos.X += Speed * _Delta;
-								Pos.Y += Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
-					else if (Pos.Y < Ptr->GetPos().Y - Ptr->GetScale().hY() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Left() <= Ptr->Right() && Bottom() >= Ptr->Top())
 					{
-						for (auto UpTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X += Speed * _Delta;
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+						if (Pos.Y < IndexToPos(Index).Y)
 						{
-							if (UpTile && (Ptr->GetIndex() + int2::Up) == UpTile->GetIndex()
-								&& dynamic_cast<Tile*>(UpTile)->GetIsEmpty())
-							{
-								Pos.X += Speed * _Delta;
-								Pos.Y -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
 				}
@@ -159,44 +173,54 @@ void Player::RunUpdate(float _Delta)
 			Pos.X -= Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto RightTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (RightTile->GetIndex() == Index + int2::Right &&
+				!dynamic_cast<Tile*>(RightTile)->GetIsEmpty() &&
+				Right() >= RightTile->Left())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.X < Ptr->GetIndex().X)
+				Pos.X -= Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.Y == Ptr->GetIndex().Y)
+					if (Ptr->GetIndex() == Index + int2::UpRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y < RightTile->GetPos().Y - RightTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::DownRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y > RightTile->GetPos().Y + RightTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (RightTile->GetIndex() == Index + int2::Right &&
+				dynamic_cast<Tile*>(RightTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::UpRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Right() >= Ptr->Left() && Top() <= Ptr->Bottom())
 					{
 						Pos.X -= Speed * _Delta;
-					}
-
-					if (Pos.Y > Ptr->GetPos().Y + Ptr->GetScale().hY() * TrimRatio)
-					{
-						for (auto DownTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y += Speed * _Delta * SpeedRatio;
+						if (Pos.Y > IndexToPos(Index).Y)
 						{
-							if (DownTile && (Ptr->GetIndex() + int2::Down) == DownTile->GetIndex()
-								&& dynamic_cast<Tile*>(DownTile)->GetIsEmpty())
-							{
-								Pos.X -= Speed * _Delta;
-								Pos.Y += Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
-					else if (Pos.Y < Ptr->GetPos().Y - Ptr->GetScale().hY() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::DownRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Right() >= Ptr->Left() && Bottom() >= Ptr->Top())
 					{
-						for (auto UpTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X -= Speed * _Delta;
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+						if (Pos.Y < IndexToPos(Index).Y)
 						{
-							if (UpTile && (Ptr->GetIndex() + int2::Up) == UpTile->GetIndex()
-								&& dynamic_cast<Tile*>(UpTile)->GetIsEmpty())
-							{
-								Pos.X -= Speed * _Delta;
-								Pos.Y -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
 				}
@@ -211,43 +235,54 @@ void Player::RunUpdate(float _Delta)
 			Pos.Y += Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto UpTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (UpTile->GetIndex() == Index + int2::Up &&
+				!dynamic_cast<Tile*>(UpTile)->GetIsEmpty() &&
+				Top() <= UpTile->Bottom())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.Y > Ptr->GetIndex().Y)
+				Pos.Y += Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.X == Ptr->GetIndex().X)
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X < UpTile->GetPos().X - UpTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::UpRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X > UpTile->GetPos().X + UpTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (UpTile->GetIndex() == Index + int2::Up &&
+				dynamic_cast<Tile*>(UpTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Top() <= Ptr->Bottom() && Left() <= Ptr->Right())
 					{
 						Pos.Y += Speed * _Delta;
-					}
-					if (Pos.X > Ptr->GetPos().X + Ptr->GetScale().hX() * TrimRatio)
-					{
-						for (auto RightTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X += Speed * _Delta * SpeedRatio;
+						if (Pos.X > IndexToPos(Index).X)
 						{
-							if (RightTile && (Ptr->GetIndex() + int2::Right) == RightTile->GetIndex()
-								&& dynamic_cast<Tile*>(RightTile)->GetIsEmpty())
-							{
-								Pos.Y += Speed * _Delta;
-								Pos.X += Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
-					else if (Pos.X < Ptr->GetPos().X - Ptr->GetScale().hX() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::UpRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Top() <= Ptr->Bottom() && Right() >= Ptr->Left())
 					{
-						for (auto LeftTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y += Speed * _Delta;
+						Pos.X -= Speed * _Delta * SpeedRatio;
+						if (Pos.X < IndexToPos(Index).X)
 						{
-							if (LeftTile && (Ptr->GetIndex() + int2::Left) == LeftTile->GetIndex()
-								&& dynamic_cast<Tile*>(LeftTile)->GetIsEmpty())
-							{
-								Pos.Y += Speed * _Delta;
-								Pos.X -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
 				}
@@ -262,44 +297,54 @@ void Player::RunUpdate(float _Delta)
 			Pos.Y -= Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto DownTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (DownTile->GetIndex() == Index + int2::Down &&
+				!dynamic_cast<Tile*>(DownTile)->GetIsEmpty() &&
+				Bottom() >= DownTile->Top())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.Y < Ptr->GetIndex().Y)
+				Pos.Y -= Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.X == Ptr->GetIndex().X)
+					if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X < DownTile->GetPos().X - DownTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::DownRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X > DownTile->GetPos().X + DownTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (DownTile->GetIndex() == Index + int2::Down &&
+				dynamic_cast<Tile*>(DownTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Bottom() >= Ptr->Top() && Left() <= Ptr->Right())
 					{
 						Pos.Y -= Speed * _Delta;
-					}
-
-					if (Pos.X > Ptr->GetPos().X + Ptr->GetScale().hX() * TrimRatio)
-					{
-						for (auto RightTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X += Speed * _Delta * SpeedRatio;
+						if (Pos.X > IndexToPos(Index).X)
 						{
-							if (RightTile && (Ptr->GetIndex() + int2::Right) == RightTile->GetIndex()
-								&& dynamic_cast<Tile*>(RightTile)->GetIsEmpty())
-							{
-								Pos.Y -= Speed * _Delta;
-								Pos.X += Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
-					else if (Pos.X < Ptr->GetPos().X - Ptr->GetScale().hX() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::DownRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Bottom() >= Ptr->Top() && Right() >= Ptr->Left())
 					{
-						for (auto LeftTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y -= Speed * _Delta;
+						Pos.X -= Speed * _Delta * SpeedRatio;
+						if (Pos.X < IndexToPos(Index).X)
 						{
-							if (LeftTile && (Ptr->GetIndex() + int2::Left) == LeftTile->GetIndex()
-								&& dynamic_cast<Tile*>(LeftTile)->GetIsEmpty())
-							{
-								Pos.Y -= Speed * _Delta;
-								Pos.X -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
 				}
@@ -353,18 +398,6 @@ void Player::CaptureUpdate(float _Delta)
 		return;
 	}
 
-	if (GameEngineInput::IsDown(VK_LCONTROL))
-	{
-		Dir = "Down";
-		if (State == "Capture")
-		{
-			GameEngineSound::FindSound("PlayerFree.wav")->Play();
-			State = "Free";
-		}
-		FindRenderer(Main)->SetPos({ 0, -11 });
-		return;
-	}
-
 	Speed = 20.0f;
 
 	FindRenderer(Main)->AddPos({ 0, MoveDir * MoveSpeed * _Delta });
@@ -385,44 +418,54 @@ void Player::CaptureUpdate(float _Delta)
 			Pos.X += Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto LeftTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (LeftTile->GetIndex() == Index + int2::Left &&
+				!dynamic_cast<Tile*>(LeftTile)->GetIsEmpty() &&
+				Left() <= LeftTile->Right())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.X > Ptr->GetIndex().X)
+				Pos.X += Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.Y == Ptr->GetIndex().Y)
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y < LeftTile->GetPos().Y - LeftTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y > LeftTile->GetPos().Y + LeftTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (LeftTile->GetIndex() == Index + int2::Left &&
+				dynamic_cast<Tile*>(LeftTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Left() <= Ptr->Right() && Top() <= Ptr->Bottom())
 					{
 						Pos.X += Speed * _Delta;
-					}
-
-					if (Pos.Y > Ptr->GetPos().Y + Ptr->GetScale().hY() * TrimRatio)
-					{
-						for (auto DownTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y += Speed * _Delta * SpeedRatio;
+						if (Pos.Y > IndexToPos(Index).Y)
 						{
-							if (DownTile && (Ptr->GetIndex() + int2::Down) == DownTile->GetIndex()
-								&& dynamic_cast<Tile*>(DownTile)->GetIsEmpty())
-							{
-								Pos.X += Speed * _Delta;
-								Pos.Y += Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
-					else if (Pos.Y < Ptr->GetPos().Y - Ptr->GetScale().hY() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Left() <= Ptr->Right() && Bottom() >= Ptr->Top())
 					{
-						for (auto UpTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X += Speed * _Delta;
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+						if (Pos.Y < IndexToPos(Index).Y)
 						{
-							if (UpTile && (Ptr->GetIndex() + int2::Up) == UpTile->GetIndex()
-								&& dynamic_cast<Tile*>(UpTile)->GetIsEmpty())
-							{
-								Pos.X += Speed * _Delta;
-								Pos.Y -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
 				}
@@ -437,44 +480,54 @@ void Player::CaptureUpdate(float _Delta)
 			Pos.X -= Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto RightTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (RightTile->GetIndex() == Index + int2::Right &&
+				!dynamic_cast<Tile*>(RightTile)->GetIsEmpty() &&
+				Right() >= RightTile->Left())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.X < Ptr->GetIndex().X)
+				Pos.X -= Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.Y == Ptr->GetIndex().Y)
+					if (Ptr->GetIndex() == Index + int2::UpRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y < RightTile->GetPos().Y - RightTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::DownRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.Y > RightTile->GetPos().Y + RightTile->GetScale().hY() * TrimRatio)
+					{
+						Pos.Y += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (RightTile->GetIndex() == Index + int2::Right &&
+				dynamic_cast<Tile*>(RightTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::UpRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Right() >= Ptr->Left() && Top() <= Ptr->Bottom())
 					{
 						Pos.X -= Speed * _Delta;
-					}
-
-					if (Pos.Y > Ptr->GetPos().Y + Ptr->GetScale().hY() * TrimRatio)
-					{
-						for (auto DownTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y += Speed * _Delta * SpeedRatio;
+						if (Pos.Y > IndexToPos(Index).Y)
 						{
-							if (DownTile && (Ptr->GetIndex() + int2::Down) == DownTile->GetIndex()
-								&& dynamic_cast<Tile*>(DownTile)->GetIsEmpty())
-							{
-								Pos.X -= Speed * _Delta;
-								Pos.Y += Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
-					else if (Pos.Y < Ptr->GetPos().Y - Ptr->GetScale().hY() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::DownRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Right() >= Ptr->Left() && Bottom() >= Ptr->Top())
 					{
-						for (auto UpTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X -= Speed * _Delta;
+						Pos.Y -= Speed * _Delta * SpeedRatio;
+						if (Pos.Y < IndexToPos(Index).Y)
 						{
-							if (UpTile && (Ptr->GetIndex() + int2::Up) == UpTile->GetIndex()
-								&& dynamic_cast<Tile*>(UpTile)->GetIsEmpty())
-							{
-								Pos.X -= Speed * _Delta;
-								Pos.Y -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.Y = IndexToPos(Index).Y;
 						}
 					}
 				}
@@ -489,43 +542,54 @@ void Player::CaptureUpdate(float _Delta)
 			Pos.Y += Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto UpTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (UpTile->GetIndex() == Index + int2::Up &&
+				!dynamic_cast<Tile*>(UpTile)->GetIsEmpty() &&
+				Top() <= UpTile->Bottom())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.Y > Ptr->GetIndex().Y)
+				Pos.Y += Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.X == Ptr->GetIndex().X)
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X < UpTile->GetPos().X - UpTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::UpRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X > UpTile->GetPos().X + UpTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (UpTile->GetIndex() == Index + int2::Up &&
+				dynamic_cast<Tile*>(UpTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::UpLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Top() <= Ptr->Bottom() && Left() <= Ptr->Right())
 					{
 						Pos.Y += Speed * _Delta;
-					}
-					if (Pos.X > Ptr->GetPos().X + Ptr->GetScale().hX() * TrimRatio)
-					{
-						for (auto RightTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X += Speed * _Delta * SpeedRatio;
+						if (Pos.X > IndexToPos(Index).X)
 						{
-							if (RightTile && (Ptr->GetIndex() + int2::Right) == RightTile->GetIndex()
-								&& dynamic_cast<Tile*>(RightTile)->GetIsEmpty())
-							{
-								Pos.Y += Speed * _Delta;
-								Pos.X += Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
-					else if (Pos.X < Ptr->GetPos().X - Ptr->GetScale().hX() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::UpRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Top() <= Ptr->Bottom() && Right() >= Ptr->Left())
 					{
-						for (auto LeftTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y += Speed * _Delta;
+						Pos.X -= Speed * _Delta * SpeedRatio;
+						if (Pos.X < IndexToPos(Index).X)
 						{
-							if (LeftTile && (Ptr->GetIndex() + int2::Left) == LeftTile->GetIndex()
-								&& dynamic_cast<Tile*>(LeftTile)->GetIsEmpty())
-							{
-								Pos.Y += Speed * _Delta;
-								Pos.X -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
 				}
@@ -540,44 +604,54 @@ void Player::CaptureUpdate(float _Delta)
 			Pos.Y -= Speed * _Delta;
 		}
 
-		for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+		for (auto DownTile : Level->FindActor(UpdateOrder::Tile))
 		{
-			if (dynamic_cast<Tile*>(Ptr)->GetIsEmpty())
+			if (DownTile->GetIndex() == Index + int2::Down &&
+				!dynamic_cast<Tile*>(DownTile)->GetIsEmpty() &&
+				Bottom() >= DownTile->Top())
 			{
-				continue;
-			}
-
-			if (GameEngineCollision::CollisionCheck(this, Ptr))
-			{
-				if (Index.Y < Ptr->GetIndex().Y)
+				Pos.Y -= Speed * _Delta;
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 				{
-					if (Index.X == Ptr->GetIndex().X)
+					if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X < DownTile->GetPos().X - DownTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X -= Speed * _Delta * SpeedRatio;
+					}
+					if (Ptr->GetIndex() == Index + int2::DownRight &&
+						dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Pos.X > DownTile->GetPos().X + DownTile->GetScale().hX() * TrimRatio)
+					{
+						Pos.X += Speed * _Delta * SpeedRatio;
+					}
+				}
+			}
+			else if (DownTile->GetIndex() == Index + int2::Down &&
+				dynamic_cast<Tile*>(DownTile)->GetIsEmpty())
+			{
+				for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
+				{
+					if (Ptr->GetIndex() == Index + int2::DownLeft &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Bottom() >= Ptr->Top() && Left() <= Ptr->Right())
 					{
 						Pos.Y -= Speed * _Delta;
-					}
-
-					if (Pos.X > Ptr->GetPos().X + Ptr->GetScale().hX() * TrimRatio)
-					{
-						for (auto RightTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.X += Speed * _Delta * SpeedRatio;
+						if (Pos.X > IndexToPos(Index).X)
 						{
-							if (RightTile && (Ptr->GetIndex() + int2::Right) == RightTile->GetIndex()
-								&& dynamic_cast<Tile*>(RightTile)->GetIsEmpty())
-							{
-								Pos.Y -= Speed * _Delta;
-								Pos.X += Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
-					else if (Pos.X < Ptr->GetPos().X - Ptr->GetScale().hX() * TrimRatio)
+					else if (Ptr->GetIndex() == Index + int2::DownRight &&
+						!dynamic_cast<Tile*>(Ptr)->GetIsEmpty() &&
+						Bottom() >= Ptr->Top() && Right() >= Ptr->Left())
 					{
-						for (auto LeftTile : Level->FindActor(UpdateOrder::Tile))
+						Pos.Y -= Speed * _Delta;
+						Pos.X -= Speed * _Delta * SpeedRatio;
+						if (Pos.X < IndexToPos(Index).X)
 						{
-							if (LeftTile && (Ptr->GetIndex() + int2::Left) == LeftTile->GetIndex()
-								&& dynamic_cast<Tile*>(LeftTile)->GetIsEmpty())
-							{
-								Pos.Y -= Speed * _Delta;
-								Pos.X -= Speed * SpeedRatio * _Delta;
-							}
+							Pos.X = IndexToPos(Index).X;
 						}
 					}
 				}
@@ -616,4 +690,71 @@ void Player::FreeUpdate(float _Delta)
 
 void Player::StopUpdate(float _Delta)
 {
+}
+
+void Player::JumpUpdate(float _Delta)
+{
+	JumpSpeed = JumpMaxDist / 0.3f;
+	RendererSpeed = 200.0f;
+
+	if (!JumpDown && RendererDist <= TileSize.X)
+	{
+		FindRenderer(Main)->AddPos({ 0, -RendererSpeed * _Delta });
+		RendererDist += RendererSpeed * _Delta;
+	}
+	else if (JumpDown && RendererDist >= 0.0f)
+	{
+		FindRenderer(Main)->AddPos({ 0, RendererSpeed * _Delta });
+		RendererDist -= RendererSpeed * _Delta;
+	}
+
+	if (Dir == "Left")
+	{
+		Pos.X -= JumpSpeed * _Delta;
+	}
+	else if (Dir == "Right")
+	{
+		Pos.X += JumpSpeed * _Delta;
+
+	}
+	else if (Dir == "Up")
+	{
+		Pos.Y -= JumpSpeed * _Delta;
+
+	}
+	else if (Dir == "Down")
+	{
+		Pos.Y += JumpSpeed * _Delta;
+
+	}
+
+	Index = PosToIndex(Pos);
+	JumpDist += JumpSpeed * _Delta;
+
+	if (JumpDist >= JumpMaxDist / 2)
+	{
+		JumpDown = true;
+	}
+
+	if (JumpDist >= JumpMaxDist)
+	{
+		State = "Idle";
+		JumpDist = 0.0f;
+		JumpMaxDist = 0.0f;
+		JumpSpeed = 0.0f;
+
+		RendererDist = 0.0f;
+		JumpDown = false;
+		FindRenderer(Main)->SetPos({ 0, -11 });
+		FindRenderer(Main)->SetTheFirst(false);
+
+		if (Dir == "Left" || Dir == "Right")
+		{
+			Pos.X = IndexToPos(Index).X;
+		}
+		else if (Dir == "Up" || Dir == "Down")
+		{
+			Pos.Y = IndexToPos(Index).Y;
+		}
+	}
 }

@@ -19,11 +19,11 @@ public:
 	GameEngineActor& operator=(GameEngineActor&& _Other) noexcept = delete;
 
 	template<typename RenderOrder>
-	GameEngineRenderer* CreateRenderer(const std::string& _Filename, RenderOrder _RenderOrder, const float4& _Pos = { 0, 0 }, const float4& _Size = { 1, 1 })
+	GameEngineRenderer* CreateRenderer(const std::string& _Filename, RenderOrder _RenderOrder, const float4& _Pos = { 0, 0 }, const float4& _Size = { 1, 1 }, const std::string& _Name = "")
 	{
-		return CreateRenderer(_Filename, static_cast<int>(_RenderOrder), _Pos, _Size);
+		return CreateRenderer(_Filename, static_cast<int>(_RenderOrder), _Pos, _Size, _Name);
 	}
-	GameEngineRenderer* CreateRenderer(const std::string& _Filename, int _RenderOrder, const float4& _Pos, const float4& _Size);
+	GameEngineRenderer* CreateRenderer(const std::string& _Filename, int _RenderOrder, const float4& _Pos, const float4& _Size, const std::string& _Name);
 
 	template<typename RenderOrder>
 	GameEngineRenderer* CreateRenderer(const std::string& _Name, RenderOrder _RenderOrder, const float4& _Size, unsigned int _Color)
@@ -40,6 +40,7 @@ public:
 	GameEngineRenderer* CreateTextRenderer(const std::string& _Text, int _RenderOrder);
 	GameEngineRenderer* FindRenderer(const std::string& _Filename);
 	void InsertRenderer();
+	void InsertRenderer(const std::string& _Name);
 
 	void DrawRect(const float4& _Pos, const float4& _Scale, unsigned int _Color);
 	void DrawLine(const float4& _StartPos, const float4& _EndPos);

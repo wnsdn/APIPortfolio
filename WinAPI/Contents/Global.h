@@ -27,6 +27,7 @@ enum class UpdateOrder
 
 	Player,
 	Monster,
+	Boss,
 
 	UI,
 
@@ -36,9 +37,10 @@ enum class UpdateOrder
 enum class RenderOrder
 {
 	//1
-	BackUI = -3,
+	BackUI = -4,
 	BackGround,
 	Tile,
+	Shadow,
 
 	//2
 	InGameObject = 0,

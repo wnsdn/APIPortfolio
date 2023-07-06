@@ -9,6 +9,8 @@
 
 #include "Player.h"
 #include "Monster.h"
+#include "MonsterBoss.h"
+#include "UIFrame.h"
 #include "TitleLevel.h"
 
 void MonsterLevel::CuratinUpdate(float _Delta)
@@ -38,13 +40,18 @@ void MonsterLevel::PlayerCheck()
 		{
 			Player::MainPlayer->AddCurExp(Player::MainPlayer->GetKill() * Monster::GetExp());
 
-			CreateActor<GameResult>(UpdateOrder::UI)->Init(Player::MainPlayer, false);
+			CreateActor<GameResult>(UpdateOrder::UI)->Init(false);
 
-			GameEngineSound::FindSound("Octopus.mp3")->Stop();
+			SoundOff();
+
 			LiveTime = 0.0f;
 			for (auto Ptr : FindActor(UpdateOrder::Monster))
 			{
 				dynamic_cast<Monster*>(Ptr)->Stop();
+			}
+			for (auto Ptr : FindActor(UpdateOrder::Boss))
+			{
+				dynamic_cast<MonsterBoss*>(Ptr)->SetState("Stop");
 			}
 			State = "Lose";
 		}
@@ -64,12 +71,39 @@ void MonsterLevel::MonsterCheck()
 		{
 			Player::MainPlayer->AddCurExp(Player::MainPlayer->GetKill() * Monster::GetExp());
 
-			CreateActor<GameResult>(UpdateOrder::UI)->Init(Player::MainPlayer, true);
+			CreateActor<GameResult>(UpdateOrder::UI)->Init(true);
 
-			GameEngineSound::FindSound("Octopus.mp3")->Stop();
+			SoundOff();
+
 			LiveTime = 0.0f;
 			Player::MainPlayer->Stop();
 			State = "Win";
+		}
+	}
+}
+
+void MonsterLevel::TimeCheck()
+{
+	if (FramePtr->TimeOver())
+	{
+		if (State != "Lose")
+		{
+			Player::MainPlayer->AddCurExp(Player::MainPlayer->GetKill() * Monster::GetExp());
+
+			CreateActor<GameResult>(UpdateOrder::UI)->Init(false);
+
+			SoundOff();
+			LiveTime = 0.0f;
+			for (auto Ptr : FindActor(UpdateOrder::Monster))
+			{
+				dynamic_cast<Monster*>(Ptr)->Stop();
+			}
+			for (auto Ptr : FindActor(UpdateOrder::Boss))
+			{
+				dynamic_cast<MonsterBoss*>(Ptr)->SetState("Stop");
+			}
+			Player::MainPlayer->Stop();
+			State = "Lose";
 		}
 	}
 }
@@ -86,7 +120,22 @@ void MonsterLevel::OutButtonUpdate(float _Delta)
 		BtnOut->Reset();
 
 		Process->CreateLevel<TitleLevel>();
+		SoundOff();
+	}
+}
 
+void MonsterLevel::SoundOff()
+{
+	if (CurMap == "Octopus.txt" || CurMap == "Octopus1.txt")
+	{
 		GameEngineSound::FindSound("Octopus.mp3")->Stop();
+	}
+	else if (CurMap == "Boss.txt")
+	{
+		GameEngineSound::FindSound("BossStart.wav")->Stop();
+	}
+	else if (CurMap == "test.txt")
+	{
+		GameEngineSound::FindSound("Patrit.mp3")->Stop();
 	}
 }

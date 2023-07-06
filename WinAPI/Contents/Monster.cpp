@@ -1,9 +1,13 @@
 #include "Monster.h"
 #include <iostream>
+#include <GameEngineBase/GameEngineRandom.h>
+#include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineLevel.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include "Global.h"
 #include "Player.h"
+#include "Water.h"
 
 #include <format>
 
@@ -17,6 +21,12 @@ Monster::Monster()
 Monster::~Monster()
 {
 	--Count;
+
+	if (Collider)
+	{
+		delete Collider;
+		Collider = nullptr;
+	}
 }
 
 void Monster::Init(const int2& _Index, const std::string& _Path)
@@ -25,15 +35,11 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 	Dir = "";
 	State = "Start";
 
+	Collider = new GameEngineCollision(Pos, { 30, 30 });
+
 	Index = _Index;
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
-
-	int Pos = static_cast<int>(Main.find('.'));
-	std::string TmpStr = Main.substr(0, Pos);
-
-	CreateRenderer(TmpStr + "Shadow.bmp", RenderOrder::InGameObject);
-	FindRenderer(TmpStr + "Shadow.bmp")->SetPos({ 0.f, 5.f });
 
 	CreateRenderer(Main, RenderOrder::InGameObject, { 2, 0 }, { 6, 2 });
 	FindRenderer(Main)->CreateAnimation("UpRun", 0, 0, 2, 0.35f, true);
@@ -46,6 +52,10 @@ void Monster::Init(const int2& _Index, const std::string& _Path)
 
 	++Count;
 	InsertRenderer();
+
+	CreateRenderer("OctopusShadow.bmp", RenderOrder::Shadow);
+	FindRenderer("OctopusShadow.bmp")->SetPos({ 0.f, 5.f });
+	FindRenderer("OctopusShadow.bmp")->InsertSingleRenderer();
 }
 
 void Monster::Update(float _Delta)
@@ -64,14 +74,15 @@ void Monster::Update(float _Delta)
 
 void Monster::Render(float _Delta)
 {
-	DrawRect(Pos, { 30, 30 }, (255 | (0 << 8)) | (0 << 16));
-	DrawRect(IndexToPos(Index), Scale, (0 | (255 << 8)) | (0 << 16));
+	/*DrawRect(Pos, { 30, 30 }, (255 | (0 << 8)) | (0 << 16));
+	DrawRect(IndexToPos(Index), Scale, (0 | (255 << 8)) | (0 << 16));*/
+	//DrawRect(Collider->GetPos(), Collider->GetScale(), Rgb(255, 0, 0));
 }
 
 void Monster::RandomMove()
 {
 	Speed = 50.f;
-	switch (rand() % 4)
+	switch (GameEngineRandom::RandomInt(3, 0))
 	{
 	case 0:
 		Dir = "Left";
@@ -93,4 +104,19 @@ void Monster::Stop()
 {
 	Dir = "";
 	State = "Stop";
+}
+
+void Monster::Kill()
+{
+	if (State != "Death")
+	{
+		GameEngineSound::FindSound("MonsterDeath.wav")->Play();
+		if (Player::MainPlayer)
+		{
+			Player::MainPlayer->AddKill(1);
+		}
+	}
+
+	Dir = "";
+	State = "Death";
 }

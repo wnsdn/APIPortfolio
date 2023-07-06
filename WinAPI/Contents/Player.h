@@ -15,10 +15,16 @@ public:
 
 	void Init(const int2& _Index, const std::string& _Path);
 	void Stop();
+	void WriteData();
+	void ReadData();
 
 	int GetCount() const
 	{
 		return Count;
+	}
+	int GetLength() const
+	{
+		return Length;
 	}
 	void SetCount(const int _Count)
 	{
@@ -116,8 +122,39 @@ public:
 
 		return 0;
 	}
+
+	bool GetCanKick() const
+	{
+		return CanKick;
+	}
+	bool GetCanThrow() const
+	{
+		return CanThrow;
+	}
+	int GetItemNeedle() const
+	{
+		return ItemNeedle;
+	}
+	int GetItemShield() const
+	{
+		return ItemShield;
+	}
+	int GetItemJump() const
+	{
+		return ItemJump;
+	}
+	std::string GetCurItem() const
+	{
+		return CurItem;
+	}
+
+	bool GetGodMode() const
+	{
+		return GodMode;
+	}
 private:
 	std::string Main = "";
+	class GameEngineCollision* Collider = nullptr;
 
 	int Count = 0;
 	int MaxCount = 0;
@@ -130,16 +167,44 @@ private:
 	std::string Dir = "";
 	std::string State = "";
 
+	bool CanKick = false;
+	bool CanThrow = false;
+	int ItemNeedle = 0;
+	int ItemShield = 0;
+	int ItemJump = 0;
+	std::string CurItem = "";
+	bool ShieldOn = false;
+
+	bool GodMode = false;
+
 	int Kill = 0;
 	int Rank = 0;
 	int PreExp = 0;
-	int CurExp = 15;
-	int MaxExp = 133;
+	int CurExp = 0;
+	int MaxExp = (Rank + 1) * 100;
+
+	float MoveDist = 0.f;
+	float MaxDist = 6.f;
+	float MoveSpeed = 7.f;
+	float MoveDir = -1.f;
+
+	float JumpDist = 0.0f;
+	float JumpMaxDist = 0.0f;
+	float JumpSpeed = 0.0f;
+	float RendererDist = 0.0f;
+	float RendererSpeed = 0.0f;
+	bool JumpDown = false;
+
+	const float TrimRatio = 0.6f;
+	const float SpeedRatio = 0.8f;
 
 	void Update(float _Delta) override;
 	void Render(float _Delta) override;
 
 	void StateUpdate(float _Delta);
+	void CollisionCheck(float _Delta);
+	void AllUpdate(float _Delta);
+
 	void DirCheck();
 	void ReadyUpdate(float _Delta);
 	void IdleUpdate(float _Delta);
@@ -148,17 +213,12 @@ private:
 	void CaptureUpdate(float _Delta);
 	void FreeUpdate(float _Delta);
 	void StopUpdate(float _Delta);
+	void JumpUpdate(float _Delta);
 
-	float MoveDist = 0.f;
-	float MaxDist = 8.f;
-	float MoveSpeed = 10.f;
-	float MoveDir = -1.f;
-
-	const float TrimRatio = 0.6f;
-	const float SpeedRatio = 0.8f;
-	
-	void CollisionCheck(float _Delta);
-	void ChangeAnimation();
 	void BombSet();
+	void ItemUseUpdate();
+	void ItemUpdate();
+	void ShieldUpdate();
 	void ExpUpdate();
+	void ChangeAnimation();
 };

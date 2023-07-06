@@ -218,7 +218,7 @@ void Monster::ChangeDir()
 	}
 
 	int RndCnt = static_cast<int>(DirArr.size());
-	int RndInt = GameEngineRandom::RandomInt(RndCnt);
+	int RndInt = GameEngineRandom::RandomInt(RndCnt, 1);
 	Dir = DirArr[RndInt - 1];
 }
 

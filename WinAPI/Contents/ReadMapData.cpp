@@ -12,8 +12,17 @@
 #include "Item.h"
 #include "Player.h"
 #include "Monster.h"
+#include "MonsterBoss.h"
 
-ReadMapData::ReadMapData(const std::string& _Filename, GameEngineLevel* _Level)
+ReadMapData::ReadMapData()
+{
+}
+
+ReadMapData::~ReadMapData()
+{
+}
+
+void ReadMapData::Read(const std::string& _Filename, GameEngineLevel* _Level)
 {
 	Level = _Level;
 
@@ -32,10 +41,6 @@ ReadMapData::ReadMapData(const std::string& _Filename, GameEngineLevel* _Level)
 
 		IFS.close();
 	}
-}
-
-ReadMapData::~ReadMapData()
-{
 }
 
 void ReadMapData::SplitMapData(const std::string& _MapData, std::vector<std::string>& _TileData)
@@ -111,6 +116,11 @@ void ReadMapData::SplitAttrData(const std::vector<std::string>& _AttrData)
 							Level->CreateActor<Monster>(UpdateOrder::Monster)
 								->Init({ x,y }, "Octopus2.bmp");
 						}
+						else if (TypeX == 3)
+						{
+							Level->CreateActor<MonsterBoss>(UpdateOrder::Boss)
+								->Init({ x,y });
+						}
 						break;
 					}
 				}
@@ -118,8 +128,6 @@ void ReadMapData::SplitAttrData(const std::vector<std::string>& _AttrData)
 		}
 	}
 
-	int RndInt = GameEngineRandom::RandomInt(4);
-	Player::MainPlayer = Level->CreateActor<Player>(UpdateOrder::Player);
-	Player::MainPlayer->Init(VecInt2[RndInt - 1], "Bazzi.bmp");
-	//Player::MainPlayer->Init(VecInt2[0], "Bazzi.bmp");
+	int RndInt = GameEngineRandom::RandomInt(3, 0);
+	Player::MainPlayer->Init(VecInt2[RndInt], "Bazzi.bmp");
 }

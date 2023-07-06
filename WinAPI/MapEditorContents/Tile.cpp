@@ -30,12 +30,15 @@ void Tile::Init(const float4& _Pos)
 	Renderer[2]->SetScale({ 47, 84 });
 	Renderer[2]->Off();
 
-	Renderer[3] = CreateRenderer("Item.bmp", RenderOrder::Item, {}, { 4,3 });
+	Renderer[3] = CreateRenderer("Item.bmp", RenderOrder::Item, {}, { 2,5 });
 	Renderer[3]->Off();
 
-	Renderer[4] = CreateRenderer("Position.bmp", RenderOrder::Position, {}, { 3,1 });
+	Renderer[4] = CreateRenderer("Position.bmp", RenderOrder::Position, {}, { 4,1 });
 	Renderer[4]->SetScale({ 40, 40 });
 	Renderer[4]->Off();
+
+	Index.X = static_cast<int>((_Pos.X - 21) / 42);
+	Index.Y = static_cast<int>((_Pos.Y - 21) / 42);
 
 	InsertRenderer();
 }

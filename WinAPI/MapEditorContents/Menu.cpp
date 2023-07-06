@@ -26,10 +26,10 @@ void Menu::Start()
 	FindRenderer("Object.bmp")->SetPos({ 42 * 15 + 235, 360 });
 	FindRenderer("Object.bmp")->Off();
 	CreateRenderer("Item.bmp", RenderOrder::UI);
-	FindRenderer("Item.bmp")->SetPos({ 42 * 15 + 83, 57 + 2 });
+	FindRenderer("Item.bmp")->SetPos({ 42 * 15 + 38 + 4, 95 + 2 });
 	FindRenderer("Item.bmp")->Off();
 	CreateRenderer("Position.bmp", RenderOrder::UI);
-	FindRenderer("Position.bmp")->SetPos({ 42 * 15 + 65, 22 });
+	FindRenderer("Position.bmp")->SetPos({ 42 * 15 + 95, 22 });
 	FindRenderer("Position.bmp")->Off();
 
 	CurRenderer = FindRenderer("Tile1x1.bmp");

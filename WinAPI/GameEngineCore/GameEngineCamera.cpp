@@ -26,7 +26,7 @@ GameEngineCamera::~GameEngineCamera()
 
 void GameEngineCamera::InsertRenderer(const std::vector<GameEngineRenderer*>& _VecRenderer)
 {
-	AllRenderer[_VecRenderer[0]->GetRenderOrder()].emplace_back(_VecRenderer);
+	AllRenderer[_VecRenderer[0]->GetRenderOrder()].emplace_front(_VecRenderer);
 }
 
 void GameEngineCamera::Update(float _Delta)
@@ -42,18 +42,26 @@ void GameEngineCamera::Update(float _Delta)
 			{
 				if (!Renderer)
 				{
-					continue;
+					break;
+				}
+
+				if (Renderer->GetTheFirst() && CurGrpRO != ZOrderEnd)
+				{
+					AllRenderer[ZOrderEnd].emplace_back(*Iter);
+					Iter = AllRenderer[CurGrpRO].erase(Iter);
+					Check = false;
+					break;
 				}
 
 				int IdxY = Renderer->GetActor()->GetIndex().Y;
-				if (IdxY < CurGrpRO)
+				if (IdxY < CurGrpRO && IdxY >= ZOrderBegin)
 				{
 					AllRenderer[IdxY].emplace_back(*Iter);
 					Iter = AllRenderer[CurGrpRO].erase(Iter);
 					Check = false;
 					break;
 				}
-				else if (IdxY > CurGrpRO)
+				else if (IdxY > CurGrpRO && IdxY <= ZOrderEnd)
 				{
 					AllRenderer[IdxY].emplace_front(*Iter);
 					Iter = AllRenderer[CurGrpRO].erase(Iter);

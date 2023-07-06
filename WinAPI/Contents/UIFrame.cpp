@@ -41,24 +41,26 @@ void UIFrame::Init(const std::string& _Path)
 	FindRenderer("Player")->SetText("Player", 11.0f, 2.8f, "나눔스퀘어 네오 Heavy", ((255 | (255 << 8)) | (255 << 16)));
 	FindRenderer("Player")->AddPos({ 319, -186 });
 
-	//너무 낭비임 나중에 엔진 고칠필요 있음
 	CreateRenderer("Time0.bmp", RenderOrder::BackUI);
 	FindRenderer("Time0.bmp")->AddPos({ 332, -227 });
 	FindRenderer("Time0.bmp")->SetScale({ 14, 16 });
-	CreateRenderer("TimeNum1.bmp", RenderOrder::BackUI, {}, { 2, 5 });
-	FindRenderer("TimeNum1.bmp")->AddPos({ 345, -227 });
-	FindRenderer("TimeNum1.bmp")->SetScale({ 14, 16 });
+	CreateRenderer("TimeNum.bmp", RenderOrder::BackUI, {}, { 2, 5 }, "TimeNum1");
+	FindRenderer("TimeNum1")->AddPos({ 345, -227 });
+	FindRenderer("TimeNum1")->SetScale({ 14, 16 });
 
 	CreateRenderer("Dot.bmp", RenderOrder::BackUI);
 	FindRenderer("Dot.bmp")->AddPos({ 355, -228 });
 	FindRenderer("Dot.bmp")->SetScale({ 14, 15 });
 
-	CreateRenderer("TimeNum2.bmp", RenderOrder::BackUI, {}, { 2, 5 });
-	FindRenderer("TimeNum2.bmp")->AddPos({ 365, -227 });
-	FindRenderer("TimeNum2.bmp")->SetScale({ 14, 16 });
-	CreateRenderer("TimeNum3.bmp", RenderOrder::BackUI, {}, { 2, 5 });
-	FindRenderer("TimeNum3.bmp")->AddPos({ 378, -227 });
-	FindRenderer("TimeNum3.bmp")->SetScale({ 14, 16 });
+	CreateRenderer("TimeNum.bmp", RenderOrder::BackUI, {}, { 2, 5 }, "TimeNum2");
+	FindRenderer("TimeNum2")->AddPos({ 365, -227 });
+	FindRenderer("TimeNum2")->SetScale({ 14, 16 });
+	CreateRenderer("TimeNum.bmp", RenderOrder::BackUI, {}, { 2, 5 }, "TimeNum3");
+	FindRenderer("TimeNum3")->AddPos({ 378, -227 });
+	FindRenderer("TimeNum3")->SetScale({ 14, 16 });
+
+	ItemSlotInit();
+	CurItemInit();
 
 	InsertRenderer();
 }
@@ -66,15 +68,27 @@ void UIFrame::Init(const std::string& _Path)
 void UIFrame::Update(float _Delta)
 {
 	CurTime = MaxTime - static_cast<int>(LiveTime);
+	if (CurTime < 0)
+	{
+		CurTime = 0;
+	}
 
-	int Minute = CurTime / 60;
-	int SecTen = CurTime % 60 / 10;
-	int Sec = CurTime % 10;
+	Minute = CurTime / 60;
+	SecTen = CurTime % 60 / 10;
+	Sec = CurTime % 10;
 
-	FindRenderer("TimeNum1.bmp")->
+	FindRenderer("TimeNum1")->
 		SetCopyPos({ static_cast<float>(Minute / 5), static_cast<float>(Minute % 5) });
-	FindRenderer("TimeNum2.bmp")->
+	FindRenderer("TimeNum2")->
 		SetCopyPos({ static_cast<float>(SecTen / 5), static_cast<float>(SecTen % 5) });
-	FindRenderer("TimeNum3.bmp")->
+	FindRenderer("TimeNum3")->
 		SetCopyPos({ static_cast<float>(Sec / 5), static_cast<float>(Sec % 5) });
+	if (Player::MainPlayer)
+	{
+		int Rank = Player::MainPlayer->GetRank();
+		FindRenderer("PlayerRank.bmp")
+			->SetCopyPos({ static_cast<float>(Rank / 10), static_cast<float>(Rank % 10) });
+	}
+	ItemSlotUpdate(_Delta);
+	CurItemUpdate(_Delta);
 }

@@ -238,3 +238,10 @@ void GameEngineRenderer::ResetAnimation(const std::string& _AnimationName)
 	CurAnimation->CurFrame = CurAnimation->StartFrame;
 	CurAnimation->AnimationEnd = false;
 }
+
+void GameEngineRenderer::InsertSingleRenderer()
+{
+	std::vector<GameEngineRenderer*> TmpVec;
+	TmpVec.push_back(this);
+	Camera->InsertRenderer(TmpVec);
+}

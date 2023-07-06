@@ -1,7 +1,7 @@
 #include "GameEngineRandom.h"
-#include <iostream>
 
-int GameEngineRandom::Seed = 0;
+std::random_device GameEngineRandom::Seed;
+std::mt19937 GameEngineRandom::Gen(Seed());
 
 GameEngineRandom::GameEngineRandom()
 {
@@ -11,13 +11,9 @@ GameEngineRandom::~GameEngineRandom()
 {
 }
 
-void GameEngineRandom::Init()
-{
-	Seed = (int)time(nullptr);
-	srand(Seed);
-}
-
 int GameEngineRandom::RandomInt(int _Max, int _Min)
 {
-	return rand() % (_Max + _Min - 1) + _Min;
+	std::uniform_int_distribution<int> RndInt(_Min, _Max);
+
+	return RndInt(Gen);
 }

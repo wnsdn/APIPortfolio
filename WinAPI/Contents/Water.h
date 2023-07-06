@@ -12,6 +12,7 @@ public:
 	Water& operator=(Water&& _Other) noexcept = delete;
 
 	void Init(const int2& _Index, int _Length, class Player* _Owner);
+	void Rect(const int2& _Index, int _Length);
 
 	class Player* GetOwner() const
 	{
@@ -33,4 +34,5 @@ private:
 	void Update(float _Delta) override;
 
 	void CollisionCheck(const int2 _CurIndex, int _Dir);
+	void CollisionCheck2(const int2 _CurIndex, bool& _Check);
 };

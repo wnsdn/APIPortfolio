@@ -20,11 +20,11 @@ void Button::ActiveUpdate(float _Delta)
 			IsMouseOnButton = true;
 		}
 
-		if (GameEngineInput::IsDown(VK_LBUTTON))
+		if (GameEngineInput::IsDown(VK_LBUTTON) && !IsClick)
 		{
 			GameEngineSound::FindSound("ButtonClick.wav")->Play();
-			IsClick = true;
 			LiveTime = 0.f;
+			IsClick = true;
 		}
 	}
 	else
@@ -47,12 +47,12 @@ void Button::ClickUpdate(float _Delta)
 			IsMouseOnButton = true;
 		}
 
-		if (GameEngineInput::IsDown(VK_LBUTTON))
+		if (GameEngineInput::IsDown(VK_LBUTTON) && !IsClick)
 		{
 			GameEngineSound::FindSound("ButtonClick.wav")->Play();
 			FindRenderer(Main)->ChangeAnimation("After");
-			IsClick = true;
 			LiveTime = 0.f;
+			IsClick = true;
 		}
 		if (GameEngineInput::IsUp(VK_LBUTTON))
 		{

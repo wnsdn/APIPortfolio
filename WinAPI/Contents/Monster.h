@@ -5,7 +5,7 @@ class Monster : public GameEngineActor
 {
 public:
 	Monster();
-	~Monster();
+	virtual ~Monster();
 	Monster(const Monster& _Other) = delete;
 	Monster(Monster&& _Other) noexcept = delete;
 	Monster& operator=(const Monster& _Other) = delete;
@@ -18,6 +18,10 @@ public:
 	static void SetCount(int _Count)
 	{
 		Count = _Count;
+	}
+	static void AddCount(int _Count)
+	{
+		Count += _Count;
 	}
 
 	static int GetExp()
@@ -32,7 +36,15 @@ public:
 	void Init(const int2& _Index, const std::string& _Path);
 	void RandomMove();
 	void Stop();
+	void Kill();
+
+	class GameEngineCollision* GetCollider() const
+	{
+		return Collider;
+	}
 private:
+	class GameEngineCollision* Collider = nullptr;
+
 	static int Count;
 	static int Exp;
 

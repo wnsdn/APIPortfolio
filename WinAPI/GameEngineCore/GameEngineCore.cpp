@@ -41,7 +41,6 @@ void GameEngineCore::CoreStart()
 {
 	GameEngineTime::Init();
 	GameEngineInput::Init();
-	GameEngineRandom::Init();
 	GameEngineSound::Init();
 	GameEngineGraphics::Init();
 

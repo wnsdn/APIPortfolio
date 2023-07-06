@@ -1,12 +1,13 @@
 #pragma once
+#include <random>
 
 class GameEngineRandom
 {
 public:
-	static void Init();
-	static int RandomInt(int _Max, int _Min = 1);
+	static int RandomInt(int _Max, int _Min);
 private:
-	static int Seed;
+	static std::random_device Seed;
+	static std::mt19937 Gen;
 
 	GameEngineRandom();
 	~GameEngineRandom();

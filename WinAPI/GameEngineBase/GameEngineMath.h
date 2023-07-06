@@ -209,7 +209,7 @@ public:
 	{
 		return { X * _Other.X, Y * _Other.Y };
 	}
-	int2 operator*(const int _Value)
+	int2 operator*(const int _Value) const
 	{
 		return { X * _Value, Y * _Value };
 	}

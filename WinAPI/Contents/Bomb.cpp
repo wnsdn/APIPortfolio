@@ -8,6 +8,8 @@
 #include "Water.h"
 #include "Player.h"
 
+#include "MonsterLevel.h"
+
 Bomb::Bomb()
 {
 }
@@ -16,23 +18,27 @@ Bomb::~Bomb()
 {
 }
 
-void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner)
+void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner, bool _Push)
 {
 	Index = _Index;
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
-	
+
 	Length = _Length;
 	Owner = _Owner;
-
-	CreateRenderer("BubbleShadow.bmp", RenderOrder::InGameObject);
-	FindRenderer("BubbleShadow.bmp")->SetPos({ -3.f, 16.5f });
 
 	CreateRenderer("Bubble.bmp", RenderOrder::InGameObject, { 0, 0 }, { 3, 1 });
 	FindRenderer("Bubble.bmp")->CreateAnimation("Bubble", 0, 0, 3, 0.2f, true);
 	FindRenderer("Bubble.bmp")->ChangeAnimation("Bubble");
 
-	GameEngineSound::FindSound("BombSet.mp3")->Play();
+	if (!_Push)
+	{
+		GameEngineSound::FindSound("BombSet.mp3")->Play();
+	}
+	else
+	{
+		GameEngineSound::FindSound("PlayerKick.mp3")->Play();
+	}
 
 	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 	{
@@ -42,6 +48,10 @@ void Bomb::Init(const int2& _Index, int _Length, class Player* _Owner)
 		}
 	}
 	InsertRenderer();
+
+	CreateRenderer("BubbleShadow.bmp", RenderOrder::Shadow);
+	FindRenderer("BubbleShadow.bmp")->SetPos({ -3.f, 16.5f });
+	FindRenderer("BubbleShadow.bmp")->InsertSingleRenderer();
 }
 
 void Bomb::Update(float _Delta)
@@ -50,11 +60,33 @@ void Bomb::Update(float _Delta)
 	{
 		Death();
 	}
+
+	/*if (Player::MainPlayer && Player::MainPlayer->GetState() == "Death")
+	{
+		LiveTime = 0.0f;
+	}*/
+	if (dynamic_cast<MonsterLevel*>(Level)->GetState() == "Win" ||
+		dynamic_cast<MonsterLevel*>(Level)->GetState() == "Lose")
+	{
+		LiveTime = 0.0f;
+	}
+
+	StateUpdate(_Delta);
+	CollisionCheck(_Delta);
+}
+
+void Bomb::Render(float _Delta)
+{
+	/*DrawRect(Pos, Scale, Rgb(255, 0, 0));
+	DrawRect(IndexToPos(Index), Scale, Rgb(0, 255, 0));*/
 }
 
 void Bomb::Release()
 {
-	Owner->AddCount(1);
+	if (Owner)
+	{
+		Owner->AddCount(1);
+	}
 
 	for (auto Ptr : Level->FindActor(UpdateOrder::Tile))
 	{
@@ -65,6 +97,4 @@ void Bomb::Release()
 	}
 
 	Level->CreateActor<Water>(UpdateOrder::Water)->Init(Index, Length, Owner);
-
-	GameEngineSound::FindSound("BombExplode.wav")->Play();
 }

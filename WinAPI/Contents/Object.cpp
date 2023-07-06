@@ -22,10 +22,10 @@ void Object::Init(const int2& _Index, const float4& _Type)
 	Pos = IndexToPos(Index);
 	Scale = TileSize;
 
-	if (GameEngineRandom::RandomInt(100) > 60)
+	if (GameEngineRandom::RandomInt(100, 1) > 60)
 	{
 		HasItem = true;
-		Type.X = static_cast<float>(GameEngineRandom::RandomInt(5, 0));
+		Type.X = static_cast<float>(GameEngineRandom::RandomInt(1, 0));
 		Type.Y = static_cast<float>(GameEngineRandom::RandomInt(4, 0));
 	}
 
@@ -44,6 +44,10 @@ void Object::Init(const int2& _Index, const float4& _Type)
 		CanMove = true;
 	}
 	if (_Type.X == 0 && _Type.Y == 3)
+	{
+		CanMove = true;
+	}
+	if (_Type.X == 5 && _Type.Y == 2)
 	{
 		CanMove = true;
 	}
@@ -82,7 +86,7 @@ void Object::Update(float _Delta)
 
 void Object::Render(float _Delta)
 {
-	DrawRect(Pos, Scale, Rgb(255, 0, 0));
+	//DrawRect(Pos, Scale, Rgb(255, 0, 0));
 }
 
 void Object::Release()

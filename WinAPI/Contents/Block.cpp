@@ -34,5 +34,5 @@ void Block::Init(const int2& _Index, const float4& _Type)
 
 void Block::Render(float _Delta)
 {
-	DrawRect(Pos, Scale, Rgb(255, 0, 0));
+	//DrawRect(Pos, Scale, Rgb(255, 0, 0));
 }
