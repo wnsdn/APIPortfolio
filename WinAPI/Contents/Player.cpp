@@ -194,10 +194,10 @@ void Player::Render(float _Delta)
 		}
 	}*/
 
-	HDC Hdc = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
+	/*HDC Hdc = GameEngineWindow::GetInst().GetBackBuffer()->GetImageDC();
 
 	std::string Buffer(std::format("{},{},{}", Rank, CurExp, MaxExp));
-	TextOut(Hdc, 200, 2, &Buffer[0], static_cast<int>(Buffer.size()));
+	TextOut(Hdc, 200, 2, &Buffer[0], static_cast<int>(Buffer.size()));*/
 }
 
 void Player::Stop()

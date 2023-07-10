@@ -64,6 +64,10 @@ void MonsterLevel::WinUpdate(float _Delta)
 		{
 			Process->CreateLevel<MonsterLevel>()->Init("test.txt");
 		}
+		else if (CurMap == "test.txt")
+		{
+			Process->CreateLevel<MonsterLevel>()->Init("BossTest.txt");
+		}
 
 		Check = false;
 	}

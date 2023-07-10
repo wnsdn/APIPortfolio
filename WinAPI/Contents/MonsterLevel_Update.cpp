@@ -134,7 +134,7 @@ void MonsterLevel::SoundOff()
 	{
 		GameEngineSound::FindSound("BossStart.wav")->Stop();
 	}
-	else if (CurMap == "test.txt")
+	else if (CurMap == "test.txt" || CurMap == "BossTest.txt")
 	{
 		GameEngineSound::FindSound("Patrit.mp3")->Stop();
 	}

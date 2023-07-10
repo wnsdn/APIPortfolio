@@ -54,7 +54,7 @@ void MonsterLevel::Init(const std::string& _MapData)
 		GameEngineSound::CreateSound("BossStart.wav", true);
 		GameEngineSound::FindSound("BossStart.wav")->Play();
 	}
-	else if (CurMap == "test.txt")
+	else if (CurMap == "test.txt" || CurMap == "BossTest.txt")
 	{
 		GameEngineSound::CreateSound("Patrit.mp3", true);
 		GameEngineSound::FindSound("Patrit.mp3")->Play();
@@ -138,6 +138,15 @@ void MonsterLevel::Update(float _Delta)
 			dynamic_cast<MonsterBoss*>(BossPtr)->SetState("Death");
 			Player::MainPlayer->AddCurExp(111);
 		}
+	}
+	if (GameEngineInput::IsDown('P'))
+	{
+
+	}
+
+	if (LevelRender)
+	{
+		FramePtr->ResetLiveTime();
 	}
 }
 
